@@ -25,3 +25,30 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Other IDEs and editors trash
+.idea
+.ropeproject
+.gitshots
+*.*~
+*.swp
+*.bak
+
+# Project files
+lib.zip
+static/dst
+static/min
+index.yaml
+node_modules
