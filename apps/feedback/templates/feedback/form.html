@@ -1,0 +1,22 @@
+<form class="form-horizontal" method="POST" action="">
+    <fieldset>
+        {{ form.csrf }}
+
+        {% set form_field = form.subject %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.feedback %}
+        {% include 'bit/form_textarea_field.html' %}
+
+        {% set form_field = form.email %}
+        {% include 'bit/form_text_field.html' %}
+
+        <div class="form-actions">
+            <button type="submit"
+                    class="btn btn-primary btn-loading"
+                    data-loading-text="Sending Feedback..">
+                Send Feedback
+            </button>
+        </div>
+    </fieldset>
+</form>

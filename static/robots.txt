@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /logout/
+Disallow: /_s/
+Disallow: /_ah/
+Disallow: /_json/

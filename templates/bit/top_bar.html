@@ -1,0 +1,52 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <ul class="nav">
+        <li>
+          <a class="brand" href="{{url_for('pages.index')}}">
+            {{config.BRAND_NAME}}
+          </a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <a href="{{url_for('mgi.auth.users', limit=8, order='-created')}}">User List</a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <a href="{{url_for('extras.index')}}">Extras</a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <a href="{{url_for('chat.index')}}">Chat</a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li>
+          <a href="{{url_for('feedback.index')}}">Feedback</a>
+        </li>
+        <li class="divider-vertical"></li>
+      </ul>
+      <ul class="nav pull-right">
+        {% if current_user.id > 0 %}
+          {% if current_user.admin %}
+            <li class="divider-vertical"></li>
+            <li class="">
+              <a href="{{url_for('mgi.settings.config')}}">Config</a>
+            </li>
+          {% endif %}
+          <li class="divider-vertical"></li>
+          <li class="">
+            <a href="{{url_for('mgi.auth.profile')}}">{{current_user.name}}</a>
+          </li>
+          <li class="divider-vertical"></li>
+          <li class="">
+            <a href="{{url_for('mgi.auth.logout')}}">Logout</a>
+          </li>
+        {% else %}
+          <li class="">
+            <a href="{{url_for('mgi.auth.login')}}">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
