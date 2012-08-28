@@ -33,7 +33,7 @@ def index():
 
     return flask.render_template(
         'feedback/index.html',
-        title='Feedback',
+        title=u'Обратная связь',
         html_class='feedback',
         form=form,
     )

@@ -52,6 +52,7 @@ SCRIPTS = {
         'lib/pubnub.js',
         'lib/bootstrap/js/bootstrap-alert.js',
         'lib/bootstrap/js/bootstrap-button.js',
+        'lib/bootstrap/js/bootstrap-dropdown.js',
         ],
     'site': [
         'src/coffee/common/util.coffee',

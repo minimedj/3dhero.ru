@@ -9,23 +9,30 @@
         </li>
         <li class="divider-vertical"></li>
         <li>
-          <a href="{{url_for('mgi.auth.users', limit=8, order='-created')}}">User List</a>
+          <a href="#">Категории</a>
         </li>
         <li class="divider-vertical"></li>
         <li>
-          <a href="{{url_for('extras.index')}}">Extras</a>
+          <a href="#">Жанры</a>
         </li>
         <li class="divider-vertical"></li>
         <li>
-          <a href="{{url_for('chat.index')}}">Chat</a>
-        </li>
-        <li class="divider-vertical"></li>
-        <li>
-          <a href="{{url_for('feedback.index')}}">Feedback</a>
+          <a href="#">Серии</a>
         </li>
         <li class="divider-vertical"></li>
       </ul>
       <ul class="nav pull-right">
+          <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                  О нас <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                  <li>
+                  <a href="{{url_for('feedback.index')}}">Обратная связь</a>
+                  </li>
+              </ul>
+          </li>
+          <li class="divider-vertical"></li>
         {% if current_user.id > 0 %}
           {% if current_user.admin %}
             <li class="divider-vertical"></li>
@@ -39,11 +46,11 @@
           </li>
           <li class="divider-vertical"></li>
           <li class="">
-            <a href="{{url_for('mgi.auth.logout')}}">Logout</a>
+            <a href="{{url_for('mgi.auth.logout')}}">Выход</a>
           </li>
         {% else %}
           <li class="">
-            <a href="{{url_for('mgi.auth.login')}}">Login</a>
+            <a href="{{url_for('mgi.auth.login')}}"><i class="icon-user"></i> Вход</a>
           </li>
         {% endif %}
       </ul>

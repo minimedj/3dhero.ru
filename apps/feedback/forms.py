@@ -2,9 +2,11 @@
 from flaskext import wtf
 
 class FeedbackForm(wtf.Form):
-    subject = wtf.TextField('Subject', [wtf.validators.required()])
-    feedback = wtf.TextAreaField('Feedback', [wtf.validators.required()])
-    email = wtf.TextField('Email (optional)', [
+    subject = wtf.TextField(u'Тема', [wtf.validators.required()])
+    feedback = wtf.TextAreaField(u'Вопрос/предложение', [wtf.validators.required()])
+    email = wtf.TextField(u'Email (необязательно)', [
         wtf.validators.optional(),
-        wtf.validators.email("That doesn't look like an email"),
+        wtf.validators.email(
+            u"Хмм... это не выглядит похожим на настоящий email,\
+            вероятнее всего Вы ошиблись"),
         ])
