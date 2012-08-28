@@ -1,20 +1,46 @@
 <div class="navbar navbar-fixed-bottom">
-  <div class="navbar-inner">
-    <div class="container">
-      <ul class="nav">
-        <li>
-          <a class="">
-            &copy; 2012 - {{config.BRAND_NAME}}
-          </a>
-        </li>
-      </ul>
-      <ul class="nav pull-right">
-        <li>
-          <a class="">
-            version: {{config.CURRENT_VERSION_ID}}
-          </a>
-        </li>
-      </ul>
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li>
+                    <a class="">
+                        &copy; 2012 - {{ config.BRAND_NAME }}
+                               (version: {{ config.CURRENT_VERSION_ID }})
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+                {% if current_user.id > 0 %}
+                    {% if current_user.admin %}
+                        <li class="">
+                            <a href="{{url_for('mgi.settings.config')}}">
+                                <i class="icon-wrench"></i>
+                                Администрирование
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="divider-vertical"></li>
+                    <li class="">
+                        <a href="{{url_for('mgi.auth.profile')}}">
+                            <i class="icon-pencil"></i>
+                            {{ current_user.name }}
+                        </a>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="">
+                        <a href="{{url_for('mgi.auth.logout')}}">
+                            <i class="icon-user"></i>
+                            Выход
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="">
+                        <a href="{{url_for('mgi.auth.login')}}">
+                            <i class="icon-user"></i> Вход
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
-  </div>
 </div>

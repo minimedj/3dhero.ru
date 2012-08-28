@@ -1,59 +1,58 @@
 <div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <ul class="nav">
-        <li>
-          <a class="brand" href="{{url_for('pages.index')}}">
-            {{config.BRAND_NAME}}
-          </a>
-        </li>
-        <li class="divider-vertical"></li>
-        <li>
-          <a href="#">Категории</a>
-        </li>
-        <li class="divider-vertical"></li>
-        <li>
-          <a href="#">Жанры</a>
-        </li>
-        <li class="divider-vertical"></li>
-        <li>
-          <a href="#">Серии</a>
-        </li>
-        <li class="divider-vertical"></li>
-      </ul>
-      <ul class="nav pull-right">
-          <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  О нас <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                  <li>
-                  <a href="{{url_for('feedback.index')}}">Обратная связь</a>
-                  </li>
-              </ul>
-          </li>
-          <li class="divider-vertical"></li>
-        {% if current_user.id > 0 %}
-          {% if current_user.admin %}
-            <li class="divider-vertical"></li>
-            <li class="">
-              <a href="{{url_for('mgi.settings.config')}}">Config</a>
-            </li>
-          {% endif %}
-          <li class="divider-vertical"></li>
-          <li class="">
-            <a href="{{url_for('mgi.auth.profile')}}">{{current_user.name}}</a>
-          </li>
-          <li class="divider-vertical"></li>
-          <li class="">
-            <a href="{{url_for('mgi.auth.logout')}}">Выход</a>
-          </li>
-        {% else %}
-          <li class="">
-            <a href="{{url_for('mgi.auth.login')}}"><i class="icon-user"></i> Вход</a>
-          </li>
-        {% endif %}
-      </ul>
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li>
+                    <a class="brand" href="{{url_for('pages.index')}}">
+                        {{ config.BRAND_NAME }}
+                    </a>
+                </li>
+                <li class="divider-vertical"></li>
+                <li>
+                    <a href="#">Категории</a>
+                </li>
+                <li class="divider-vertical"></li>
+                <li>
+                    <a href="#">Жанры</a>
+                </li>
+                <li class="divider-vertical"></li>
+                <li>
+                    <a href="#">Серии</a>
+                </li>
+                <li class="divider-vertical"></li>
+            </ul>
+            <ul class="nav pull-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Информация <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="">
+                                Контакты
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('feedback.index')}}">
+                                Обратная связь
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="">
+                        <i class="icon-shopping-cart"></i>
+                        Корзина
+                        (
+                        {% if session.get('cart_status') %}
+                            {{ session.cart_status.get('items_count', 0) }}
+                        {% else %}
+                        0
+                        {% endif %}
+                        )
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </div>
