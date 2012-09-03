@@ -32,7 +32,10 @@ INSTALLED_APPS = (
     'apps.feedback',
     'apps.chat',
     'apps.extras',
-    'apps.product'
+    'apps.product',
+    'apps.api.v1',
+    'apps.file',
+    'apps.product.admin',
 )
 
 ################################################################################

@@ -1,13 +1,21 @@
 # -*- coding: utf-8 -*-
+from flask import url_for
 from google.appengine.ext import ndb
+from google.appengine.api import taskqueue, memcache
+from mgi.util import uuid
+from apps.file.models import File
 from mgi.models import Base
 
 class BaseSection(Base):
-    name = ndb.StringProperty(verbose_name=u'Название')
-    name_lowercase = ndb.ComputedProperty(lambda self: self.name.lower())
+    name = ndb.StringProperty(verbose_name=u'Название', indexed=True)
+    name_lowercase = ndb.ComputedProperty(lambda self: self.name.lower(), indexed=True)
     products = ndb.IntegerProperty(repeated=True)
     hide_products = ndb.IntegerProperty(repeated=True)
     is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?')
+
+    @property
+    def all_products(self):
+        return self.products + self.hide_products
 
     @classmethod
     def get_exist(cls, name):
@@ -37,13 +45,32 @@ class BaseSection(Base):
 
 
 class Category(BaseSection):
-    pass
+    def _post_put_hook(self, future):
+        mem_key = uuid()
+        taskqueue.add(url_for(
+            'product.tasks.post_put_category',
+            key_id=self.key.id(),
+            mem_key=mem_key
+        ))
+
 
 class Genre(BaseSection):
-    pass
+    def _post_put_hook(self, future):
+        mem_key = uuid()
+        taskqueue.add(url_for(
+            'product.task.post_put_genre',
+            key_id=self.key.id(),
+            mem_key=mem_key
+        ))
 
 class Series(BaseSection):
-    pass
+    def _post_put_hook(self, future):
+        mem_key = uuid()
+        taskqueue.add(url_for(
+            'product.task.post_put_series',
+            key_id=self.key.id(),
+            mem_key=mem_key
+        ))
 
 
 def _unique_section_products(section):
@@ -72,33 +99,36 @@ def _set_section(section, key_id, is_public=True):
         if is_public:
             if key_id in section.hide_products:
                 section.hide_products.remove(key_id)
-                if key_id not in section.products:
-                    section.products.append(key_id)
-                    return True
-                else:
-                    return False
+            if key_id not in section.products:
+                section.products.append(key_id)
+                return True
+            else:
+                return False
         else:
             if key_id in section.products:
                 section.products.remove(key_id)
-                if key_id not in section.hide_products:
-                    section.hide_products.append(key_id)
-                    return True
-                else:
-                    return False
+            if key_id not in section.hide_products:
+                section.hide_products.append(key_id)
+                return True
+            else:
+                return False
     return False
 
+class ProductImage(File):
+    is_master = ndb.BooleanProperty(verbose_name=u'Основное изображение?', default=False)
+
 class Product(Base):
-    id_1c = ndb.StringProperty(verbose_name=u'Код 1С')
-    catalogue_id = ndb.StringProperty(verbose_name=u'Артикул')
-    barcode = ndb.StringProperty(verbose_name=u'Штрих код')
+    id_1c = ndb.StringProperty(verbose_name=u'Код 1С', indexed=False)
+    catalogue_id = ndb.StringProperty(verbose_name=u'Артикул', indexed=False)
+    barcode = ndb.StringProperty(verbose_name=u'Штрих код', default='', indexed=True)
 
-    name = ndb.StringProperty(verbose_name=u'Название')
-    category = ndb.StringProperty(verbose_name=u'Категория')
-    genre = ndb.StringProperty(verbose_name=u'Жанр')
-    series = ndb.StringProperty(verbose_name=u'Серия')
+    name = ndb.StringProperty(verbose_name=u'Название', default='', indexed=True)
+    category = ndb.StringProperty(verbose_name=u'Категория', default='', indexed=True)
+    genre = ndb.StringProperty(verbose_name=u'Жанр', default='', indexed=True)
+    series = ndb.StringProperty(verbose_name=u'Серия', default='', indexed=True)
 
-    brand = ndb.StringProperty(verbose_name=u'Брэнд/Производитель')
-    country = ndb.StringProperty(verbose_name=u'Страна')
+    brand = ndb.StringProperty(verbose_name=u'Брэнд/Производитель', indexed=True)
+    country = ndb.StringProperty(verbose_name=u'Страна', default='', indexed=False)
 
     rating = ndb.IntegerProperty(verbose_name=u'Рейтинг')
     status = ndb.IntegerProperty(verbose_name=u'Статус')
@@ -106,23 +136,57 @@ class Product(Base):
         verbose_name=u'Показывать на сайте?',
         default=True)
 
-    material = ndb.StringProperty(verbose_name=u'Материал')
-    size = ndb.StringProperty(verbose_name=u'Размер')
-    weight = ndb.StringProperty(verbose_name=u'Вес')
+    material = ndb.StringProperty(verbose_name=u'Материал', default='', indexed=False)
+    size = ndb.StringProperty(verbose_name=u'Размер', default='', indexed=False)
+    weight = ndb.StringProperty(verbose_name=u'Вес', default='', indexed=False)
 
-    box_material = ndb.StringProperty(verbose_name=u'Материал/тип упаковки')
-    box_size = ndb.StringProperty(verbose_name=u'Размер упаковки')
-    box_weight = ndb.StringProperty(verbose_name=u'Вес упаковки')
+    box_material = ndb.StringProperty(verbose_name=u'Материал/тип упаковки', default='', indexed=False)
+    box_size = ndb.StringProperty(verbose_name=u'Размер упаковки', default='', indexed=False)
+    box_weight = ndb.StringProperty(verbose_name=u'Вес упаковки', default='', indexed=False)
 
     price_retail = ndb.FloatProperty(verbose_name=u'Цена (розничная)')
     price_trade = ndb.FloatProperty(verbose_name=u'Цена (оптовая)')
 
     leftovers = ndb.IntegerProperty(verbose_name=u'Остаток на складе')
     leftovers_on_way = ndb.IntegerProperty(verbose_name=u'Остаток в пути')
-    receipt_date = ndb.DateProperty(verbose_name=u'дата поступления')
+    receipt_date = ndb.DateProperty(verbose_name=u'Дата поступления')
 
-    badge = ndb.StringProperty(u'Бэйдж')
-    description = ndb.StringProperty(u'Описание')
+    badge = ndb.StringProperty(verbose_name=u'Бэйдж', indexed=False)
+    description = ndb.TextProperty(verbose_name=u'Описание', default='')
+
+    images_list = ndb.StructuredProperty(ProductImage, repeated=True)
+
+    _PROPERTIES = Base._PROPERTIES.union([
+        'id_1c',
+        'catalogue_id',
+        'barcode',
+        'name',
+        'category',
+        'genre',
+        'series',
+        'brand',
+        'country',
+        'rating',
+        'status',
+        'is_public',
+        'material',
+        'size',
+        'weight',
+        'box_material',
+        'box_size',
+        'box_weight',
+        'price_retail',
+        'price_trade',
+        'leftovers',
+        'leftovers_on_way',
+        'receipt_date',
+        'description',
+        'images'
+    ])
+
+    @property
+    def images(self):
+        return [img.url for img in self.images_list]
 
     @ndb.toplevel
     def clear_sections(self):
@@ -133,48 +197,50 @@ class Product(Base):
         flag = False
         category = Category.get_exist(self.category)
         if _clear_section(category, key_id):
-            category.async_put()
+            category.put_async()
             flag = True
         genre = Genre.get_exist(self.genre)
         if _clear_section(genre, key_id):
-            genre.async_put()
+            genre.put_async()
             flag = True
         series = Series.get_exist(self.series)
         if _clear_section(series, key_id):
-            series.async_put()
+            series.put_async()
             flag = True
         return flag
 
-    @ndb.toplevel
     def set_sections(self):
         try:
             key_id = self.key.id()
         except:
             return False
         flag = False
-        category = Category.get_exist(self.category)
-        if _set_section(category, key_id, self.is_public):
-            category.async_put()
-            flag = True
-        genre = Genre.get_exist(self.genre)
-        if _set_section(genre, key_id, self.is_public):
-            genre.async_put()
-            flag = True
-        series = Series.get_exist(self.series)
-        if _set_section(series, key_id, self.is_public):
-            series.async_put()
-            flag = True
+        if self.category:
+            category = Category.new_or_exist(self.category)
+            if _set_section(category, key_id, self.is_public):
+                category.put()
+                flag = True
+        if self.genre:
+            genre = Genre.new_or_exist(self.genre)
+            if _set_section(genre, key_id, self.is_public):
+                genre.put()
+                flag = True
+        if self.series:
+            series = Series.new_or_exist(self.series)
+            if _set_section(series, key_id, self.is_public):
+                series.put()
+                flag = True
         return flag
 
-    def _pre_put_hook(self):
-        self.clear_sections()
 
     def _post_put_hook(self, future):
         self.set_sections()
 
     @classmethod
     def _pre_delete_hook(cls, key):
-        p = cls.get(key)
+        p = key.get()
         if p:
             p.clear_sections()
+            for img in p.images_list:
+                img.delete_blob()
 

@@ -47,6 +47,6 @@ class BaseX(ndb.Model):
 
 
 class Base(BaseX):
-    _PROPERTIES = {'key', 'id', 'created', 'modified', 'created_ago',
+    _PROPERTIES = set(['key', 'id', 'created', 'modified', 'created_ago',
                    'modified_ago'
-    }
+                   ])

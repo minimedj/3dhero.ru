@@ -21,9 +21,9 @@ class Config(Base, ConfigX):
     pubnub_subscribe = ndb.StringProperty(default='')
     twitter_consumer_key = ndb.StringProperty(default='')
     twitter_consumer_secret = ndb.StringProperty(default='')
-    _PROPERTIES = Base._PROPERTIES.union({
+    _PROPERTIES = Base._PROPERTIES.union(set([
         'analytics_id', 'brand_name', 'facebook_app_id',
         'facebook_app_secret', 'feedback_email', 'flask_secret_key',
         'pubnub_publish', 'pubnub_subscribe', 'twitter_consumer_key',
         'twitter_consumer_secret'
-    })
+    ]))
