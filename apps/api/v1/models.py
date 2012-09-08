@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from mgi.models import Base
-from mgi.util import uuid
+from model import Base
+from util import uuid
 from google.appengine.ext import ndb
 
 

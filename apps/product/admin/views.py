@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from apps.product.models import Category
 from apps.product.admin.forms import CategoryForm
-from mgi.auth.decorators import admin_required
+from auth import admin_required
 
 mod = Blueprint(
     'product.admin',

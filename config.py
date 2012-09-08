@@ -3,7 +3,7 @@ try:
     # This part is surrounded in try/except because the this config.py file is
     # also used in the build.py script which is used to compile/minify the client
     # side files (*.less, *.coffee, *.js) and is not aware of the GAE
-    from mgi.settings.models import Config
+    from model import Config
 
     config_db = Config.get_master_db()
     BRAND_NAME = config_db.brand_name
@@ -27,16 +27,6 @@ DEBUG = DEVELOPMENT
 
 DEFAULT_DB_LIMIT = 64
 
-INSTALLED_APPS = (
-    'apps.pages',
-    'apps.feedback',
-    'apps.chat',
-    'apps.extras',
-    'apps.product',
-    'apps.api.v1',
-    'apps.file',
-    'apps.product.admin',
-)
 
 ################################################################################
 # Client modules, also used by the build.py script.

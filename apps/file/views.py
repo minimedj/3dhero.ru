@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, redirect, url_for
 from apps.utils.blobstore import send_blob
-from mgi.auth.utils import current_user_db, current_user_key, is_logged_in
+from auth import current_user_db, current_user_key, is_logged_in
 from apps.file.models import File
 
 mod = Blueprint(

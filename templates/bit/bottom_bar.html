@@ -13,7 +13,7 @@
                 {% if current_user.id > 0 %}
                     {% if current_user.admin %}
                         <li class="">
-                            <a href="{{url_for('mgi.settings.config')}}">
+                            <a href="{{url_for('settings.config')}}">
                                 <i class="icon-wrench"></i>
                                 Администрирование
                             </a>
@@ -21,21 +21,21 @@
                     {% endif %}
                     <li class="divider-vertical"></li>
                     <li class="">
-                        <a href="{{url_for('mgi.auth.profile')}}">
+                        <a href="{{url_for('auth.profile')}}">
                             <i class="icon-pencil"></i>
                             {{ current_user.name }}
                         </a>
                     </li>
                     <li class="divider-vertical"></li>
                     <li class="">
-                        <a href="{{url_for('mgi.auth.logout')}}">
+                        <a href="{{url_for('auth.logout')}}">
                             <i class="icon-user"></i>
                             Выход
                         </a>
                     </li>
                 {% else %}
                     <li class="">
-                        <a href="{{url_for('mgi.auth.login')}}">
+                        <a href="{{url_for('auth.login')}}">
                             <i class="icon-user"></i> Вход
                         </a>
                     </li>

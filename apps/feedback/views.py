@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import flask
 from google.appengine.api import mail
-from mgi.settings.models import Config
-from mgi.auth.utils import current_user_id, current_user_db
+from model import Config
+from auth import current_user_id, current_user_db
 from apps.feedback.forms import FeedbackForm
 
 mod = flask.Blueprint(
