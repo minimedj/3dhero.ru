@@ -128,7 +128,7 @@ class Product(Base):
     series = ndb.StringProperty(verbose_name=u'Серия', default='', indexed=True)
 
     brand = ndb.StringProperty(verbose_name=u'Брэнд/Производитель', indexed=True)
-    country = ndb.StringProperty(verbose_name=u'Страна', default='', indexed=False)
+    country = ndb.StringProperty(verbose_name=u'Страна', default='', indexed=True)
 
     rating = ndb.IntegerProperty(verbose_name=u'Рейтинг')
     status = ndb.IntegerProperty(verbose_name=u'Статус')
@@ -143,6 +143,7 @@ class Product(Base):
     box_material = ndb.StringProperty(verbose_name=u'Материал/тип упаковки', default='', indexed=False)
     box_size = ndb.StringProperty(verbose_name=u'Размер упаковки', default='', indexed=False)
     box_weight = ndb.StringProperty(verbose_name=u'Вес упаковки', default='', indexed=False)
+    box_amount = ndb.StringProperty(verbose_name=u'Количество в упаковке', default='', indexed=False)
 
     price_retail = ndb.FloatProperty(verbose_name=u'Цена (розничная)')
     price_trade = ndb.FloatProperty(verbose_name=u'Цена (оптовая)')
@@ -175,6 +176,7 @@ class Product(Base):
         'box_material',
         'box_size',
         'box_weight',
+        'box_amount,'
         'price_retail',
         'price_trade',
         'leftovers',
