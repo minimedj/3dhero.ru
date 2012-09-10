@@ -18,16 +18,16 @@
             <a class="btn btn-success disabled">
               Limit
             </a>
-            <a class="btn {% if not request.args.get('limit')%} active {% endif %}" href="{{url_for('mgi.auth.users')}}">
+            <a class="btn {% if not request.args.get('limit')%} active {% endif %}" href="{{url_for('auth.users')}}">
               All
             </a>
-            <a class="btn {% if request.args.get('limit') == '2' %} active {% endif %}" href="{{url_for('mgi.auth.users', limit=2)}}">
+            <a class="btn {% if request.args.get('limit') == '2' %} active {% endif %}" href="{{url_for('auth.users', limit=2)}}">
               2
             </a>
-            <a class="btn {% if request.args.get('limit') == '4' %} active {% endif %}" href="{{url_for('mgi.auth.users', limit=4)}}">
+            <a class="btn {% if request.args.get('limit') == '4' %} active {% endif %}" href="{{url_for('auth.users', limit=4)}}">
               4
             </a>
-            <a class="btn {% if request.args.get('limit') == '8' %} active {% endif %}" href="{{url_for('mgi.auth.users', limit=8)}}">
+            <a class="btn {% if request.args.get('limit') == '8' %} active {% endif %}" href="{{url_for('auth.users', limit=8)}}">
               8
             </a>
           </div>
@@ -35,16 +35,16 @@
             <a class="btn btn-primary disabled">
               Order by
             </a>
-            <a class="btn {% if not request.args.get('order')%} active {% endif %}" href="{{url_for('mgi.auth.users')}}">
+            <a class="btn {% if not request.args.get('order')%} active {% endif %}" href="{{url_for('auth.users')}}">
               None
             </a>
-            <a class="btn {% if request.args.get('order') == 'name' %} active {% endif %}" href="{{url_for('mgi.auth.users', order='name')}}">
+            <a class="btn {% if request.args.get('order') == 'name' %} active {% endif %}" href="{{url_for('auth.users', order='name')}}">
               Name
             </a>
-            <a class="btn {% if request.args.get('order') == '-created' %} active {% endif %}" href="{{url_for('mgi.auth.users', order='-created')}}">
+            <a class="btn {% if request.args.get('order') == '-created' %} active {% endif %}" href="{{url_for('auth.users', order='-created')}}">
               Created
             </a>
-            <a class="btn {% if request.args.get('order') == '-modified' %} active {% endif %}" href="{{url_for('mgi.auth.users', order='-modified')}}">
+            <a class="btn {% if request.args.get('order') == '-modified' %} active {% endif %}" href="{{url_for('auth.users', order='-modified')}}">
               Modified
             </a>
           </div>
@@ -52,13 +52,13 @@
             <a class="btn btn-danger disabled">
               Filter name by
             </a>
-            <a class="btn {% if not request.args.get('name')%} active {% endif %}" href="{{url_for('mgi.auth.users')}}">
+            <a class="btn {% if not request.args.get('name')%} active {% endif %}" href="{{url_for('auth.users')}}">
               All
             </a>
-            <a class="btn {% if request.args.get('name') == 'Lipis' %} active {% endif %}" href="{{url_for('mgi.auth.users', name='Lipis')}}">
+            <a class="btn {% if request.args.get('name') == 'Lipis' %} active {% endif %}" href="{{url_for('auth.users', name='Lipis')}}">
               Lipis
             </a>
-            <a class="btn {% if request.args.get('name') == 'Chris' %} active {% endif %}" href="{{url_for('mgi.auth.users', name='Chris')}}">
+            <a class="btn {% if request.args.get('name') == 'Chris' %} active {% endif %}" href="{{url_for('auth.users', name='Chris')}}">
               Chris
             </a>
           </div>

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from mgi.models import Base
+from model import Base
 from google.appengine.ext import ndb
 from google.appengine.ext.blobstore import BlobInfo
 from os import path
 import uuid
 from google.appengine.api import images
 from flask import url_for
-from mgi.auth.utils import current_user_key
+from auth import current_user_key
 
 IMAGE_TYPES = ('image/bmp', 'image/jpeg', 'image/png',
     'image/gif', 'image/tiff', 'image/x-icon')

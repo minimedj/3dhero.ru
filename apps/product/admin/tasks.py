@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify, url_for
 from google.appengine.api import memcache, taskqueue
 from google.appengine.ext import ndb
-from mgi.util import uuid
+from util import uuid
 from apps.api.v1.views import model_populate
 from apps.product.models import (Product, Category, Genre, Series)
 

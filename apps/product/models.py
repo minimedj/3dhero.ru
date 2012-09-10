@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import url_for
 from google.appengine.ext import ndb
-from google.appengine.api import taskqueue, memcache
-from mgi.util import uuid
+from google.appengine.api import taskqueue
+from util import uuid
 from apps.file.models import File
-from mgi.models import Base
+from model import Base
 
 class BaseSection(Base):
     name = ndb.StringProperty(verbose_name=u'Название', indexed=True)

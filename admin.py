@@ -1,32 +1,61 @@
 # -*- coding: utf-8 -*-
+
 import flask
-from mgi import util
-from mgi.settings.forms import ConfigUpdateForm
-from mgi.settings.models import Config
-from mgi.auth.decorators import admin_required
+from flaskext import wtf
 
-mod = flask.Blueprint(
-    'mgi.settings',
-    __name__,
-    url_prefix='/mgi/settings',
-    template_folder='templates'
-)
+import auth
+import util
+import model
+
+from main import app
 
 
-mod_json = flask.Blueprint(
-    'mgi.settings_json',
-    __name__,
-    url_prefix='/_json/mgi/settings',
-    template_folder='templates'
-)
+class ConfigUpdateForm(wtf.Form):
+  brand_name = wtf.TextField(
+      'Brand Name', [wtf.validators.required()]
+    )
+  analytics_id = wtf.TextField(
+      'Analytics ID', [wtf.validators.optional()]
+    )
+  facebook_app_id = wtf.TextField(
+      'Facebook ID', [wtf.validators.optional()]
+    )
+  facebook_app_secret = wtf.TextField(
+      'Facebook Secret', [wtf.validators.optional()]
+    )
+  feedback_email = wtf.TextField('Feedback Email', [
+        wtf.validators.optional(),
+        wtf.validators.email("That doesn't look like an email"),
+      ])
+  twitter_consumer_key = wtf.TextField(
+      'Twitter Key', [wtf.validators.optional()]
+    )
+  twitter_consumer_secret = wtf.TextField(
+      'Twitter Secret', [wtf.validators.optional()]
+    )
+  pubnub_publish = wtf.TextField(
+      'PubNub Publish', [wtf.validators.optional()]
+    )
+  pubnub_subscribe = wtf.TextField(
+      'PubNub Subsrcibe', [wtf.validators.optional()]
+    )
+  pubnub_secret = wtf.TextField(
+      'PubNub Secret', [wtf.validators.optional()]
+    )
+  flask_secret_key = wtf.TextField(
+      'Flask Secret Key', [wtf.validators.required()]
+    )
 
-@mod_json.route('/config/', endpoint='config')
-@mod.route('/config/', methods=['GET', 'POST'], endpoint='config')
-@admin_required
-def index():
+
+@app.route('/_json/admin/config/', endpoint='settings.admin_config_update_service')
+@app.route(
+    '/admin/config/', methods=['GET', 'POST'], endpoint='settings.config',
+  )
+@auth.admin_required
+def admin_config_update():
   form = ConfigUpdateForm()
 
-  config_db = Config.get_master_db()
+  config_db = model.Config.get_master_db()
   if form.validate_on_submit():
     config_db.analytics_id = form.analytics_id.data
     config_db.brand_name = form.brand_name.data
@@ -42,7 +71,7 @@ def index():
     config_db.put()
     update_config_variables(config_db)
     flask.flash('Your Config settings have been saved', category='success')
-    return flask.redirect('/')
+    return flask.redirect(flask.url_for('settings.config'))
   if not form.errors:
     form.analytics_id.data = config_db.analytics_id
     form.brand_name.data = config_db.brand_name
@@ -60,8 +89,8 @@ def index():
     return util.jsonify_model_db(config_db)
 
   return flask.render_template(
-      'mgi/settings/config_update.html',
-      title='Admin Config',
+      'admin/config_update.html',
+      title=u'Общие настройки',
       html_class='admin-config',
       form=form,
       config_db=config_db,
@@ -69,11 +98,8 @@ def index():
 
 
 def update_config_variables(config_db):
-  from main import app
   app.config.update(
       BRAND_NAME=config_db.brand_name,
       ANALYTICS_ID=config_db.analytics_id,
       SECRETE_KEY=config_db.flask_secret_key,
     )
-
-_blueprints = (mod, mod_json, )

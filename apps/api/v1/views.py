@@ -2,12 +2,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from apps.api.v1.models import WriteKey
 from apps.api.v1.forms import WriteKeyForm
-from mgi.util import jsonify_model_dbs, jsonify_model_db, param
+from util import jsonify_model_dbs, jsonify_model_db, param
 from apps.product.models import Product, ProductImage
 from functools import wraps
 import json, logging
 from datetime import datetime
-from mgi.auth.decorators import admin_required
+from auth import admin_required
 from google.appengine.ext import blobstore
 from apps.utils.blobstore import get_uploads
 import os
