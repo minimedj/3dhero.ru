@@ -1,0 +1,58 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Серии</h1>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <h2>Новая серия</h2>
+            {% include 'product/admin/series/form.html' %}
+        </div>
+
+        <div class="span6">
+            <h2>Существующие серии</h2>
+            <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Название
+                    </th>
+                    <th>
+                        Публичная?
+                    </th>
+                    <th>
+                        Кол-во
+                    </th>
+                    <th>
+                        Операции
+                    </th>
+                </tr>
+            </thead>
+            {% for ser in series %}
+                <tr>
+                    <td>
+                        {{ ser.name }}
+                    </td>
+                    <td>
+                        {% if ser.is_public %}
+                            Да
+                        {% else %}
+                            Нет
+                        {% endif %}
+                    </td>
+                    <td>
+                        ({{ ser.products|length + ser.hide_products|length }})
+                    </td>
+                    <td>
+                        <a href="{{ url_for('product.admin.series_edit', key_id=ser.key.id()) }}">
+                            Редактировать
+                        </a>
+                    </td>
+
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

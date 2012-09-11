@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
-
 import functools
 
 import flask
 import flaskext.login
 import flaskext.oauth
 from flaskext import wtf
+from main import app
 
 import util
 import model
-from main import app
 
 
 ################################################################################

@@ -1,0 +1,12 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Редактирование серии {{ series.name }}</h1>
+    </div>
+    <div class="row">
+        <div class="span6">
+            {% include 'product/admin/series/edit_form.html' %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import url_for
-from google.appengine.ext import ndb
-from google.appengine.api import taskqueue
+from google.appengine.ext import ndb, db
+from google.appengine.api import memcache
+from google.appengine.api.taskqueue import taskqueue
 from util import uuid
 from apps.file.models import File
 from model import Base
@@ -46,32 +47,97 @@ class BaseSection(Base):
 
 class Category(BaseSection):
     def _post_put_hook(self, future):
-        mem_key = uuid()
-        taskqueue.add(url_for(
-            'product.tasks.post_put_category',
-            key_id=self.key.id(),
-            mem_key=mem_key
-        ))
+        def do_txn():
+            mem_key = uuid()
+            memcache.add(mem_key, {'id': self.key.id()}, 7200)
+            taskqueue.add(url=url_for(
+                'product.task.post_put_category',
+                key_id=self.key.id(),
+                mem_key=mem_key),
+                transactional=True
+            )
+        db.run_in_transaction(do_txn)
+
+    @classmethod
+    def _pre_delete_hook(cls, key):
+        category = key.get()
+        if category:
+            for product in category.all_products:
+                product_mem_key = uuid()
+                memcache.add(
+                    product_mem_key,
+                    {'category': ''},
+                    7200
+                )
+                taskqueue.add(
+                    url=url_for(
+                        'product.task.update_product',
+                        key_id=product,
+                        mem_key=product_mem_key)
+                )
 
 
 class Genre(BaseSection):
     def _post_put_hook(self, future):
-        mem_key = uuid()
-        taskqueue.add(url_for(
-            'product.task.post_put_genre',
-            key_id=self.key.id(),
-            mem_key=mem_key
-        ))
+        def do_txn():
+            mem_key = uuid()
+            memcache.add(mem_key, {'id': self.key.id()}, 7200)
+            taskqueue.add(url=url_for(
+                'product.task.post_put_genre',
+                key_id=self.key.id(),
+                mem_key=mem_key),
+                transactional=True
+            )
+        db.run_in_transaction(do_txn)
+
+    @classmethod
+    def _pre_delete_hook(cls, key):
+        genre = key.get()
+        if genre:
+            for product in genre.all_products:
+                product_mem_key = uuid()
+                memcache.add(
+                    product_mem_key,
+                    {'genre': ''},
+                    7200
+                )
+                taskqueue.add(
+                    url=url_for(
+                        'product.task.update_product',
+                        key_id=product,
+                        mem_key=product_mem_key)
+                )
 
 class Series(BaseSection):
     def _post_put_hook(self, future):
-        mem_key = uuid()
-        taskqueue.add(url_for(
-            'product.task.post_put_series',
-            key_id=self.key.id(),
-            mem_key=mem_key
-        ))
+        def do_txn():
+            mem_key = uuid()
+            memcache.add(mem_key, {'id': self.key.id()}, 7200)
+            taskqueue.add(url=url_for(
+                'product.task.post_put_series',
+                key_id=self.key.id(),
+                mem_key=mem_key),
+                transactional=True
+            )
+        db.run_in_transaction(do_txn)
 
+    @classmethod
+    def _pre_delete_hook(cls, key):
+        series = key.get()
+        if series:
+            for product in series.all_products:
+                product_mem_key = uuid()
+                memcache.add(
+                    product_mem_key,
+                    {'series': ''},
+                    7200
+                )
+                taskqueue.add(
+                    url=url_for(
+                        'product.task.update_product',
+                        key_id=product,
+                        mem_key=product_mem_key)
+                )
 
 def _unique_section_products(section):
     prs = section.products
@@ -118,8 +184,8 @@ class ProductImage(File):
     is_master = ndb.BooleanProperty(verbose_name=u'Основное изображение?', default=False)
 
 class Product(Base):
-    id_1c = ndb.StringProperty(verbose_name=u'Код 1С', indexed=False)
-    catalogue_id = ndb.StringProperty(verbose_name=u'Артикул', indexed=False)
+    id_1c = ndb.StringProperty(verbose_name=u'Код 1С', indexed=True)
+    catalogue_id = ndb.StringProperty(verbose_name=u'Артикул', indexed=True)
     barcode = ndb.StringProperty(verbose_name=u'Штрих код', default='', indexed=True)
 
     name = ndb.StringProperty(verbose_name=u'Название', default='', indexed=True)

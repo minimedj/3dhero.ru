@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 import flask
 
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, date
 import urllib
 
 import config
@@ -126,7 +126,7 @@ def model_db_to_object(model_db, now=None):
     else:
       value = getattr(model_db, prop, None)
 
-    if type(value) == datetime:
+    if type(value) == datetime or type(value) == date:
       model_db_object[prop] = format_datetime_utc(value)
     elif type(value) == ndb.Key:
       model_db_object[prop] = value.urlsafe()

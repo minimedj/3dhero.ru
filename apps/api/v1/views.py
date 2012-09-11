@@ -12,6 +12,20 @@ from google.appengine.ext import blobstore
 from apps.utils.blobstore import get_uploads
 import os
 
+def except_wrap(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception, e:
+            res = {'success': False,
+                   'msg': str(e),
+                   'function': func.__name__}
+            logging.error(res)
+            return jsonify(res, status=400)
+    return wrapped
+
+
 admin_mod = Blueprint(
     'api.v1.admin',
     __name__,
@@ -51,6 +65,7 @@ def products():
     return jsonify_model_dbs(products)
 
 @mod.route('/products/<int:key_id>', methods=['GET', 'DELETE', 'PUT'])
+@except_wrap
 def get_product(key_id):
     product = Product.retrieve_by_id(key_id)
     if not product:
@@ -99,19 +114,6 @@ def check_write_permission(func):
         return func(*args, **kwargs)
     return wrapped
 
-def except_wrap(func):
-    @wraps(func)
-    def wrapped(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception, e:
-            res = {'success': False,
-                   'msg': str(e),
-                   'function': func.__name__}
-            logging.error(res)
-            return jsonify(res, status=400)
-    return wrapped
-
 def load_data():
     data = json.loads(request.data)
     if type(data) is not dict:
@@ -137,11 +139,9 @@ def model_populate(model, product):
             continue
         if key == 'receipt_date':
             try:
-                new_date = datetime.date(datetime.strptime(value, '%Y-%m-%d'))
-                product.receipt_date = new_date
+                value = datetime.date(datetime.strptime(value, '%Y-%m-%d'))
             except ValueError:
-                model.receipt_date = None
-            continue
+                value = None
         setattr(product, key, value)
 
 
@@ -153,6 +153,18 @@ def product_new():
         flag, model = load_data()
         if not flag:
             return model
+        id_1c = model.get('id_1c')
+        if not id_1c:
+            return jsonify({
+                'success': False,
+                'msg': 'id_1c field not found.'
+            })
+        is_exist = Product.query(Product.id_1c == id_1c).count()
+        if is_exist:
+            return jsonify({
+                'success': False,
+                'msg': 'Product with id_1c: %s is exist' % id_1c
+            })
         product = Product()
         model_populate(model, product)
         product.put()
