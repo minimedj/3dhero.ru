@@ -39,7 +39,6 @@ class Paginator(object):
     "Returns a Page object for the given 1-based page number."
     number = self.validate_number(number)
     bottom = (number - 1) * self.per_page
-    top = bottom + self.per_page
     
     # Get one more entity than requested to see if 
     # we have one more page
