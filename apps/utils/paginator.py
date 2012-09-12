@@ -48,7 +48,7 @@ class Paginator(object):
         raise EmptyPage('That page contains no results')
 
     # Check if there is a next page
-    has_next = len(page_items) > self.per_page
+    has_next = number < self.num_pages
     return Page(page_items[:self.per_page], number, self, has_next)
 
   @cached_property
@@ -87,18 +87,6 @@ class Page(object):
 
   def __repr__(self):
     return '<Page %s of %s>' % (self.number, self.paginator.num_pages)
-
-  @cached_property
-  def has_next(self):
-    """
-    Checks for one more item than last on this page.
-    """
-    try:
-      next_item = self.paginator.object_list[
-          self.number * self.paginator.per_page]
-    except IndexError:
-      return False
-    return True
 
   @property
   def has_previous(self):
