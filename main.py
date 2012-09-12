@@ -8,7 +8,8 @@ import config
 app = flask.Flask(__name__)
 app.config.from_object(config)
 
-import auth
+from auth_views import mod as auth_mod
+app.register_blueprint(auth_mod)
 
 from admin_views import mod as admin_mod
 from admin_views import json_mod as json_admin_mod
