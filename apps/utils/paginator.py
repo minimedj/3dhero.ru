@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
-
 from math import ceil
 from werkzeug.utils import cached_property
 
