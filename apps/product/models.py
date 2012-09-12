@@ -161,24 +161,23 @@ def _clear_section(section, key_id):
     return flag
 
 def _set_section(section, key_id, is_public=True):
+    flag = False
     if section:
         if is_public:
             if key_id in section.hide_products:
                 section.hide_products.remove(key_id)
+                flag = True
             if key_id not in section.products:
                 section.products.append(key_id)
-                return True
-            else:
-                return False
+                flag = True
         else:
             if key_id in section.products:
                 section.products.remove(key_id)
+                flag = True
             if key_id not in section.hide_products:
                 section.hide_products.append(key_id)
-                return True
-            else:
-                return False
-    return False
+                flag = True
+    return flag
 
 class ProductImage(File):
     is_master = ndb.BooleanProperty(verbose_name=u'Основное изображение?', default=False)
