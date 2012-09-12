@@ -1,4 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="row">
+        <ul class="thumbnails">
+        {% for product in products.object_list %}
+            <li class="span3">
+                <div class="thumbnail">
+                    <img src="{{ product.images_list[0].url }}=s200-c">
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+{#        <div class="pagination pagination-centered">#}
+        <ul class="pagination pagination-centered">
+            {% if products.has_previous %}
+             <li>
+                 <a href="{{
+                         url_for(
+                            'pages.index',
+                            page=products.previous_page_number) }}"
+                    class="prev">
+                        &larr; назад
+                 </a>
+             </li>
+            {% endif %}
+
+            {% for page in products.paginator.page_range %}
+                {% if page %}
+                    {% if page == products.number %}
+                        <li class="active">
+                            <a href="{{ url_for('pages.index', page=page) }}" class="page">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('pages.index', page=page) }}" class="page">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    ......
+                {% endif %}
+            {% endfor %}
+
+            {% if products.has_next %}
+                <li>
+                    <a href="{{ url_for('pages.page', page=products.next_page_number) }}"
+                   class="next">вперед &rarr;</a>
+                </li>
+            {% endif %}
+        </ul>
+        </div>
+{#        </div>#}
+    </div>
+
 {% endblock %}
