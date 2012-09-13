@@ -7,12 +7,39 @@ from util import uuid
 from apps.file.models import File
 from model import Base
 
+def rename_section(section, section_name):
+    if not section:
+        return
+    for product in section.all_products:
+        product_mem_key = uuid()
+        memcache.add(
+            product_mem_key,
+            {'%s' % section_name: section.name},
+            7200
+        )
+        taskqueue.add(
+            url=url_for(
+                'product.task.update_product',
+                key_id=product,
+                mem_key=product_mem_key
+            ))
+
 class BaseSection(Base):
-    name = ndb.StringProperty(verbose_name=u'Название', indexed=True)
-    name_lowercase = ndb.ComputedProperty(lambda self: self.name.lower(), indexed=True)
+    name = ndb.StringProperty(verbose_name=u'Название', indexed=True, required=True)
+    name_lowercase = ndb.StringProperty(indexed=True, default=None)
     products = ndb.IntegerProperty(repeated=True)
     hide_products = ndb.IntegerProperty(repeated=True)
     is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?', default=True)
+
+    def _pre_put_hook(self):
+        self.name = self.name.strip()
+        lower_name = self.name.lower()
+        if lower_name != self.name_lowercase:
+            self.do_rename()
+        self.name_lowercase = lower_name
+
+    def do_rename(self):
+        raise Exception("do_rename() not overloaded in the child class")
 
     @property
     def all_products(self):
@@ -50,19 +77,9 @@ class BaseSection(Base):
         if flag:
             is_exist.put()
 
-
 class Category(BaseSection):
-    def _post_put_hook(self, future):
-        def do_txn():
-            mem_key = uuid()
-            memcache.add(mem_key, {'id': self.key.id()}, 7200)
-            taskqueue.add(url=url_for(
-                'product.task.post_put_category',
-                key_id=self.key.id(),
-                mem_key=mem_key),
-                transactional=True
-            )
-        db.run_in_transaction(do_txn)
+    def do_rename(self):
+        rename_section(self, 'category')
 
     @classmethod
     def _pre_delete_hook(cls, key):
@@ -84,17 +101,8 @@ class Category(BaseSection):
 
 
 class Genre(BaseSection):
-    def _post_put_hook(self, future):
-        def do_txn():
-            mem_key = uuid()
-            memcache.add(mem_key, {'id': self.key.id()}, 7200)
-            taskqueue.add(url=url_for(
-                'product.task.post_put_genre',
-                key_id=self.key.id(),
-                mem_key=mem_key),
-                transactional=True
-            )
-        db.run_in_transaction(do_txn)
+    def do_rename(self):
+        rename_section(self, 'genre')
 
     @classmethod
     def _pre_delete_hook(cls, key):
@@ -115,17 +123,8 @@ class Genre(BaseSection):
                 )
 
 class Series(BaseSection):
-    def _post_put_hook(self, future):
-        def do_txn():
-            mem_key = uuid()
-            memcache.add(mem_key, {'id': self.key.id()}, 7200)
-            taskqueue.add(url=url_for(
-                'product.task.post_put_series',
-                key_id=self.key.id(),
-                mem_key=mem_key),
-                transactional=True
-            )
-        db.run_in_transaction(do_txn)
+    def do_rename(self):
+        rename_section(self, 'series')
 
     @classmethod
     def _pre_delete_hook(cls, key):
@@ -304,6 +303,16 @@ class Product(Base):
                 series.put()
                 flag = True
         return flag
+
+    def _pre_put_hook(self):
+        if self.category:
+            self.category = self.category.strip()
+        if self.genre:
+            self.genre = self.genre.strip()
+        if self.series:
+            self.series = self.series.strip()
+        if self.badge:
+            self.badge = self.badge.strip()
 
     def _post_put_hook(self, future):
         self.set_sections()
