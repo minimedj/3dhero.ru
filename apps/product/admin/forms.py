@@ -11,6 +11,7 @@ class CategoryForm(wtf.Form):
     )
     is_public = wtf.BooleanField(
         u'Публичная?',
+        default=True,
         description=u'Показывать категорию на сайте?',
         validators=[wtf.validators.optional()]
     )
@@ -35,6 +36,7 @@ class SeriesForm(wtf.Form):
     )
     is_public = wtf.BooleanField(
         u'Публичная?',
+        default=True,
         description=u'Показывать серию на сайте?',
         validators=[wtf.validators.optional()]
     )

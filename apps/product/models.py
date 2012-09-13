@@ -12,7 +12,7 @@ class BaseSection(Base):
     name_lowercase = ndb.ComputedProperty(lambda self: self.name.lower(), indexed=True)
     products = ndb.IntegerProperty(repeated=True)
     hide_products = ndb.IntegerProperty(repeated=True)
-    is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?')
+    is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?', default=True)
 
     @property
     def all_products(self):
@@ -40,8 +40,14 @@ class BaseSection(Base):
         is_exist = cls.get_exist(name)
         if is_exist is None:
             return False
+        flag = False
         if key_id in is_exist.products:
             is_exist.products.remove(key_id)
+            flag = True
+        if key_id in is_exist.hide_products:
+            is_exist.hide_products.remove(key_id)
+            flag = True
+        if flag:
             is_exist.put()
 
 
@@ -298,7 +304,6 @@ class Product(Base):
                 series.put()
                 flag = True
         return flag
-
 
     def _post_put_hook(self, future):
         self.set_sections()

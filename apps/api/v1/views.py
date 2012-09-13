@@ -133,6 +133,7 @@ def load_data():
     return True, model
 
 def model_populate(model, product):
+    flag = False
     for key in model.keys():
         value = model.get(key)
         if value is None:
@@ -142,7 +143,13 @@ def model_populate(model, product):
                 value = datetime.date(datetime.strptime(value, '%Y-%m-%d'))
             except ValueError:
                 value = None
-        setattr(product, key, value)
+        try:
+            if getattr(product, key) != value:
+                setattr(product, key, value)
+                flag = True
+        except Exception:
+            pass
+    return flag
 
 
 @mod.route('/products/new', methods=['POST'])
@@ -166,8 +173,8 @@ def product_new():
                 'msg': 'Product with id_1c: %s is exist' % id_1c
             })
         product = Product()
-        model_populate(model, product)
-        product.put()
+        if model_populate(model, product):
+            product.put()
     return jsonify({'success': True})
 
 @mod.route('/products/<int:key_id>/upload_image_url', methods=['POST'])
