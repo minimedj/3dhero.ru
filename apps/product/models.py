@@ -7,6 +7,15 @@ from util import uuid
 from apps.file.models import File
 from model import Base
 
+def strip_string(s):
+    if s:
+        type_ = type(s)
+        if type_ == str:
+            return ' '.join(s.split())
+        if type_ == unicode:
+            return ' '.join(s.split())
+    return s
+
 def rename_section(section, section_name):
     if not section:
         return
@@ -32,7 +41,7 @@ class BaseSection(Base):
     is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?', default=True)
 
     def _pre_put_hook(self):
-        self.name = self.name.strip()
+        self.name = strip_string(self.name)
         lower_name = self.name.lower()
         if lower_name != self.name_lowercase:
             self.do_rename()
@@ -305,14 +314,14 @@ class Product(Base):
         return flag
 
     def _pre_put_hook(self):
-        if self.category:
-            self.category = self.category.strip()
-        if self.genre:
-            self.genre = self.genre.strip()
-        if self.series:
-            self.series = self.series.strip()
-        if self.badge:
-            self.badge = self.badge.strip()
+        self.category = strip_string(self.category)
+        self.genre = strip_string(self.genre)
+        self.series = strip_string(self.series)
+        self.badge = strip_string(self.badge)
+        self.barcode = strip_string(self.barcode)
+        self.brand = strip_string(self.brand)
+        self.country = strip_string(self.country)
+        self.material = strip_string(self.material)
 
     def _post_put_hook(self, future):
         self.set_sections()
