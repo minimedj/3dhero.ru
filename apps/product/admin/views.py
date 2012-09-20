@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, url_for, request
-from apps.product.models import Category, Series
-from apps.product.admin.forms import CategoryForm, SeriesForm
+from apps.product.models import Category, Series, Brand
+from apps.product.admin.forms import CategoryForm, SeriesForm, BrandForm
 from auth import admin_required
 
 mod = Blueprint(
@@ -80,6 +80,42 @@ def series_edit(key_id):
     return render_template(
         'product/admin/series/edit.html',
         series=series,
+        form=form
+    )
+
+@mod.route('/brands/', methods=['GET', 'POST'])
+@admin_required
+def brands():
+    brands = Brand.query()
+    form = BrandForm()
+    if form.validate_on_submit():
+        new_series = Brand()
+        form.populate_obj(new_series)
+        new_series.put()
+        return redirect(url_for('product.admin.brands'))
+    return render_template(
+        'product/admin/brand/all.html',
+        brands=brands,
+        form=form
+    )
+
+@mod.route('/brands/<int:key_id>/', methods=['GET', 'POST'])
+@admin_required
+def brand_edit(key_id):
+    brand = Brand.retrieve_by_id(key_id)
+    if not brand:
+        return redirect(url_for('product.admin.brands'))
+    form = SeriesForm(obj=brand)
+    if request.method == 'POST' and 'delete_brand' in request.form:
+        brand.key.delete()
+        return redirect(url_for('product.admin.brands'))
+    if form.is_submitted() and form.validate(is_edit=True):
+        form.populate_obj(brand)
+        brand.put()
+        return redirect(url_for('product.admin.brands'))
+    return render_template(
+        'product/admin/brand/edit.html',
+        brand=brand,
         form=form
     )
 

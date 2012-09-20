@@ -153,6 +153,28 @@ class Series(BaseSection):
                         mem_key=product_mem_key)
                 )
 
+class Brand(BaseSection):
+    def do_rename(self):
+        rename_section(self, 'brand')
+
+    @classmethod
+    def _pre_delete_hook(cls, key):
+        brand = key.get()
+        if brand:
+            for product in brand.all_products:
+                product_mem_key = uuid()
+                memcache.add(
+                    product_mem_key,
+                    {'brand': ''},
+                    7200
+                )
+                taskqueue.add(
+                    url=url_for(
+                        'product.task.update_product',
+                        key_id=product,
+                        mem_key=product_mem_key)
+                )
+
 def _unique_section_products(section):
     prs = section.products
     hide_prs =section.hide_products
@@ -288,6 +310,10 @@ class Product(Base):
         if _clear_section(series, key_id):
             series.put_async()
             flag = True
+        brand = Brand.get_exist(self.brand)
+        if _clear_section(brand, key_id):
+            brand.put_async()
+            flag = True
         return flag
 
     def set_sections(self):
@@ -310,6 +336,11 @@ class Product(Base):
             series = Series.new_or_exist(self.series)
             if _set_section(series, key_id, self.is_public):
                 series.put()
+                flag = True
+        if self.brand:
+            brand = Brand.new_or_exist(self.brand)
+            if _set_section(brand, key_id, self.is_public):
+                brand.put()
                 flag = True
         return flag
 
