@@ -1,0 +1,32 @@
+<li class="product_box mosaic-block m-fade span3">
+    <a href="{{ product.url }}" class="mosaic-overlay">
+        <span class="details">
+            <h1>{{ product.name }}</h1>
+            Цена: {{ product.price_retail }}<br>
+            Цена опт: {{ product.price_trade }}
+        </span>
+    </a>
+    <a href="" class="mosaic-backdrop product_img_container">
+        {% if product.images_list %}
+            <img src="{{ product.images_list[0].url }}=s200-c" width="200" height="200">
+        {% else %}
+            <img src="/p/img/none/200x200.jpg" width="200" height="200">
+        {% endif %}
+        {% if product.badge %}
+            <span class="badge badge-info badge_badge">{{ product.badge }}</span>
+        {% endif %}
+        {% if product.leftovers_on_way %}
+            <span class="badge badge-warning badge_leftovers">В пути</span>
+        {% else %}
+            {% if not product.leftovers %}
+                <span class="badge badge-important badge_leftovers">Отсуствует</span>
+            {% else %}
+                {% if product.leftovers > 10 %}
+                    <span class="badge badge-success badge_leftovers">Много</span>
+                {% else %}
+                    <span class="badge badge-info badge_leftovers">Мало</span>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </a>
+</li>
