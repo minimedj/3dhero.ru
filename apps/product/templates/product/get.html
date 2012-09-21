@@ -12,7 +12,9 @@
     </div>
     <div class="span6">
         {% if product.images %}
-            <img src="{{ product.images[0] }}=s500">
+            <img src="{{ product.images[0] }}=s400" height="400" width="400">
+        {% else %}
+            <img src="/p/img/none/400x400.jpg" height="400" width="400">
         {% endif %}
     </div>
     <div class="span6">
