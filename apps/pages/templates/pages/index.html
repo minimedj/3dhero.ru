@@ -1,5 +1,15 @@
 {% extends 'base_two.html' %}
 
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('.product_box').mosaic({
+                animation: 'fade',
+                anchor_y: 'top'});
+        });
+    </script>
+{% endblock %}
+
 {% block aside %}
     {{ get_aside()|safe }}
 {% endblock %}

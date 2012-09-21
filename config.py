@@ -33,12 +33,13 @@ DEFAULT_DB_LIMIT = 64
 ################################################################################
 STYLES = [
     'src/less/style.less',
-    ]
+]
 
 SCRIPTS_MODULES = [
     'libs',
     'site',
-    ]
+    'jquery.plugins',
+]
 
 SCRIPTS = {
     'libs': [
@@ -47,7 +48,10 @@ SCRIPTS = {
         'lib/bootstrap/js/bootstrap-alert.js',
         'lib/bootstrap/js/bootstrap-button.js',
         'lib/bootstrap/js/bootstrap-dropdown.js',
-        ],
+    ],
+    'jquery.plugins': [
+        'lib/jquery.mosaic.js',
+    ],
     'site': [
         'src/coffee/common/util.coffee',
         'src/coffee/common/service.coffee',
@@ -58,5 +62,5 @@ SCRIPTS = {
         'src/coffee/site/profile.coffee',
         'src/coffee/site/admin.coffee',
         'src/coffee/site/chat.coffee',
-        ],
-    }
+    ],
+}

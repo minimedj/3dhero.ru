@@ -1,29 +1,36 @@
 <ul class="thumbnails">
     {% for product in products.object_list %}
-        <li class="span3 product_box">
-            <a href="" class="thumbnail">
+        <li class="product_box mosaic-block m-fade span3">
+            <a href="{{ product.url }}" class="mosaic-overlay">
+                <span class="details">
+                    <h1>{{ product.name }}</h1>
+                    Цена: {{ product.price_retail }}<br>
+                    Цена опт: {{ product.price_trade }}
+                </span>
+            </a>
+            <a href="" class="mosaic-backdrop">
                 {% if product.images_list %}
                     <img src="{{ product.images_list[0].url }}=s200-c">
                 {% else %}
                     <img src="/p/img/none/200x200.jpg">
                 {% endif %}
-            </a>
-            {% if product.badge %}
-                <span class="badge badge-info">{{ product.badge }}</span>
-            {% endif %}
-            {% if product.leftovers_on_way %}
-                <span class="badge badge-warning leftovers">В пути</span>
-            {% else %}
-                {% if not product.leftovers %}
-                    <span class="badge badge-important leftovers">Отсуствует</span>
+                {% if product.badge %}
+                    <span class="badge badge-info">{{ product.badge }}</span>
+                {% endif %}
+                {% if product.leftovers_on_way %}
+                    <span class="badge badge-warning leftovers">В пути</span>
                 {% else %}
-                    {% if product.leftovers > 10 %}
-                        <span class="badge badge-success leftovers">Много</span>
+                    {% if not product.leftovers %}
+                        <span class="badge badge-important leftovers">Отсуствует</span>
                     {% else %}
-                        <span class="badge badge-info leftovers">Мало</span>
+                        {% if product.leftovers > 10 %}
+                            <span class="badge badge-success leftovers">Много</span>
+                        {% else %}
+                            <span class="badge badge-info leftovers">Мало</span>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
-            {% endif %}
+            </a>
         </li>
     {% endfor %}
 </ul>
