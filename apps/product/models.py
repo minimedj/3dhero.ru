@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import url_for
+from werkzeug.wrappers import cached_property
 from google.appengine.ext import ndb, db
 from google.appengine.api import memcache
 from google.appengine.api.taskqueue import taskqueue
@@ -295,6 +296,10 @@ class Product(Base):
         'description',
         'images'
     ])
+
+    @cached_property
+    def url(self):
+        return url_for('product.get_product', key_id=self.key.id())
 
     @property
     def images(self):

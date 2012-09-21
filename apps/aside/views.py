@@ -18,3 +18,9 @@ def get_aside(active='series', key_id=None):
         sections = sections,
         key_id=key_id
     )
+
+def get_str_property(name, value):
+    return render_template(
+        'str_property.html',
+        name=name, value=value
+    )

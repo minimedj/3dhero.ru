@@ -6,7 +6,8 @@
             Цена опт: {{ product.price_trade }}
         </span>
     </a>
-    <a href="" class="mosaic-backdrop product_img_container">
+    <a href="{{ product.url }}"
+       class="mosaic-backdrop product_img_container">
         {% if product.images_list %}
             <img src="{{ product.images_list[0].url }}=s200-c" width="200" height="200">
         {% else %}

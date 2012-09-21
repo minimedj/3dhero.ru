@@ -8,8 +8,9 @@ import config
 app = flask.Flask(__name__)
 app.config.from_object(config)
 
-from apps.aside.views import get_aside
+from apps.aside.views import get_aside, get_str_property
 app.jinja_env.globals.update(get_aside=get_aside)
+app.jinja_env.globals.update(get_str_property=get_str_property)
 
 from auth_views import mod as auth_mod
 app.register_blueprint(auth_mod)
@@ -35,3 +36,6 @@ app.register_blueprint(admin_product)
 
 from apps.product.admin.tasks import mod as product_task_mod
 app.register_blueprint(product_task_mod)
+
+from apps.product.views import mod as product_mod
+app.register_blueprint(product_mod)
