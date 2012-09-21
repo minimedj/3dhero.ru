@@ -41,7 +41,8 @@ class Paginator(object):
     # Get one more entity than requested to see if 
     # we have one more page
     if type(self.object_list) == list:
-        page_items = self.object_list
+        top = bottom + self.per_page
+        page_items = self.object_list[bottom:top+1]
     else:
         page_items = self.object_list.fetch(self.per_page, offset=bottom)
     if not page_items:

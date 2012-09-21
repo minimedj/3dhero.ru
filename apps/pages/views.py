@@ -16,7 +16,7 @@ def get_paginator(products, page):
     try:
         products = paginator.page(page)
     except (EmptyPage, InvalidPage):
-        products = paginator.page(paginator.num_pages())
+        products = paginator.page(paginator.num_pages)
     return products
 
 @mod.route('/', defaults={'page':1})
