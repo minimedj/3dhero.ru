@@ -1,0 +1,29 @@
+<ul class="thumbnails">
+    {% for product in products.object_list %}
+        <li class="span3 product_box">
+            <a href="" class="thumbnail">
+                {% if product.images_list %}
+                    <img src="{{ product.images_list[0].url }}=s200-c">
+                {% else %}
+                    <img src="/p/img/none/200x200.jpg">
+                {% endif %}
+            </a>
+            {% if product.badge %}
+                <span class="badge badge-info">{{ product.badge }}</span>
+            {% endif %}
+            {% if product.leftovers_on_way %}
+                <span class="badge badge-warning leftovers">В пути</span>
+            {% else %}
+                {% if not product.leftovers %}
+                    <span class="badge badge-important leftovers">Отсуствует</span>
+                {% else %}
+                    {% if product.leftovers > 10 %}
+                        <span class="badge badge-success leftovers">Много</span>
+                    {% else %}
+                        <span class="badge badge-info leftovers">Мало</span>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>

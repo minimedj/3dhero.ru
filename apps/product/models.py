@@ -36,8 +36,17 @@ def rename_section(section, section_name):
 class BaseSection(Base):
     name = ndb.StringProperty(verbose_name=u'Название', indexed=True, required=True)
     name_lowercase = ndb.StringProperty(indexed=True, default=None)
+
     products = ndb.IntegerProperty(repeated=True)
     hide_products = ndb.IntegerProperty(repeated=True)
+
+    is_products = ndb.ComputedProperty(lambda self: True if self.products_count else False)
+    is_hide_products = ndb.ComputedProperty(lambda self: True if self.hide_products_count else False)
+    is_all_products = ndb.ComputedProperty(lambda self: True if self.all_products_count else False)
+    products_count = ndb.ComputedProperty(lambda self: len(self.products))
+    hide_products_count = ndb.ComputedProperty(lambda self: len(self.hide_products))
+    all_products_count = ndb.ComputedProperty(lambda self: len(self.all_products))
+
     is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?', default=True)
 
     def _pre_put_hook(self):

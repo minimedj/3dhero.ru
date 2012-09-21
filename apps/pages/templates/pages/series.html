@@ -1,19 +1,19 @@
 {% extends 'base_two.html' %}
 
 {% block aside %}
-    {{ get_aside()|safe }}
+    {{ get_aside(active='series', key_id=key_id)|safe }}
 {% endblock %}
 
 {% block content %}
-    <h2>Топ продаж</h2>
+    <h2>Серия <big>«{{ series.name }}»</big></h2>
     {% include 'pages/products_ul.html' %}
-
     <ul class="pager">
         {% if products.has_previous %}
              <li class="previous">
                  <a href="{{
                          url_for(
-                            'pages.index',
+                            'pages.series',
+                            key_id=key_id,
                             page=products.previous_page_number) }}"
                     class="prev">
                         &larr; назад
@@ -27,7 +27,11 @@
 
         {% if products.has_next %}
             <li class="next">
-                <a href="{{ url_for('pages.index', page=products.next_page_number) }}"
+                <a href="{{ url_for(
+                    'pages.series',
+                    key_id=key_id,
+                    page=products.next_page_number)
+                }}"
                class="next">вперед &rarr;</a>
             </li>
         {% else %}
@@ -43,19 +47,25 @@
                 {% if page %}
                     {% if page == products.number %}
                         <li class="active">
-                            <a href="{{ url_for('pages.index', page=page) }}" class="page">{{ page }}</a>
+                            <a href="{{ url_for(
+                                'pages.series',
+                                key_id=key_id,
+                                page=page) }}" class="page">
+                                {{ page }}
+                            </a>
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ url_for('pages.index', page=page) }}" class="page">{{ page }}</a>
+                            <a href="{{ url_for(
+                                'pages.series',
+                                key_id=key_id,
+                                page=page) }}" class="page">{{ page }}</a>
                         </li>
                     {% endif %}
                 {% else %}
                     ......
                 {% endif %}
             {% endfor %}
-
-
         </ul>
     </div>
 

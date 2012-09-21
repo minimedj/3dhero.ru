@@ -40,7 +40,10 @@ class Paginator(object):
     
     # Get one more entity than requested to see if 
     # we have one more page
-    page_items = self.object_list.fetch(self.per_page, offset=bottom)
+    if type(self.object_list) == list:
+        page_items = self.object_list
+    else:
+        page_items = self.object_list.fetch(self.per_page, offset=bottom)
     if not page_items:
       if number == 1 and self.allow_empty_first_page:
         pass
@@ -55,6 +58,8 @@ class Paginator(object):
   def count(self):
     "Returns the total number of objects, across all pages."
     try:
+      if type(self.object_list) == list:
+        return len(self.object_list)
       return self.object_list.count()
     except (AttributeError, TypeError):
       # AttributeError if object_list has no count() method.

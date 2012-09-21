@@ -8,6 +8,9 @@ import config
 app = flask.Flask(__name__)
 app.config.from_object(config)
 
+from apps.aside.views import get_aside
+app.jinja_env.globals.update(get_aside=get_aside)
+
 from auth_views import mod as auth_mod
 app.register_blueprint(auth_mod)
 
