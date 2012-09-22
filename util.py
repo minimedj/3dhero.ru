@@ -39,7 +39,7 @@ def get_next_url():
   referrer = flask.request.referrer
   if referrer and referrer.startswith(flask.request.host_url):
     return referrer
-  return flask.url_for('main_page.index')
+  return flask.url_for('pages.index')
 
 
 ################################################################################
