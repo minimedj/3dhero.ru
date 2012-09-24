@@ -71,3 +71,16 @@ class File(Base):
     @classmethod
     def is_image_type(cls, content_type):
         return content_type in IMAGE_TYPES
+
+
+class Folder(Base):
+    title = ndb.StringProperty(verbose_name=u'Название')
+    is_public = ndb.BooleanProperty(verbose_name=u'Публичная?', default=False)
+    files = ndb.KeyProperty(File, verbose_name=u'Файлы', repeated=True)
+
+    @classmethod
+    def _pre_delete_hook(cls, key):
+        folder = key.get()
+        if folder and folder.files:
+            for f in folder.files:
+                f.delete()
