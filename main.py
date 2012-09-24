@@ -39,3 +39,9 @@ app.register_blueprint(product_task_mod)
 
 from apps.product.views import mod as product_mod
 app.register_blueprint(product_mod)
+
+from apps.file.views import mod as file_view
+app.register_blueprint(file_view)
+
+from apps.file.admin.views import mod as file_admin_mod
+app.register_blueprint(file_admin_mod)
