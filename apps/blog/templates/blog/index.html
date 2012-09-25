@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">
+            Главная
+        </a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        Новости
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            {% if not posts or not posts.count() %}
+                Новостей нет
+            {% else %}
+                {% for post in posts %}
+                    {% include 'blog/post_box.html' %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

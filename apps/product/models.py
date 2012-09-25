@@ -246,6 +246,7 @@ class Product(Base):
     is_public = ndb.BooleanProperty(
         verbose_name=u'Показывать на сайте?',
         default=True)
+    is_available = ndb.ComputedProperty(lambda self: True if self.is_public and (self.leftovers or self.leftovers_on_way) else False)
 
     material = ndb.StringProperty(verbose_name=u'Материал', default='', indexed=False)
     size = ndb.StringProperty(verbose_name=u'Размер', default='', indexed=False)

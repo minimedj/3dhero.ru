@@ -10,6 +10,22 @@
     </script>
 {% endblock %}
 
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">
+            Главная
+        </a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li>
+        <a class="{{ url_for('pages.catalogue') }}">Каталог</a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        Серия «{{ series.name }}»
+    </li>
+{% endblock %}
+
 {% block aside %}
     {{ get_aside(active='series', key_id=key_id)|safe }}
 {% endblock %}

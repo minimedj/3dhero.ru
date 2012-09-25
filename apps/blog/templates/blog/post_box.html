@@ -1,0 +1,7 @@
+<section>
+    <h3>{{ post.title }} <small><i class="icon-calendar"></i> {{ post.created }}</small></h3>
+    {{ post.short_text|safe }}
+    {% if post.text %}
+        <a href="" class="btn">Подробнее &rarr;</a>
+    {% endif %}
+</section>

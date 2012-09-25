@@ -39,6 +39,7 @@ SCRIPTS_MODULES = [
     'libs',
     'site',
     'jquery.plugins',
+    'admin'
 ]
 
 SCRIPTS = {
@@ -51,6 +52,9 @@ SCRIPTS = {
     ],
     'jquery.plugins': [
         'lib/jquery.mosaic.js',
+    ],
+    'admin':[
+        'lib/redactor.js'
     ],
     'site': [
         'src/coffee/common/util.coffee',

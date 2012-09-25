@@ -1,5 +1,25 @@
 {% extends 'base.html' %}
 
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">
+            Главная
+        </a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li>
+        <a class="{{ url_for('pages.catalogue') }}">Каталог</a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li>
+        <a href="{{url_for('pages.series', key_id=series.key.id()) }}">Серия «{{ series.name }}»</a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        {{ product.name }}
+    </li>
+{% endblock %}
+
 {% block container %}
 <div class="row">
     {% if request.referrer %}

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import flask
-from apps.product.models import Product, Series
+from apps.blog.models import Post
+from apps.product.models import Product, Series, Brand
 from apps.utils.paginator import Paginator, EmptyPage, InvalidPage
 
 mod = flask.Blueprint(
@@ -19,17 +20,31 @@ def get_paginator(products, page):
         products = paginator.page(paginator.num_pages)
     return products
 
-@mod.route('/', defaults={'page':1})
-@mod.route('/page/<int:page>/')
-def index(page):
+@mod.route('/')
+def index():
+    posts = Post.query(Post.is_public == True).order(-Post.created).fetch(5)
+    products = Product.query(Product.is_available == True).order(-Product.created).fetch(6)
+    product_count = Product.query(Product.is_available == True).count()
+    series_count = Series.query(Series.is_public == True).count()
+    brands_count = Brand.query(Brand.is_public == True).count()
+    return flask.render_template(
+        'pages/index.html',
+        posts=posts,
+        products=products,
+        product_count=product_count,
+        series_count= series_count,
+        brands_count=brands_count
+    )
+
+@mod.route('/catalogue/', defaults={'page':1})
+@mod.route('/catalogue/page/<int:page>/')
+def catalogue(page):
     products = Product.query(
         Product.is_public == True,
         Product.images_list.is_image == True).order(-Product.rating)
     products = get_paginator(products, page)
     return flask.render_template(
-        'pages/index.html',
-        html_class='welcome',
-        channel_name='welcome',
+        'pages/catalogue.html',
         products=products
     )
 

@@ -45,3 +45,9 @@ app.register_blueprint(file_view)
 
 from apps.file.admin.views import mod as file_admin_mod
 app.register_blueprint(file_admin_mod)
+
+from apps.blog.admin.views import mod as blog_admin_mod
+app.register_blueprint(blog_admin_mod)
+
+from apps.blog.views import mod as blog_mod
+app.register_blueprint(blog_mod)

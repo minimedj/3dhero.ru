@@ -2,7 +2,7 @@
     <div class="navbar-inner">
         <div class="container">
 
-            <ul class="nav span4">
+            <ul class="nav span2">
                 <li>
                     <a class="brand" href="{{url_for('pages.index')}}">
                         <img src="/p/img/logo.png" style="height: 30px;">
@@ -11,39 +11,43 @@
                 </li>
             </ul>
 
-            <ul class="nav span4">
-                <li class="pull-right">
-                    <form class="form-search" action="">
-                        <div class="input-append">
-                            <input
-                                type="text"
-                                placeholder="Введите текст для поиска"
-                                style="margin-top: 6px;">
-                            <button type="submit" class="btn">Поиск</button>
-                        </div>
-                    </form>
+{#            <ul class="nav span4">#}
+{#                <li class="pull-right">#}
+{#                    <form class="form-search" action="">#}
+{#                        <div class="input-append">#}
+{#                            <input#}
+{#                                type="text"#}
+{#                                placeholder="Введите текст для поиска"#}
+{#                                style="margin-top: 6px;">#}
+{#                            <button type="submit" class="btn">Поиск</button>#}
+{#                        </div>#}
+{#                    </form>#}
+{#                </li>#}
+{#            </ul>#}
+
+            <ul class="nav span7">
+                <li>
+                    <a href="{{ url_for('blog.index') }}">Новости</a>
+                </li>
+                <li>
+                    <a href={{ url_for('pages.catalogue') }}>
+                        Каталог
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        Контакты
+                    </a>
+                </li>
+                <li>
+                    <a href="{{url_for('feedback.index')}}">
+                        Обратная связь
+                    </a>
                 </li>
             </ul>
 
-            <ul class="nav pull-right" style="margin-right: 0;">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        Информация <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="">
-                                Контакты
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{url_for('feedback.index')}}">
-                                Обратная связь
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="pull-right">
+            <ul class="nav pull-right">
+                <li class="">
                     <a class="">
                         <i class="icon-shopping-cart"></i>
                         Корзина
