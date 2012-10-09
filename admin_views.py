@@ -17,8 +17,8 @@ json_mod = flask.Blueprint(
     url_prefix='/_json'
 )
 
-@json_mod.route('/admin/config/')
-@mod.route('/config/', methods=['GET', 'POST'])
+@json_mod.route('/admin/')
+@mod.route('/', methods=['GET', 'POST'])
 @admin_required
 def config_update():
     form = ConfigUpdateForm()
