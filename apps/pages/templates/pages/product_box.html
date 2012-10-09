@@ -8,11 +8,14 @@
     </a>
     <a href="{{ product.url }}"
        class="mosaic-backdrop product_img_container">
-        {% if product.images_list %}
-            <img src="{{ product.images_list[0].url }}=s200-c" width="200" height="200">
-        {% else %}
-            <img src="/p/img/none/200x200.jpg" width="200" height="200">
-        {% endif %}
+        <img
+            {% if product.images_list %}
+                src="{{ product.images_list[0].url }}=s200-c"
+            {% else %}
+                src="/p/img/none/200x200.jpg"
+            {% endif %}
+        width="200" height="200"
+        style="height: 200px; width: 200px; float: left;">
         {% if product.badge %}
             <span class="badge badge-info badge_badge">{{ product.badge }}</span>
         {% endif %}
