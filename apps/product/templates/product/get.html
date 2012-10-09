@@ -21,6 +21,7 @@
 {% endblock %}
 
 {% block container %}
+    {{ super() }}
 <div class="row">
     {% if request.referrer %}
         <ul class="pager span2">
@@ -36,11 +37,15 @@
         {% else %}
             <img src="/p/img/none/400x400.jpg" height="400" width="400">
         {% endif %}
+        &nbsp;
     </div>
     <div class="span6">
+            <div class="order_box">
+
+            </div>
 
             <dl class="dl-horizontal">
-                {{ get_str_property('Цена', product.price_retail|string + ' pублей')|safe }}
+                {{ get_str_property('Цена розничная', product.price_retail|string + ' pублей')|safe }}
                 {{ get_str_property('Цена оптовая', product.price_trade|string + ' pублей')|safe }}
             </dl>
 
