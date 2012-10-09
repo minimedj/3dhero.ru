@@ -29,7 +29,9 @@ app.register_blueprint(api_v1_mod)
 app.register_blueprint(api_v1_mod_admin)
 
 from apps.feedback.views import mod as feedback_mod
+from apps.feedback.admin.views import mod as admin_feedback_mod
 app.register_blueprint(feedback_mod)
+app.register_blueprint(admin_feedback_mod)
 
 from apps.product.admin.views import mod as admin_product
 app.register_blueprint(admin_product)
@@ -63,6 +65,11 @@ app.register_blueprint(manager_admin_mod)
 
 from apps.contact.admin.views import mod as admin_contact_mod
 app.register_blueprint(admin_contact_mod)
+
+from apps.user.admin.views import mod as admin_user_mod
+from apps.user.admin.views import mod_json as json_admin_user_mod
+app.register_blueprint(admin_user_mod)
+app.register_blueprint(json_admin_user_mod)
 
 @app.errorhandler(401)
 def custom_401(error):

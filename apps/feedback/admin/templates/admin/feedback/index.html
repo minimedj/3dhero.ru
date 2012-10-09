@@ -1,0 +1,55 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+    Контакты -
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+            Отзывы и предложения
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>Существующие отзывы и предложения</caption>
+            <thead>
+                <tr>
+                    <th>
+                        Тема
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Операции
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedbacks %}
+                    <tr>
+                    <td>
+                        {{ feedback.subject }}
+                    </td>
+                    <td>
+                        {{ feedback.email }}
+                    </td>
+                    <td>
+                        <a
+                            href="{{ url_for('admin.feedback.view', key_id=feedback.key.id()) }}"
+                            class="btn">
+                            Просмотр
+                        </a>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>
+      {{title}}
+      <small>
+        просмотр зарегистрированных
+      </small>
+      {% include 'bit/view_in_json_btn.html' %}
+    </h1>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <div class="well">
+        <div class="btn-toolbar">
+          <div class="btn-group">
+            <a class="btn btn-success disabled">
+              Выводить
+            </a>
+            <a class="btn {% if not request.args.get('limit')%} active {% endif %}" href="{{url_for('admin.user.index')}}">
+              Все
+            </a>
+            <a class="btn {% if request.args.get('limit') == '2' %} active {% endif %}" href="{{url_for('admin.user.index', limit=2)}}">
+              2
+            </a>
+            <a class="btn {% if request.args.get('limit') == '4' %} active {% endif %}" href="{{url_for('admin.user.index', limit=4)}}">
+              4
+            </a>
+            <a class="btn {% if request.args.get('limit') == '8' %} active {% endif %}" href="{{url_for('admin.user.index', limit=8)}}">
+              8
+            </a>
+          </div>
+          <div class="btn-group">
+            <a class="btn btn-primary disabled">
+              Сортировать по
+            </a>
+            <a class="btn {% if not request.args.get('order')%} active {% endif %}" href="{{url_for('admin.user.index')}}">
+              Все подряд
+            </a>
+            <a class="btn {% if request.args.get('order') == 'name' %} active {% endif %}" href="{{url_for('admin.user.index', order='name')}}">
+              Имя
+            </a>
+            <a class="btn {% if request.args.get('order') == '-created' %} active {% endif %}" href="{{url_for('admin.user.index', order='-created')}}">
+              Создание
+            </a>
+            <a class="btn {% if request.args.get('order') == '-modified' %} active {% endif %}" href="{{url_for('admin.user.index', order='-modified')}}">
+              Изменение
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Gravatar</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Дата создания</th>
+            <th>Дата изменения</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in user_dbs %}
+            <tr>
+              <td>{{user.key.id()}}</td>
+              <td>
+                <img src="{{user.avatar_url}}&amp;s=24" alt="Gravatar for {{user.name}}">
+              </td>
+              <td>{{user.name}}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <abbr title="{{user.created_utc}}">
+                  {{user.created_ago}}
+                </abbr>
+              </td>
+              <td>
+                <abbr title="{{user.modified_utc}}">
+                  {{user.modified_ago}}
+                </abbr>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% if more_url %}
+    <div class="row">
+      <div class="span12">
+        <ul class="pager">
+          <li>
+            <a href="{{more_url}}">Next Page</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

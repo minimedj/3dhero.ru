@@ -1,0 +1,79 @@
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+
+            <ul class="nav span2">
+                <li>
+                    <a class="brand" href="{{url_for('admin.config_update')}}">
+                        <img src="/p/img/logo.png" style="height: 30px;">
+                        {{ config.BRAND_NAME }}
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="nav span7">
+                <li>
+                    <a href="{{ url_for('admin.blog.index') }}">Новости</a>
+                </li>
+
+                <li class="dropdown">
+                    <a
+                        href="#"
+                        class="dropdown-toggle"
+                        data-toggle="dropdown">
+                        Контакты
+                        <b class="caret">&nbsp;</b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{ url_for('admin.contact.index') }}">
+                                Адреса
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.manager.index') }}">
+                                Мененджеры
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a
+                        href="#"
+                        class="dropdown-toggle"
+                        data-toggle="dropdown">
+                        Клиенты
+                        <b class="caret">&nbsp;</b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{url_for('admin.feedback.index')}}">
+                                Обратная связь
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('admin.order.requests')}}">
+                                Запросы на регистрацию
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url_for('admin.user.index')}}">
+                                Пользователи
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav pull-right">
+                <li>
+                    <a href="{{ url_for('pages.index') }}">
+                        <i class="icon-backward"></i>
+                        Вернуться на сайт
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

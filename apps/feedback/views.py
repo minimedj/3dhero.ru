@@ -4,6 +4,7 @@ from google.appengine.api import mail
 from model import Config
 from auth import current_user_id, current_user_db
 from apps.feedback.forms import FeedbackForm
+from apps.feedback.models import Feedback
 from apps.manager.models import Manager
 
 mod = flask.Blueprint(
@@ -17,6 +18,9 @@ mod = flask.Blueprint(
 def index():
     form = FeedbackForm()
     if form.validate_on_submit():
+        feedback = Feedback()
+        form.populate_obj(feedback)
+        feedback.put()
         feedback_email = Config.get_master_db().feedback_email
         managers = Manager.query()
         if feedback_email and managers:

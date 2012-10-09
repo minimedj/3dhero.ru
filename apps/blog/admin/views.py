@@ -14,7 +14,7 @@ mod = Blueprint(
 
 @mod.route('/')
 @admin_required
-def get_posts():
+def index():
     posts = Post.query().order(-Post.created)
     return render_template(
         'blog/admin/posts.html',
@@ -29,7 +29,7 @@ def new_post():
         post = Post()
         form.populate_obj(post)
         post.put()
-        return redirect(url_for('admin.blog.get_posts'))
+        return redirect(url_for('admin.blog.index'))
     return render_template(
         'blog/admin/post_new.html',
         form=form
@@ -40,15 +40,15 @@ def new_post():
 def edit_post(key_id):
     post = Post.retrieve_by_id(key_id)
     if not post:
-        return redirect(url_for('admin.blog.get_posts'))
+        return redirect(url_for('admin.blog.index'))
     if request.method == 'POST' and 'delete_post' in request.form:
         post.key.delete()
-        return redirect(url_for('admin.blog.get_posts'))
+        return redirect(url_for('admin.blog.index'))
     form = PostForm(obj=post)
     if form.validate_on_submit():
         form.populate_obj(post)
         post.put()
-        return redirect(url_for('admin.blog.get_posts'))
+        return redirect(url_for('admin.blog.index'))
     return render_template(
         'blog/admin/post_edit.html',
         form=form,

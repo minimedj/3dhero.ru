@@ -1,0 +1,29 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+    Контакты -
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+            <a href="{{ url_for('admin.feedback.index') }}">&larr; Назад</a> Просмотр отзыва/предложения
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <h1>{{ feedback.subject }}</h1>
+        {{ feedback.feedback }}
+
+        <h2>Обратный адрес</h2>
+        {% if feedback.email %}
+            <a href="mailto:{{ feedback.email }}">{{ feedback.email }}</a>
+        {% else %}
+            Обратный адрес не был указан
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
