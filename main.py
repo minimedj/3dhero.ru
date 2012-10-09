@@ -51,3 +51,19 @@ app.register_blueprint(blog_admin_mod)
 
 from apps.blog.views import mod as blog_mod
 app.register_blueprint(blog_mod)
+
+from apps.order.views import mod as order_mod
+app.register_blueprint(order_mod)
+
+from apps.order.admin.views import mod as admin_order_mod
+app.register_blueprint(admin_order_mod)
+
+from apps.manager.admin.views import mod as manager_admin_mod
+app.register_blueprint(manager_admin_mod)
+
+from apps.contact.admin.views import mod as admin_contact_mod
+app.register_blueprint(admin_contact_mod)
+
+@app.errorhandler(401)
+def custom_401(error):
+    return flask.redirect(flask.url_for('auth.login', next=flask.request.url))

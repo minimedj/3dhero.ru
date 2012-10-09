@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="">
+                    <a href="{{ url_for('pages.contacts') }}">
                         Контакты
                     </a>
                 </li>
@@ -47,18 +47,7 @@
             </ul>
 
             <ul class="nav pull-right">
-                <li class="">
-                    <a class="">
-                        <i class="icon-shopping-cart"></i>
-                        Корзина
-                        (
-                        {% if session.get('cart_status') %}
-                            {{ session.cart_status.get('items_count', 0) }}
-                        {% else %}
-                        0
-                        {% endif %}
-                        )
-                    </a>
+                <li class="cart_box">
                 </li>
             </ul>
         </div>

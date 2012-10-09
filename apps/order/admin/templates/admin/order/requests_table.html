@@ -1,0 +1,60 @@
+<thead>
+    <tr>
+        <th>
+            Имя
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Телефон
+        </th>
+        <th>
+            Организация
+        </th>
+        <th>
+            Город
+        </th>
+        <th>
+            Адрес
+        </th>
+        <th>
+            Операции
+        </th>
+    </tr>
+</thead>
+
+<tbody>
+    {% for request in requests %}
+        {% if request.customer %}
+            {% set customer = request.customer.get() %}
+            <tr>
+                <td>
+                    {{ customer.name }}
+                </td>
+                <td>
+                    {{ customer.email }}
+                </td>
+                <td>
+                    {{ customer.telephone }}
+                </td>
+                <td>
+                    {{ customer.company }}
+                </td>
+                <td>
+                    {{ customer.city }}
+                </td>
+                <td>
+                    {{ customer.address }}
+                </td>
+                <td>
+                    <a
+                        href="{{ url_for('admin.order.request', key_id=request.key.id()) }}"
+                        class="btn">
+                        Редактировать
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</tbody>

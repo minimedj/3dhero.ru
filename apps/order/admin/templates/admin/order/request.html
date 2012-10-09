@@ -1,0 +1,84 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+            <a href="{{ url_for('admin.order.requests') }}">
+                &larr; Назад
+            </a>
+            Просмотр запроса на партнерство
+        </h1>
+    </div>
+    <div class="span12">
+        <h2>Статус</h2>
+        {% if request_status == 0 %}
+            Новый запрос
+        {% endif %}
+        {% if request_status == 1 %}
+            Одобренный запрос
+        {% endif %}
+        {% if request_status == 2 %}
+            Отклонненый запрос
+        {% endif %}
+    </div>
+    <div class="span4">
+        <h3>Имя</h3>
+        {{ customer.name }}
+    </div>
+    <div class="span4">
+        <h3>Email</h3>
+        <a href="mailto:{{ customer.email }}">
+            {{ customer.email }}
+        </a>
+        <h3>Телефон</h3>
+        {{ customer.telephone }}
+    </div>
+    <div class="span4">
+        <h3>Огранизация</h3>
+        {{ customer.company }}
+        <h3>Город</h3>
+        {{ customer.city }}
+        <h3>Адрес</h3>
+        {{ customer.address }}
+    </div>
+    <div class="span12">
+        <form method="POST">
+            <fieldset>
+                {% if request_status == 0  %}
+                    <button
+                        name="request_accept"
+                        class="btn btn-success"
+                        type="submit">
+                        Одобрить
+                    </button>
+                    <button
+                        name="request_reject"
+                        class="btn btn-warning"
+                        type="submit">
+                        Отклонить
+                    </button>
+
+                    <br><br>
+                    <span>Задать права администратора. Внимание, будьте внимательны!</span>
+                    <br>
+                    <button
+                        name="request_admin"
+                        class="btn btn-danger"
+                        type="submit">
+                        Администратор
+                    </button>
+                {% else %}
+                    <button
+                        class="btn btn-warning"
+                        type="submit"
+                        name="request_reset">
+                        Сбрость
+                    </button>
+                {% endif %}
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}

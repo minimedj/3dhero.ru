@@ -3,6 +3,8 @@ import flask
 from apps.blog.models import Post
 from apps.product.models import Product, Series, Brand
 from apps.utils.paginator import Paginator, EmptyPage, InvalidPage
+from apps.contact.models import Contact
+from apps.manager.models import Manager
 
 mod = flask.Blueprint(
     "pages",
@@ -67,5 +69,14 @@ def series(key_id, page):
     )
 
 
+@mod.route('/contact/')
+def contacts():
+    contacts = Contact.query(Contact.is_public==True).order(-Contact.order_id)
+    managers = Manager.query(Manager.is_public==True)
+    return flask.render_template(
+        'pages/contact.html',
+        contacts=contacts,
+        managers=managers
+    )
 
 _blueprints = (mod,)

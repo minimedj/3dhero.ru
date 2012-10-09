@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from google.appengine.ext import ndb
 import modelx
@@ -42,14 +43,24 @@ class User(Base, modelx.UserX):
   username = ndb.StringProperty(indexed=True, required=True)
   email = ndb.StringProperty(default='')
 
+  telephone = ndb.StringProperty(verbose_name=u'Телефон')
+  company = ndb.StringProperty(verbose_name=u'Компания')
+  city = ndb.StringProperty(verbose_name=u'Город')
+  address = ndb.TextProperty(verbose_name=u'Адрес')
+
   active = ndb.BooleanProperty(default=True)
   admin = ndb.BooleanProperty(default=False)
   is_customer = ndb.BooleanProperty(default=False)
+  is_order_box = ndb.ComputedProperty(lambda self: True if self.admin or self.is_customer else False)
 
   federated_id = ndb.StringProperty(default='')
   facebook_id = ndb.StringProperty(default='')
   twitter_id = ndb.StringProperty(default='')
 
   _PROPERTIES = Base._PROPERTIES.union(set([
-      'name', 'username', 'avatar_url',
+      'name', 'username', 'avatar_url', 'company', 'telephone', 'address'
     ]))
+
+  def _pre_put_hook(self):
+      if self.email:
+          self.email = self.email.lower()

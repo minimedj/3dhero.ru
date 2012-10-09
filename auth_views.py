@@ -4,6 +4,7 @@ from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_use
 import flask
 import flaskext.login
 import util
+from apps.order.models import PartnerRequest, REQUEST_STATUS
 
 mod = flask.Blueprint(
     'auth',
@@ -109,22 +110,46 @@ def login_facebook():
     )
 
 
-@mod.route('/_s/profile/', endpoint='profile_service')
+@mod.route('/_json/profile/', endpoint='profile_service')
 @mod.route('/profile/', methods=['GET', 'POST'])
 @login_required
 def profile():
-  form = ProfileUpdateForm()
+  next_url = util.get_next_url()
+  customer_fields_require = False
   user_db = current_user_db()
+  form = ProfileUpdateForm(obj=user_db)
   if form.validate_on_submit():
-    user_db.name = form.name.data
-    user_db.email = form.email.data.lower()
+    form.populate_obj(user_db)
     user_db.put()
-    return flask.redirect(flask.url_for('pages.index'))
-  if not form.errors:
-    form.name.data = user_db.name
-    form.email.data = user_db.email or ''
+    if not 'customer_require' in flask.request.form:
+      flask.flash(u'Профиль успешно обновлен')
+      return flask.redirect(flask.url_for('pages.index'))
+    else:
+      if not form.telephone.data \
+         or not form.company.data\
+         or not form.address.data\
+         or not form.city.data:
+        customer_fields_require = True
+      else:
+        msg = u'Профиль успешно обновлен, '
+        request = PartnerRequest.query(PartnerRequest.customer == user_db.key)
+        if request.count():
+            msg += u'Вы уже делали запрос на сотрудничество, запрос '
+            request = request.get()
+            if request.status == REQUEST_STATUS['now']:
+                msg += u'еще не рассмотрен'
+            elif request.status == REQUEST_STATUS['accept']:
+                msg += u'одобрен'
+            else:
+                msg += u'отклонен'
+        else:
+            msg += u'в ближайшее время с Вами свяжется наш менеджер'
+            request = PartnerRequest(customer = user_db.key)
+            request.put()
+        flask.flash(msg)
+        return flask.redirect(flask.url_for('pages.index'))
 
-  if flask.request.path.startswith('/_s/'):
+  if flask.request.path.startswith('/_json/'):
     return util.jsonify_model_db(user_db)
 
   return flask.render_template(
@@ -133,4 +158,6 @@ def profile():
       html_class='profile',
       form=form,
       user_db=user_db,
+      customer_fields_require = customer_fields_require,
+      next_url = next_url
     )

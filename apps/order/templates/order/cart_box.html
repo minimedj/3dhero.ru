@@ -1,0 +1,11 @@
+<a class="">
+   <i class="icon-shopping-cart"></i>
+   Корзина
+   (
+   {% if session.get('cart_status') %}
+       {{ session.cart_status.get('items_count', 0) }}
+   {% else %}
+   0
+   {% endif %}
+   )
+</a>

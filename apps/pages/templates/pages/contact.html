@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">Главная</a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        Контакты
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <h1 class="page-header">
+                Контакты
+            </h1>
+        </div>
+        {% for contact in contacts %}
+            <div class="span12">
+            {% if contact.geo %}
+                <div class="oh">
+                    <div id="map_{{ contact.key.id() }}"
+                        style="height: 300px; width: 480px;">
+                    </div>
+                </div>
+            {% endif %}
+            <div class="oh">
+                <dl class="dl-horizontal">
+                    {% if contact.zip_code %}
+                        <dt>Индекс</dt>
+                        <dd>{{ contact.zip_code }}</dd>
+                    {% endif %}
+                    {% if contact.city %}
+                        <dt>Город</dt>
+                        <dd>{{ contact.city }}</dd>
+                    {% endif %}
+                    {% if contact.address %}
+                        <dt>Адрес</dt>
+                        <dd>{{ contact.address }}</dd>
+                    {% endif %}
+                    {% if contact.telephones %}
+                        <dt>Телефон</dt>
+                        <dd>{{ contact.telephones }}</dd>
+                    {% endif %}
+                    {% if contact.faxes %}
+                        <dt>Факс</dt>
+                        <dd>{{ contact.faxes }}</dd>
+                    {% endif %}
+                </dl>
+
+            </div>
+            </div>
+        {% endfor %}
+
+        {% if managers.count() %}
+        <div class="span12">
+            <h2>Сотрудники</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Имя
+                        </th>
+                        <th>
+                            Мобильный
+                        </th>
+                        <th>
+                            Телефон
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            ICQ
+                        </th>
+                        <th>
+                            Skype
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for manager in managers %}
+                    <tr>
+                        <td>
+                            {{ manager.name }}
+                        </td>
+                        <td>
+                            {{ manager.mobile }}
+                        </td>
+                        <td>
+                            {{ manager.telephone }}
+                        </td>
+                        <td>
+                            {% if manager.email %}
+                                <a href="mailto:{{ manager.email }}">
+                                    {{ manager.email }}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if manager.icq %}
+                            {{ manager.icq }}
+                            <img src="http://web.icq.com/whitepages/online?icq={{ manager.icq }}&amp;img=5" alt="Статус">
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if manager.skype %}
+                                <a href="skype:{{ manager.skype }}?call">
+                                    {{ manager.skype }}
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% for contact in contacts %}
+        {% if contact.geo %}
+            <script>
+                var map_{{ contact.key.id() }};
+                $(document).ready(function () {
+                    map_{{ contact.key.id() }} = new GMaps({
+                        div:'#map_{{ contact.key.id() }}',
+                        zoom: 16,
+                        lat: {{ contact.geo.lat }},
+                        lng: {{ contact.geo.lon }}
+                    });
+                    map_{{ contact.key.id() }}.addMarker({
+                        lat: {{ contact.geo.lat }},
+                        lng: {{ contact.geo.lon }},
+                        title:'{{config.BRAND_NAME}}'
+                    });
+                });
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

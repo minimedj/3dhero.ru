@@ -1,0 +1,35 @@
+{{ form.csrf }}
+<div class="oh">
+{% set form_field = form.title %}
+{% include 'bit/form_text_field.html' %}
+
+{% set form_field = form.is_public %}
+{% include 'bit/form_text_field.html' %}
+
+{% set form_field = form.zip_code %}
+{% include 'bit/form_text_field.html' %}
+
+{% set form_field = form.city %}
+{% include 'bit/form_text_field.html' %}
+
+{% set form_field = form.address %}
+{% include 'bit/form_textarea_field.html' %}
+</div>
+
+<div class="oh">
+{% set form_field = form.telephones %}
+{% include 'bit/form_textarea_field.html' %}
+
+{% set form_field = form.faxes %}
+{% include 'bit/form_textarea_field.html' %}
+</div>
+
+<div class="cl"></div>
+{% set form_field = form.latitude %}
+{% include 'bit/form_text_field.html' %}
+
+{% set form_field = form.longitude %}
+{% include 'bit/form_text_field.html' %}
+
+{% set form_field = form.additional_info %}
+{% include 'bit/form_textarea_field.html' %}

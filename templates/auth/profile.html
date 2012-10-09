@@ -1,37 +1,72 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="page-header">
-    <h1>
-      {{user_db.name}}
-      <small title="Username">{{user_db.username}}</small>
-      {% include 'bit/view_in_json_btn.html' %}
-    </h1>
-  </div>
-  <div class="row">
-    <div class="span2">
-      <a class="thumbnail" href="http://gravatar.com" target="_blank">
-        <img src="{{user_db.avatar_url}}&amp;s=130" alt="Gravatar photo of {{user_db.name}}">
-      </a>
+    <div class="page-header">
+        <h1>
+            {{ user_db.name }}
+            <small title="Username">{{ user_db.username }}</small>
+            {% include 'bit/view_in_json_btn.html' %}
+        </h1>
     </div>
-    <div class="span6">
-      <form class="form-horizontal" method="POST" action=".">
-        <fieldset>
-          {{form.csrf}}
+    <div class="row">
+        <div class="span2">
+            <a class="thumbnail" href="http://gravatar.com" target="_blank">
+                <img src="{{ user_db.avatar_url }}&amp;s=130"
+                     alt="Gravatar photo of {{ user_db.name }}">
+            </a>
+        </div>
+        <div class="span8">
+            <form class="form-horizontal" method="POST" action=".">
+                <fieldset>
+                    {{ form.csrf }}
 
-          {% set form_field = form.name %}
-          {% include 'bit/form_text_field.html' %}
+                    {% set form_field = form.name %}
+                    {% include 'bit/form_text_field.html' %}
 
-          {% set form_field = form.email %}
-          {% include 'bit/form_text_field.html' %}
+                    {% set form_field = form.email %}
+                    {% include 'bit/form_text_field.html' %}
 
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-loading" data-loading-text="Updating Profile..">
-              Update Profile
-            </button>
-          </div>
-        </fieldset>
-      </form>
+                    {% if not current_user.user_db.is_order_box %}
+                        {% if not customer_fields_require %}
+                            <label>
+                                Для сотрудничества необходимо заполнить следующие поля:
+                            </label>
+                        {% else %}
+                            <label class="alert alert-error">
+                                Для сотрудничества необходимо заполнить следующие поля:
+                            </label>
+                        {% endif %}
+                    {% endif %}
+
+                    {% set form_field = form.company %}
+                    {% include 'bit/form_text_field.html' %}
+
+                    {% set form_field = form.telephone %}
+                    {% include 'bit/form_text_field.html' %}
+
+                    {% set form_field = form.city %}
+                    {% include 'bit/form_text_field.html' %}
+
+                    {% set form_field = form.address %}
+                    {% include 'bit/form_textarea_field.html' %}
+
+                    <div class="form-actions">
+                        <button type="submit"
+                                class="btn btn-primary btn-loading"
+                                data-loading-text="Сохранение профиля...">
+                            Сохранить
+                        </button>
+                        {% if not current_user.user_db.is_order_box %}
+                        <button type="submit"
+                                name="customer_require"
+                                class="btn btn-warning btn-loading"
+                                data-loading-text="Запрос на сотрудничество..">
+                            Запрос на сотрудничество
+                        </button>
+                        {% endif %}
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
-  </div>
 {% endblock %}

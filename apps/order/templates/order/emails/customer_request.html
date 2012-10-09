@@ -1,0 +1,8 @@
+Имя: {{ customer.name }}
+Email: {{ customer.email }}
+Телефон: {{ customer.telephone }}
+Организация: {{ customer.company }}
+Город: {{ customer.city }}
+Адрес: {{ customer.address }}
+
+Для одобрения или отказа пройдите по ссылке: http://www.3dhero.ru{{ url_for('admin.order.request', key_id=customer_request.key.id()) }}

@@ -1,0 +1,40 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+    Менеджеры -
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+            <a href="{{ url_for('admin.manager.index') }}">&larr; Назад</a>
+            Редактирование менеджера
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <form class="form-horizontal" method="POST">
+            <fieldset>
+                {% include 'admin/manager/fields.html' %}
+
+                <div class="form-actions">
+                    <button type="submit"
+                            class="btn btn-primary btn-loading"
+                            data-loading-text="Сохранение...">
+                        Сохранить изменения
+                    </button>
+                    <button type="submit"
+                            class="btn btn-danger btn-loading"
+                            name='delete_manager'
+                            data-loading-text="Удаление...">
+                        Удалить
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}

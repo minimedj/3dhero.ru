@@ -1,0 +1,87 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+    Менеджеры -
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+                Менеджеры
+            </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <a href="{{ url_for('admin.manager.add') }}" class="btn btn-primary">
+            Добавить менеджера
+        </a>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>Существующие менеджеры</caption>
+            <thead>
+                <tr>
+                    <th>
+                        Имя
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Телефон
+                    </th>
+                    <th>
+                        Мобильный
+                    </th>
+                    <th>
+                        Показывать <br> в контактах
+                    </th>
+                    <th>
+                        Операции
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for manager in managers %}
+                    <tr>
+                    <td>
+                        {{ manager.name }}
+                    </td>
+                    <td>
+                        {{ manager.email }}
+                    </td>
+                    <td>
+                        {{ manager.telephone }}
+                    </td>
+                    <td>
+                        {{ manager.mobile }}
+                    </td>
+                    <td>
+                        {% if manager.is_public %}
+                            Да
+                        {% else %}
+                            Нет
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a
+                            href="{{ url_for('admin.manager.edit', key_id=manager.key.id()) }}"
+                            class="btn">
+                            Редактировать
+                        </a>
+                    </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

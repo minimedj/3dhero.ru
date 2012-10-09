@@ -1,0 +1,84 @@
+{% extends 'admin.html' %}
+
+{% block title %}
+    Контакты -
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+                Контакты
+        </h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <a href="{{ url_for('admin.contact.add') }}" class="btn btn-primary">
+            Добавить контакт
+        </a>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>Существующие контакты</caption>
+            <thead>
+                <tr>
+                    <th>
+                        Название
+                    </th>
+                    <th>
+                        Почтовый код
+                    </th>
+                    <th>
+                        Город
+                    </th>
+                    <th>
+                        Адрес
+                    </th>
+                    <th>
+                        Показывать на сайте?
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                    <tr>
+                    <td>
+                        {{ contact.title }}
+                    </td>
+                    <td>
+                        {{ contact.zip_code }}
+                    </td>
+                    <td>
+                        {{ contact.city }}
+                    </td>
+                    <td>
+                        {{ contact.address }}
+                    </td>
+                    <td>
+                        {% if contact.is_public %}
+                            Да
+                        {% else %}
+                            Нет
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a
+                            href="{{ url_for('admin.contact.edit', key_id=contact.key.id()) }}"
+                            class="btn">
+                            Редактировать
+                        </a>
+                    </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

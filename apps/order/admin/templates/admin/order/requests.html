@@ -1,0 +1,48 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>Запросы на регистрацию партнерства</h1>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Новые запросы
+            </caption>
+            {% include 'admin/order/requests_table.html' %}
+        </table>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Отклоненные запросы
+            </caption>
+            {% set requests = requests_reject %}
+            {% include 'admin/order/requests_table.html' %}
+        </table>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Одобренные запросы
+            </caption>
+            {% set requests = requests_accept %}
+            {% include 'admin/order/requests_table.html' %}
+        </table>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Одобренные запросы администраторов
+            </caption>
+            {% set requests = requests_admin %}
+            {% include 'admin/order/requests_table.html' %}
+        </table>
+    </div>
+</div>
+{% endblock %}

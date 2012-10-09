@@ -19,6 +19,7 @@ def get_product(key_id):
     series = Series.get_exist(product.series)
     return render_template(
         'product/get.html',
+        html_class='product',
         product=product,
         series=series,
         back_url=back_url

@@ -45,13 +45,13 @@ SCRIPTS_MODULES = [
 SCRIPTS = {
     'libs': [
         'lib/jquery.js',
-        'lib/pubnub.js',
         'lib/bootstrap/js/bootstrap-alert.js',
         'lib/bootstrap/js/bootstrap-button.js',
         'lib/bootstrap/js/bootstrap-dropdown.js',
     ],
     'jquery.plugins': [
         'lib/jquery.mosaic.js',
+        'lib/jquery.gmaps.js',
     ],
     'admin':[
         'lib/redactor.js'
@@ -66,5 +66,7 @@ SCRIPTS = {
         'src/coffee/site/profile.coffee',
         'src/coffee/site/admin.coffee',
         'src/coffee/site/chat.coffee',
+        'src/coffee/site/cart_box.coffee',
+        'src/coffee/site/order_box.coffee',
     ],
 }
