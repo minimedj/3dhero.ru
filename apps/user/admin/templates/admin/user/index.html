@@ -61,6 +61,8 @@
             <th>Gravatar</th>
             <th>Имя</th>
             <th>Email</th>
+            <th>Админ?</th>
+            <th>Клиент?</th>
             <th>Дата создания</th>
             <th>Дата изменения</th>
           </tr>
@@ -74,6 +76,20 @@
               </td>
               <td>{{user.name}}</td>
               <td>{{ user.email }}</td>
+              <td>
+                  {% if user.admin %}
+                      Да
+                  {% else %}
+                      Нет
+                  {% endif %}
+              </td>
+              <td>
+                  {% if user.is_customer %}
+                      Да
+                  {% else %}
+                      Нет
+                  {% endif %}
+              </td>
               <td>
                 <abbr title="{{user.created_utc}}">
                   {{user.created_ago}}
