@@ -1,0 +1,8 @@
+Ваш запрос на сотрудничество с нашей компанией 3DHero (http://www.3dhero.ru) одобрен. Вам даны права администратора: http://www.3dhero.ru/admin/
+
+{% if comment %}
+Комментарий менеджера:
+    {{ comment }}
+{% endif %}
+
+{% include 'order/emails/manager_info.txt' %}

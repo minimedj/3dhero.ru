@@ -3,4 +3,4 @@
 
 В случае если Ваш запрос уже был одобрен и Вы являетесь нашим клиентом - просто проигнорируйте это письмо.
 
-{% include 'order/emails/manager_info.html' %}
+{% include 'order/emails/manager_info.txt' %}

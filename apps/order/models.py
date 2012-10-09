@@ -41,7 +41,7 @@ class PartnerRequest(Base):
                             Config.get_master_db().brand_name
                         ),
                         body=render_template(
-                            'order/emails/customer_request_accept.html',
+                            'order/emails/customer_request_accept.txt',
                             comment = self.manager_comment
                         )
                     )
@@ -56,7 +56,7 @@ class PartnerRequest(Base):
                             Config.get_master_db().brand_name
                         ),
                         body=render_template(
-                            'order/emails/customer_request_reject.html',
+                            'order/emails/customer_request_reject.txt',
                             comment = self.manager_comment
                         )
                     )
@@ -73,7 +73,7 @@ class PartnerRequest(Base):
                             Config.get_master_db().brand_name
                         ),
                         body=render_template(
-                            'order/emails/customer_request_admin.html',
+                            'order/emails/customer_request_admin.txt',
                             comment = self.manager_comment
                         )
                     )
@@ -89,7 +89,7 @@ class PartnerRequest(Base):
                                     Config.get_master_db().brand_name
                                 ),
                                 body=render_template(
-                                    'order/emails/customer_request.html',
+                                    'order/emails/customer_request.txt',
                                     customer_request = self,
                                     customer = self.customer.get()
                                 )
@@ -109,6 +109,6 @@ class PartnerRequest(Base):
                         Config.get_master_db().brand_name
                     ),
                     body=render_template(
-                        'order/emails/customer_request_reset.html'
+                        'order/emails/customer_request_reset.txt'
                     )
                 )

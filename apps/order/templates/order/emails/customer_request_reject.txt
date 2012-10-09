@@ -5,4 +5,4 @@
     {{ comment }}
 {% endif %}
 
-{% include 'order/emails/manager_info.html' %}
+{% include 'order/emails/manager_info.txt' %}
