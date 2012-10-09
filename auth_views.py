@@ -140,6 +140,8 @@ def profile():
                 msg += u'еще не рассмотрен'
             elif request.status == REQUEST_STATUS['accept']:
                 msg += u'одобрен'
+            elif request.status == REQUEST_STATUS['admin']:
+                msg += u'одобрен и Вам были даны права администратора'
             else:
                 msg += u'отклонен'
         else:
