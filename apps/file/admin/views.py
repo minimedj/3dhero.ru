@@ -11,7 +11,7 @@ from apps.utils.blobstore import get_uploads
 
 
 mod = flask.Blueprint(
-    'file.admin',
+    'admin.file',
     __name__,
     url_prefix='/admin/file',
     template_folder='templates'
@@ -19,7 +19,7 @@ mod = flask.Blueprint(
 
 @mod.route('/')
 @admin_required
-def get_folders():
+def index():
     folders = Folder.query()
     return flask.render_template(
         'file/admin/folders.html',
@@ -35,7 +35,7 @@ def add_folder():
         folder = Folder()
         form.populate_obj(folder)
         folder.put()
-        return flask.redirect(flask.url_for('file.admin.get_folders'))
+        return flask.redirect(flask.url_for('admin.file.index'))
     return flask.render_template(
         'file/admin/add_folder.html',
         form=form,
@@ -47,17 +47,17 @@ def add_folder():
 def edit_folder(key_id):
     folder = Folder.retrieve_by_id(key_id)
     if not folder:
-        return flask.redirect(flask.url_for('file.admin.get_folders'))
+        return flask.redirect(flask.url_for('admin.file.index'))
     if flask.request.method == 'POST' and 'delete_folder' in flask.request.form:
         folder.key.delete()
-        return flask.redirect(flask.url_for('file.admin.get_folders'))
+        return flask.redirect(flask.url_for('admin.file.index'))
     form = FolderForm(obj=folder)
     if form.validate_on_submit():
         form.populate_obj(folder)
         folder.put()
-        return flask.redirect(flask.url_for('file.admin.get_folders'))
+        return flask.redirect(flask.url_for('admin.file.index'))
     file_form = FileForm()
-    add_url = blobstore.create_upload_url(flask.url_for('file.admin.add_file', key_id=folder.key.id()))
+    add_url = blobstore.create_upload_url(flask.url_for('admin.file.add_file', key_id=folder.key.id()))
     return flask.render_template(
         'file/admin/edit_folder.html',
         form=form,
@@ -73,7 +73,7 @@ def edit_folder(key_id):
 def add_file(key_id):
     folder = Folder.retrieve_by_id(key_id)
     if not folder:
-        return flask.redirect(flask.url_for('file.admin.get_folders'))
+        return flask.redirect(flask.url_for('admin.file.index'))
     upload_files = get_uploads(flask.request, 'file')
     if len(upload_files):
         blob_info = upload_files[0]
@@ -89,21 +89,21 @@ def add_file(key_id):
                 folder.put()
         else:
             blob_info.delete()
-    return flask.redirect(flask.url_for('file.admin.edit_folder', key_id=key_id))
+    return flask.redirect(flask.url_for('admin.file.edit_folder', key_id=key_id))
 
 @mod.route('/<int:key_id>/del_file/<int:file_key>/', methods=['POST'])
 @admin_required
 def del_file(key_id, file_key):
     folder = Folder.retrieve_by_id(key_id)
     if not folder:
-        return flask.redirect(flask.url_for('file.admin.get_folders'))
+        return flask.redirect(flask.url_for('admin.file.index'))
     for i, f in enumerate(folder.files):
         if f.id() == file_key:
             f.delete()
             del folder.files[i]
             break
     else:
-        return flask.redirect(flask.url_for('file.admin.edit_folder', key_id=key_id))
+        return flask.redirect(flask.url_for('admin.file.edit_folder', key_id=key_id))
     folder.put()
-    return flask.redirect(flask.url_for('file.admin.edit_folder', key_id=key_id))
+    return flask.redirect(flask.url_for('admin.file.edit_folder', key_id=key_id))
 

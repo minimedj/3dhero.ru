@@ -5,7 +5,7 @@
         <div class="span5">
             {% block side %}
             <h2>Папки</h2>
-            <a class="btn" href="{{ url_for('file.admin.add_folder') }}">
+            <a class="btn" href="{{ url_for('admin.file.add_folder') }}">
                 Добавить новую папку
             </a><br><br>
             <ul class="nav nav-tabs nav-stacked">
@@ -13,7 +13,7 @@
                     <li {% if active_folder==folder.key %}
                         class="active"
                     {% endif %} >
-                        <a href="{{ url_for('file.admin.edit_folder', key_id=folder.key.id()) }}">
+                        <a href="{{ url_for('admin.file.edit_folder', key_id=folder.key.id()) }}">
                             {{ folder.title }}
                             {% if folder.is_public %}
                                 <i class="icon-eye-open"> </i>
