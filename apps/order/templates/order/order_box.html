@@ -1,3 +1,22 @@
-<div class="hero-unit" style="padding: 30px;">
-    Система заказов заработает через день
+<div class="hero-unit" style="padding: 20px;">
+    {% if count %}
+        <div class="alert alert-success">
+            Товар ({{ count }} шт.) добавлен в предзаказ
+            <a href="#" class="close" data-dismiss='alert'>
+            &times;
+            </a>
+        </div>
+    {% endif %}
+    <form class="order_form" method="POST" action="{{ url }}">
+        <fieldset>
+        {{ form.csrf }}
+        {% set form_field = form.count %}
+        {% include 'bit/form_text_field_small.html' %}
+        <button type="submit"
+                class="btn btn-primary btn-loading add_to_cart"
+                data-loading-text="Добавление в предзаказ...">
+            + Заказ
+        </button>
+        </fieldset>
+    </form>
 </div>

@@ -40,14 +40,36 @@
         &nbsp;
     </div>
     <div class="span6">
-            <div class="order_box">
-
-            </div>
-
             <dl class="dl-horizontal">
                 {{ get_str_property('Цена розничная', product.price_retail|string + ' pублей')|safe }}
-                {{ get_str_property('Цена оптовая', product.price_trade|string + ' pублей')|safe }}
+                {% if current_user.is_order_box %}
+                    {{ get_str_property('Цена оптовая', product.price_trade|string + ' pублей')|safe }}
+                {% endif %}
+
+                {% if product.leftovers_on_way %}
+                    {% if current_user.admin %}
+                        {{ get_str_property('Осаток', product.leftovers_on_way|string + ' шт. в пути')|safe }}
+                    {% else %}
+                        {{ get_str_property('Остаток', 'В пути')|safe }}
+                    {% endif %}
+                {% else %}
+                    {% if not product.leftovers %}
+                        {{ get_str_property('Остаток', 'Отсуствует')|safe }}
+                    {% else %}
+                        {% if current_user.admin %}
+                            {{ get_str_property('Остаток', product.leftovers|string)|safe }}
+                        {% else %}
+                            {% if product.leftovers > 10 %}
+                                {{ get_str_property('Остаток', 'Много')|safe }}
+                            {% else %}
+                                {{ get_str_property('Остаток', 'Мало')|safe }}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
             </dl>
+            <div class="order_box">
+            </div>
 
             <dl class="dl-horizontal">
                 {{ get_str_property('Код 1C', product.id_1c)|safe }}
@@ -73,4 +95,32 @@
             </dl>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            $.get(
+                    "{{ url_for('order.get_order_box', key_id=product.key.id()) }}",
+                    function (data) {
+                        $('.order_box').html(data);
+                    }
+            );
+            $(".order_box").delegate(".add_to_cart", "click", function () {
+                var form = $(".order_box").find(".order_form");
+                form.ajaxSubmit({
+                    success:function (data) {
+                        $('.order_box').html(data);
+                        $.get('/order/cart_box/', function (data) {
+                            $('.cart_box').html(data);
+                        });
+                    },
+                    error:function (data) {
+                        alert('Упс, что-то пошло не так, попробуйте сделать заказа чуть позже')
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
 {% endblock %}

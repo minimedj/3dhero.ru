@@ -21,6 +21,7 @@ login_manager = flaskext.login.LoginManager()
 class AnonymousUser(flaskext.login.AnonymousUser):
     id = 0
     admin = False
+    is_order_box = False
     name = 'Anonymous'
 
     def key(self):
@@ -35,6 +36,7 @@ class FlaskUser(AnonymousUser):
         self.id = user_db.key.id()
         self.name = user_db.name
         self.admin = user_db.admin
+        self.is_order_box = user_db.is_order_box
 
     def key(self):
         return self.user_db.key.urlsafe()

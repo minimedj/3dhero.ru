@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+    <li class="active">
+        Предзаказ
+    </li>
+{% endblock %}
+
+
+{% block container %}
+    {{ super() }}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">
+            Предзаказ товара
+        </h1>
+        {% if not price %}
+            <h2>Вы ничего не выбрали для заказа</h2>
+        {% else %}
+            <h2>Краткая сводка</h2>
+            <dl class="dl-horizontal">
+                <dt>Сумма заказа</dt><dd>{{ price }} рублей</dd>
+                <dt>Уникальных товаров</dt><dd>{{ un_products_count }} шт.</dd>
+                <dt>Общее кол-во товара</dt><dd>{{ products_count }} шт.</dd>
+            </dl>
+
+            <h2>Детальная информация</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="span3">
+                            Название
+                        </th>
+                        <th>
+                            Фото
+                        </th>
+                        <th >
+                            Цена розничная
+                        </th>
+                        <th>
+                            Цена оптовая
+                        </th>
+                        <th>
+                            Кол-во
+                        </th>
+                        <th>
+                            Сумма
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                        <td>
+                            <a href="{{ product.url }}" target="_blank">
+                                {{ product.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if product.images %}
+                                <img src="{{ product.images[0] }}=s100">
+                            {% else %}
+                                <img src="/p/img/none/100x100.jpg" height="100" width="100">
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ product.price_retail }}
+                        </td>
+                        <td>
+                            {{ product.price_trade }}
+                        </td>
+                        <td>
+                            {{ product.order }}
+                        </td>
+                        <td>
+                            {{ product.order_price }}
+                        </td>
+                        <td>
+                            <form method="POST">
+                                <button class="btn btn-small">
+                                    Изменить
+                                </button>
+                                <button class="btn btn-danger btn-small">
+                                    Удалить
+                                </button>
+                            </form>
+                        </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            <h3 class="pull-right">Итого: {{ price }} рублей</h3>
+            <form method="POST">
+                <button class="btn btn-success" name="order_accept">
+                    Оформить заказ
+                </button>
+                <button class="btn btn-danger" name="order_delete">
+                    Удалить заказ
+                </button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

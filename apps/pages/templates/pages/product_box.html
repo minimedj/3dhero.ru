@@ -3,7 +3,9 @@
         <span class="details">
             <h1>{{ product.name }}</h1>
             Цена: {{ product.price_retail }}<br>
-            Цена опт: {{ product.price_trade }}
+            {% if current_user.is_order_box %}
+                Цена опт: {{ product.price_trade }}
+            {% endif %}
         </span>
     </a>
     <a href="{{ product.url }}"
@@ -20,15 +22,23 @@
             <span class="badge badge-info badge_badge">{{ product.badge }}</span>
         {% endif %}
         {% if product.leftovers_on_way %}
-            <span class="badge badge-warning badge_leftovers">В пути</span>
+            {% if current_user.admin %}
+                <span class="badge badge-warning badge_leftovers">{{ product.leftovers_on_way }} шт. в пути</span>
+            {% else %}
+                <span class="badge badge-warning badge_leftovers">В пути</span>
+            {% endif %}
         {% else %}
             {% if not product.leftovers %}
                 <span class="badge badge-important badge_leftovers">Отсуствует</span>
             {% else %}
-                {% if product.leftovers > 10 %}
-                    <span class="badge badge-success badge_leftovers">Много</span>
+                {% if current_user.admin %}
+                    <span class="badge badge-success badge_leftovers">{{ product.leftovers }} шт.</span>
                 {% else %}
-                    <span class="badge badge-info badge_leftovers">Мало</span>
+                    {% if product.leftovers > 10 %}
+                        <span class="badge badge-success badge_leftovers">Много</span>
+                    {% else %}
+                        <span class="badge badge-info badge_leftovers">Мало</span>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endif %}

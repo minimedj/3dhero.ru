@@ -52,6 +52,7 @@ SCRIPTS = {
     'jquery.plugins': [
         'lib/jquery.mosaic.js',
         'lib/jquery.gmaps.js',
+        'lib/jquery.form.js',
     ],
     'admin':[
         'lib/redactor.js'
@@ -67,6 +68,6 @@ SCRIPTS = {
         'src/coffee/site/admin.coffee',
         'src/coffee/site/chat.coffee',
         'src/coffee/site/cart_box.coffee',
-        'src/coffee/site/order_box.coffee',
+#        'src/coffee/site/order_box.coffee',
     ],
 }
