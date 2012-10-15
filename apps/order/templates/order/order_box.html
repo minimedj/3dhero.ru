@@ -25,7 +25,11 @@
                     data-loading-text="Изменение предзаказа...">
                 <i class="icon-white icon-trash"> </i>
                 Удалить из заказа
-            </button>
+            </button><br>
+            или
+            <a href="{{ url_for('order.cart_view') }}">
+                Оформить заказ
+            </a>
         {% else %}
             <button type="submit"
                     class="btn btn-primary btn-loading add_to_cart"
