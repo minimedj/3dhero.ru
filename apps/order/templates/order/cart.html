@@ -15,16 +15,28 @@
             Предзаказ товара
         </h1>
         {% if not price %}
-            <h2>Вы ничего не выбрали для заказа</h2>
+            <h2>
+                Вы ничего не выбрали для заказа
+                <a
+                    href="{{ url_for('order.cart_view') }}"
+                    class="btn btn-small">
+                    <i class="icon-refresh"> </i>
+                    обновить страницу
+                </a>
+            </h2>
         {% else %}
-            <h2>Краткая сводка</h2>
+            <h2>
+                Краткая сводка
+            </h2>
             <dl class="dl-horizontal">
                 <dt>Сумма заказа</dt><dd>{{ price }} рублей</dd>
                 <dt>Уникальных товаров</dt><dd>{{ un_products_count }} шт.</dd>
                 <dt>Общее кол-во товара</dt><dd>{{ products_count }} шт.</dd>
             </dl>
 
-            <h2>Детальная информация</h2>
+            <h2>
+                Детальная информация
+            </h2>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -77,7 +89,6 @@
                         </td>
                         <td>
                             <a
-                                target="_blank"
                                 class="btn"
                                 href="{{ url_for('product.get_product', key_id=product.key.id()) }}">
                                 Изменить/Удалить
@@ -90,6 +101,12 @@
             </table>
             <h3 class="pull-right">Итого: {{ price }} рублей</h3>
             <form method="POST">
+                <a
+                    href="{{ url_for('order.cart_view') }}"
+                    class="btn">
+                    <i class="icon-refresh"> </i>
+                    обновить страницу
+                </a>
                 <button class="btn btn-success" name="order_accept">
                     Оформить заказ
                 </button>
@@ -101,11 +118,4 @@
     </div>
 </div>
 {% endblock %}
-
-{% block content %}
-    <script>
-        onload = function () {
-            onfocus = function () {location.reload (true)}
-        }
-    </script>
-{% endblock %}
+}
