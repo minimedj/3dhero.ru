@@ -85,6 +85,9 @@ def get_order_box(key_id):
             session['cart'] = cart
             if count:
                 change = True
+                form.count.description=\
+                u'В предзакаезе %s шт. данного товара на сумму %s рублей. Введите новое количество заказываемого товара.' \
+                % (order_product_count, order_product_price)
     return render_template(
         'order/order_box.html',
         form=form,
