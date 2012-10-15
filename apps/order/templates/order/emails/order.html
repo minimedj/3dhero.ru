@@ -1,0 +1,6 @@
+{% include 'order/emails/order_detail.html' %}
+
+Для просмотра полной информации о заказе пройдите по адресу:
+<a href="http://www.3dhero.ru{{ url_for('admin.order.order_view', key_id=order.key.id()) }}">
+    http://www.3dhero.ru{{ url_for('admin.order.order_view', key_id=order.key.id()) }}
+</a>

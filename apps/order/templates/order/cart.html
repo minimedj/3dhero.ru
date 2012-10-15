@@ -17,13 +17,17 @@
         {% if not price %}
             <h2>
                 Вы ничего не выбрали для заказа
-                <a
-                    href="{{ url_for('order.cart_view') }}"
-                    class="btn btn-small">
-                    <i class="icon-refresh"> </i>
-                    обновить страницу
-                </a>
             </h2>
+            <a
+                href="{{ url_for('order.cart_view') }}">
+                <i class="icon-refresh"> </i>
+                обновить страницу
+            </a>
+            или
+            <a href="{{ url_for('pages.catalogue') }}">
+                <i class="icon-th-large"> </i>
+                вернуться в каталог продукции
+            </a>
         {% else %}
             <h2>
                 Краткая сводка

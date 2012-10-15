@@ -3,6 +3,7 @@
 from flask import Blueprint, render_template, url_for, session, request, redirect
 from flaskext.login import current_user
 from apps.order.forms import OrderForm
+from apps.order.models import Order, OrderProduct
 from apps.product.models import Product
 from auth import login_required
 
@@ -98,12 +99,15 @@ def get_order_box(key_id):
         order_product_price=order_product_price
     )
 
+def clear_cart():
+    cart = {'price': 0, 'products_count': 0, 'un_products_count': 0}
+    session['cart'] = cart
+
 @mod.route('/cart/', methods=['GET', 'POST'])
 @login_required
 def cart_view():
     if request.method == 'POST' and 'order_delete' in request.form:
-        cart = {'price': 0}
-        session['cart'] = cart
+        clear_cart()
         return redirect(url_for('order.cart_view'))
     cart = session.get('cart', {})
     price = cart.get('price', 0)
@@ -118,6 +122,26 @@ def cart_view():
             product.order = cart_product.get('count', 0)
             product.order_price = cart_product.get('price', 0)
         products.append(product)
+    if request.method == 'POST' and 'order_accept':
+        order = Order(customer=current_user.user_db.key)
+        price = 0
+        for product in products:
+            order_product = OrderProduct(
+                name=product.name,
+                img_url='%s=s100' % product.images[0] if product.images else '',
+                product_key=product.key,
+                count=product.order,
+                price=product.order_price,
+            )
+            price += product.order_price
+            order.products.append(order_product)
+        order.price = price
+        order.put()
+        clear_cart()
+        return render_template(
+            'order/order_success.html',
+            order=order
+        )
     return render_template(
         'order/cart.html',
         price=price,

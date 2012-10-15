@@ -4,6 +4,7 @@ from flask import Blueprint, request, redirect, url_for, render_template, flash
 from auth import admin_required
 from apps.order.models import PartnerRequest, REQUEST_STATUS
 import logging
+from apps.order.models import Order, ORDER_STATUS
 
 
 mod = Blueprint(
@@ -64,4 +65,29 @@ def get_request(key_id):
         'admin/order/request.html',
         request_status = request_obj.status,
         customer=customer
+    )
+
+
+@mod.route('/orders/')
+@admin_required
+def orders_view():
+    orders = Order.query(Order.status==ORDER_STATUS['now'])
+    booked_orders = Order.query(Order.status==ORDER_STATUS['booked'])
+    incorrect_orders = Order.query(Order.status==ORDER_STATUS['incorrect'])
+    return render_template(
+        'admin/order/orders.html',
+        orders=orders,
+        booked_orders=booked_orders,
+        incorrect_orders=incorrect_orders
+    )
+
+@mod.route('/order/<int:key_id>')
+@admin_required
+def order_view(key_id):
+    order = Order.retrieve_by_id(key_id)
+    if not order:
+        return redirect(url_for('admin.order.orders_view'))
+    return render_template(
+        'admin/order/order.html',
+        order=order
     )

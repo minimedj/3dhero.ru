@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+    <li class="active">
+        Предзаказ оформлен
+    </li>
+{% endblock %}
+
+
+{% block container %}
+    {{ super() }}
+    <div class="row">
+        <div class="span12">
+            <h1 class="page-header">
+                Предзаказ №{{ order.key.id() }} успешно оформлен
+            </h1>
+            <h2>В ближайшее время с Вами свяжется один из наших мененджеров.</h2>
+            <a href="{{ url_for('pages.catalogue') }}">Вернуться в каталог продукции</a>
+
+            <h2>Ваши контактные данные</h2>
+            {% set customer = order.customer.get() %}
+            Имя: {{ customer.name }}<br>
+            Компания: {{ customer.company }}<br>
+            Email: <a href="mailto:{{ customer.email }}">{{ customer.email }}</a><br>
+            Телефон: {{ customer.telephone }}<br>
+            Город: {{ customer.city }}<br>
+            Адрес: {{ customer.address }}
+
+            <h2>Предзаказ №{{ order.key.id() }}</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Название
+                        </th>
+                        <th>
+                            Изображение
+                        </th>
+                        <th>
+                            Цена
+                        </th>
+                        <th>
+                            Количество
+                        </th>
+                        <th>
+                            Сумма
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in order.products %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('product.get_product', key_id=product.product_key.id()) }}">
+                                    {{ product.name }}
+                                </a>
+                            </td>
+                            <td>
+                                {% if product.img_url %}
+                                    <img src="{{ product.img_url }}">
+                                {% else %}
+                                    <img src="/p/img/none/400x400.jpg" height="100" width="100">
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ product.price }}
+                            </td>
+                            <td>
+                                {{ product.count }}
+                            </td>
+                            <td>
+                                {{ product.price * product.count }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3 class="pull-right">Итого: {{ order.price }}</h3>
+        </div>
+    </div>
+{% endblock %}

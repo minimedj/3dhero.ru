@@ -7,12 +7,7 @@ from apps.product.models import Product
 from model import User, Config
 from google.appengine.api import mail
 from apps.manager.models import Manager
-import sys
-
-class Order(Base):
-    products = ndb.KeyProperty(Product, repeated=True)
-    customer = ndb.KeyProperty(User)
-    price = ndb.IntegerProperty(verbose_name=u'Сумма на момент заказа')
+from apps.product.models import Product
 
 REQUEST_STATUS = {
     'now': 0,
@@ -112,3 +107,50 @@ class PartnerRequest(Base):
                         'order/emails/customer_request_reset.txt'
                     )
                 )
+
+
+ORDER_STATUS = {
+    'now': 0,
+    'booked': 1,
+    'incorrect': 2,
+    'deleted': 3
+}
+
+
+class OrderProduct(ndb.Model):
+    name = ndb.StringProperty()
+    img_url = ndb.StringProperty()
+    product_key = ndb.KeyProperty(Product)
+    count = ndb.IntegerProperty()
+    price = ndb.FloatProperty()
+
+
+class Order(Base):
+    status = ndb.IntegerProperty(default=ORDER_STATUS['now'])
+    products = ndb.StructuredProperty(OrderProduct, repeated=True)
+    customer = ndb.KeyProperty(User)
+    price = ndb.FloatProperty()
+
+    def _post_put_hook(self, future):
+        customer = self.customer.get()
+        feedback_email = Config.get_master_db().feedback_email
+        if customer and feedback_email:
+            if self.status == ORDER_STATUS['now']:
+                managers = Manager.query()
+                for manager in managers:
+                    if manager.email:
+                        mail.send_mail(
+                            sender=feedback_email,
+                            to=manager.email,
+                            subject=u'[%s] - Новый заказ на сумму %s' % (
+                                Config.get_master_db().brand_name, self.price
+                            ),
+                            body=render_template(
+                                'order/emails/order.txt',
+                                order = self
+                            ),
+                            html=render_template(
+                                'order/emails/order.html',
+                                order=self
+                            )
+                        )

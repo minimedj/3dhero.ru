@@ -1,0 +1,15 @@
+Заказ №{{ order.key.id() }} на сумму: {{ order.price }}
+
+-------------------------------------------------------
+Клиент
+{% set customer = order.customer.get() %}
+Имя: {{ customer.name }}
+Компания: {{ customer.company }}
+Email: {{ customer.email }}
+Телефон: {{ customer.telephone }}
+Город: {{ customer.city }}
+Адрес: {{ customer.address }}
+-------------------------------------------------------
+
+Для просмотра полной информации о заказе пройдите по адресу:
+http://www.3dhero.ru{{ url_for('admin.order.order_view', key_id=order.key.id()) }}

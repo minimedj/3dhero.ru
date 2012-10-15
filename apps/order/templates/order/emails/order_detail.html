@@ -1,0 +1,54 @@
+<h2>Клиент</h2>
+{% set customer = order.customer.get() %}
+Имя: {{ customer.name }}<br>
+Компания: {{ customer.company }}<br>
+Email: <a href="mailto:{{ customer.email }}">{{ customer.email }}</a><br>
+Телефон: {{ customer.telephone }}<br>
+Город: {{ customer.city }}<br>
+Адрес: {{ customer.address }}
+
+
+<h2>Предзаказ №{{ order.key.id() }}</h2>
+<table class="table table-bordered">
+<thead>
+    <tr>
+        <th>
+            Название
+        </th>
+        <th>
+            Изображение
+        </th>
+        <th>
+            Количество
+        </th>
+        <th>
+            Цена
+        </th>
+    </tr>
+</thead>
+<tbody>
+    {% for product in order.products %}
+    <tr>
+        <td>
+            <a href="{{ url_for('product.get_product', key_id=product.product_key.id()) }}">
+                {{ product.name }}
+            </a>
+        </td>
+        <td>
+            {% if product.img_url %}
+                <img src="{{ product.img_url }}">
+            {% else %}
+                <img src="/p/img/none/400x400.jpg" height="100" width="100">
+            {% endif %}
+        </td>
+        <td>
+            {{ product.count }}
+        </td>
+        <td>
+            {{ product.price }}
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<h3 class="pull-right">Итого: {{ order.price }}</h3>

@@ -1,0 +1,38 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>Заказы</h1>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Новые заказы
+            </caption>
+            {% include 'admin/order/order_table.html' %}
+        </table>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Выполненные заказы
+            </caption>
+            {% set orders = booked_orders %}
+            {% include 'admin/order/order_table.html' %}
+        </table>
+    </div>
+
+    <div class="span12">
+        <table class="table table-bordered">
+            <caption>
+                Ошибочные заказы
+            </caption>
+            {% set orders = incorrect_orders %}
+            {% include 'admin/order/order_table.html' %}
+        </table>
+    </div>
+</div>
+{% endblock %}
