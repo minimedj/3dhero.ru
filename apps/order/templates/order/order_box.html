@@ -12,11 +12,28 @@
         {{ form.csrf }}
         {% set form_field = form.count %}
         {% include 'bit/form_text_field_small.html' %}
-        <button type="submit"
-                class="btn btn-primary btn-loading add_to_cart"
-                data-loading-text="Добавление в предзаказ...">
-            + Заказ
-        </button>
+        {% if change %}
+            <button type="submit"
+                    class="btn btn-primary btn-loading add_to_cart"
+                    data-loading-text="Изменение предзаказа...">
+                <i class="icon-white icon-pencil"> </i>
+                Изменить количество
+            </button>
+            <button type="submit"
+                    name='order_clear'
+                    class="btn btn-warning btn-loading remove_from_cart"
+                    data-loading-text="Изменение предзаказа...">
+                <i class="icon-white icon-trash"> </i>
+                Удалить из заказа
+            </button>
+        {% else %}
+            <button type="submit"
+                    class="btn btn-primary btn-loading add_to_cart"
+                    data-loading-text="Добавление в предзаказ...">
+                <i class="icon-white icon-shopping-cart"> </i>
+                Заказ
+            </button>
+        {% endif %}
         </fieldset>
     </form>
 </div>

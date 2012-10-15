@@ -38,30 +38,61 @@ def get_order_box(key_id):
     product = Product.retrieve_by_id(key_id)
     if not product.is_available:
         return render_template('order/no_available_box.html')
-    form = OrderForm()
+
+    cart = session.get('cart', {})
+    products = cart.get('products', {})
+
+    order_product = products.get(key_id, {})
+    order_product_count = order_product.get('count', 0)
+    order_product_price = order_product.get('price', 0)
+
+    if request.method == 'POST' and 'order_clear' in request.form:
+        if key_id in products:
+            del products[key_id]
+            cart['products'] = products
+            cart['price'] = cart.get('price', order_product_price) - order_product_price
+            session['count'] = cart.get('count', order_product_count) - order_product_count
+            session['cart'] = cart
+        return redirect(url_for('order.get_order_box', key_id=key_id))
+
+    order_product = products.get(key_id, {})
+    order_product_count = order_product.get('count', 0)
+    order_product_price = order_product.get('price', 0)
+
+    if order_product_count:
+        form = OrderForm(count=order_product_count)
+        form.count.description=\
+        u'В предзакаезе %s шт. данного товара на сумму %s рублей. Введите новое количество заказываемого товара.' \
+        % (order_product_count, order_product_price)
+        change = True
+    else:
+        form = OrderForm()
+        change = False
     count=0
     if form.validate_on_submit():
         count = form.count.data
         if product:
             price = product.price_trade * count
-            cart = session.get('cart', {})
-            cart['price'] = cart.get('price', 0) + price
-            cart['products_count'] = cart.get('products_count', 0) + count
+            cart['price'] = cart.get('price', order_product_price) - order_product_price + price
+            cart['products_count'] = cart.get('products_count', order_product_count) - order_product_count + count
 
-            products = cart.get('products', {})
-            pr = products.get(key_id, {})
-            pr['count'] = pr.get('count', 0) + count
-            pr['price'] = pr.get('price', 0) + (pr['count'] * product.price_trade)
+            order_product['count'] = order_product_count = count
+            order_product['price'] = order_product_price = order_product['count'] * product.price_trade
 
-            products[key_id] = pr
+            products[key_id] = order_product
             cart['products']=products
             cart['un_products_count'] = len(products)
             session['cart'] = cart
+            if count:
+                change = True
     return render_template(
         'order/order_box.html',
         form=form,
         url=url_for('order.get_order_box', key_id=key_id),
-        count=count
+        count=count,
+        change=change,
+        order_product_count=order_product_count,
+        order_product_price=order_product_price
     )
 
 @mod.route('/cart/', methods=['GET', 'POST'])

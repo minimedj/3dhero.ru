@@ -76,14 +76,12 @@
                             {{ product.order_price }}
                         </td>
                         <td>
-                            <form method="POST">
-                                <button class="btn btn-small">
-                                    Изменить
-                                </button>
-                                <button class="btn btn-danger btn-small">
-                                    Удалить
-                                </button>
-                            </form>
+                            <a
+                                target="_blank"
+                                class="btn"
+                                href="{{ url_for('product.get_product', key_id=product.key.id()) }}">
+                                Изменить/Удалить
+                            </a>
                         </td>
                         </tr>
                     {% endfor %}
@@ -102,4 +100,12 @@
         {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block content %}
+    <script>
+        onload = function () {
+            onfocus = function () {location.reload (true)}
+        }
+    </script>
 {% endblock %}

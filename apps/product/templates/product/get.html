@@ -106,7 +106,8 @@
                         $('.order_box').html(data);
                     }
             );
-            $(".order_box").delegate(".add_to_cart", "click", function () {
+            var order_box = $(".order_box");
+            order_box.delegate(".add_to_cart", "click", function () {
                 var form = $(".order_box").find(".order_form");
                 form.ajaxSubmit({
                     success:function (data) {
@@ -117,6 +118,23 @@
                     },
                     error:function (data) {
                         alert('Упс, что-то пошло не так, попробуйте сделать заказа чуть позже')
+                    }
+                });
+                return false;
+            });
+
+            order_box.delegate(".remove_from_cart", "click", function () {
+                var form = $(".order_box").find(".order_form");
+                form.ajaxSubmit({
+                    data: {'order_clear': 1},
+                    success:function (data) {
+                        $('.order_box').html(data);
+                        $.get('/order/cart_box/', function (data) {
+                            $('.cart_box').html(data);
+                        });
+                    },
+                    error:function (data) {
+                        alert('Упс, что-то пошло не так, попробуйте удалить предзаказ чуть позже')
                     }
                 });
                 return false;
