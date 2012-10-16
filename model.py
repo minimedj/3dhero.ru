@@ -17,6 +17,8 @@ class Config(Base, modelx.ConfigX):
   brand_name = ndb.StringProperty(default='GAE Init')
   facebook_app_id = ndb.StringProperty(default='')
   facebook_app_secret = ndb.StringProperty(default='')
+  vk_app_id = ndb.StringProperty(default='')
+  vk_app_secret = ndb.StringProperty(default='')
   feedback_email = ndb.StringProperty(default='')
   flask_secret_key = ndb.StringProperty(default='%r' % os.urandom(24))
   pubnub_publish = ndb.StringProperty(default='')

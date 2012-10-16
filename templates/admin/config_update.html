@@ -22,10 +22,17 @@
           {% set form_field = form.analytics_id %}
           {% include 'bit/form_text_field.html' %}
 
+          <label>Авторизация через соц. сети</label>
           {% set form_field = form.facebook_app_id %}
           {% include 'bit/form_text_field.html' %}
 
           {% set form_field = form.facebook_app_secret %}
+          {% include 'bit/form_text_field.html' %}
+
+          {% set form_field = form.vk_app_id %}
+          {% include 'bit/form_text_field.html' %}
+
+          {% set form_field = form.vk_app_secret %}
           {% include 'bit/form_text_field.html' %}
 
           {% set form_field = form.twitter_consumer_key %}

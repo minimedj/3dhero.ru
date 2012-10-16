@@ -17,6 +17,14 @@ class ConfigUpdateForm(wtf.Form):
   facebook_app_secret = wtf.TextField(
       'Facebook Secret', [wtf.validators.optional()]
     )
+  vk_app_id = wtf.TextField(
+      'Vkontakte ID',
+      [wtf.validators.optional()]
+  )
+  vk_app_secret = wtf.TextField(
+      'Vkontakte Secret',
+      [wtf.validators.optional()]
+  )
   feedback_email = wtf.TextField('Feedback Email', [
         wtf.validators.optional(),
         wtf.validators.email("That doesn't look like an email"),
