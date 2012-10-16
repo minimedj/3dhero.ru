@@ -24,6 +24,7 @@ def config_update():
     config_db = model.Config.get_master_db()
     form = ConfigUpdateForm(obj=config_db)
     if form.validate_on_submit():
+        form.populate_obj(config_db)
         config_db.put()
         update_config_variables(config_db)
         flask.flash('Your Config settings have been saved', category='success')
