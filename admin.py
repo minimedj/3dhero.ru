@@ -25,6 +25,15 @@ class ConfigUpdateForm(wtf.Form):
       'Vkontakte Secret',
       [wtf.validators.optional()]
   )
+  ya_app_id = wtf.TextField(
+        'Yandex app ID',
+        [wtf.validators.optional()]
+  )
+  ya_app_secret = wtf.TextField(
+    'Yandex app password',
+    [wtf.validators.optional()]
+  )
+
   feedback_email = wtf.TextField('Feedback Email', [
         wtf.validators.optional(),
         wtf.validators.email("That doesn't look like an email"),
