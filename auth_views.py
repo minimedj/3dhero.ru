@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
-from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, login_required, ProfileUpdateForm, current_user_db
+from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, login_required, ProfileUpdateForm, current_user_db
 import flask
 import flaskext.login
 import util
@@ -20,6 +20,7 @@ def login():
   google_login_url = flask.url_for('auth.login_google', next=next_url)
   twitter_login_url = flask.url_for('auth.login_twitter', next=next_url)
   facebook_login_url = flask.url_for('auth.login_facebook', next=next_url)
+  vk_login_url = flask.url_for('auth.login_vk', next=next_url)
 
   return flask.render_template(
       'auth/login.html',
@@ -28,6 +29,7 @@ def login():
       google_login_url=google_login_url,
       twitter_login_url=twitter_login_url,
       facebook_login_url=facebook_login_url,
+      vk_login_url=vk_login_url,
       next_url=next_url,
     )
 
@@ -105,6 +107,29 @@ def facebook_authorized(resp):
 @mod.route('/login/facebook/')
 def login_facebook():
   return facebook.authorize(callback=flask.url_for('auth.facebook_authorized',
+      next=util.get_next_url(),
+      _external=True),
+    )
+
+
+@mod.route('/_s/callback/vk/oauth-authorized/')
+@vk.authorized_handler
+def vk_authorized(resp):
+  if resp is None:
+    return 'Access denied: reason=%s error=%s' % (
+      flask.request.args['error_reason'],
+      flask.request.args['error_description']
+    )
+  access_token = resp['access_token']
+  flask.session['oauth_token'] = (access_token, '')
+  me = vk.get('/method/getUserInfoEx', data={'access_token':access_token})
+  user_db = retrieve_user_from_vk(me.data['response'])
+  return login_user_db(user_db)
+
+
+@mod.route('/login/vk/')
+def login_vk():
+  return vk.authorize(callback=flask.url_for('auth.vk_authorized',
       next=util.get_next_url(),
       _external=True),
     )

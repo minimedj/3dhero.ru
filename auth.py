@@ -197,6 +197,44 @@ def retrieve_user_from_facebook(response):
     user_db.put()
     return user_db
 
+################################################################################
+# Vkontakte
+################################################################################
+vk_oauth = flaskext.oauth.OAuth()
+
+vk = vk_oauth.remote_app(
+    'vk',
+    base_url='https://api.vk.com/',
+    request_token_url=None,
+    access_token_url='https://oauth.vk.com/access_token',
+    authorize_url='https://oauth.vk.com/authorize',
+    consumer_key=model.Config.get_master_db().vk_app_id,
+    consumer_secret=model.Config.get_master_db().vk_app_secret
+)
+
+
+@vk.tokengetter
+def get_vk_oauth_token():
+    return flask.session.get('oauth_token')
+
+
+def retrieve_user_from_vk(response):
+    user_db = model.User.retrieve_one_by('vk_id', response['user_id'])
+    if user_db:
+        return user_db
+
+    if 'user_name' in response:
+        username = response['user_name']
+    else:
+        username = response['user_id']
+
+    user_db = model.User(
+        vk_id=response['user_id'],
+        name=username,
+        username=generate_unique_username(username),
+    )
+    user_db.put()
+    return user_db
 
 ################################################################################
 # Helpers
