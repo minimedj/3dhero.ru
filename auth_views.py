@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
-from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, login_required, ProfileUpdateForm, current_user_db
+from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, yandex, retrieve_user_from_yandex, login_required, ProfileUpdateForm, current_user_db
 import flask
+from werkzeug.urls import url_encode
 import flaskext.login
+from flaskext.oauth import add_query, parse_response, OAuthException
 import util
 from apps.order.models import PartnerRequest, REQUEST_STATUS
 
@@ -21,6 +23,7 @@ def login():
   twitter_login_url = flask.url_for('auth.login_twitter', next=next_url)
   facebook_login_url = flask.url_for('auth.login_facebook', next=next_url)
   vk_login_url = flask.url_for('auth.login_vk', next=next_url)
+  yandex_login_url = flask.url_for('auth.login_yandex', next_url=next_url)
 
   return flask.render_template(
       'auth/login.html',
@@ -30,6 +33,7 @@ def login():
       twitter_login_url=twitter_login_url,
       facebook_login_url=facebook_login_url,
       vk_login_url=vk_login_url,
+      yandex_login_url=yandex_login_url,
       next_url=next_url,
     )
 
@@ -110,6 +114,50 @@ def login_facebook():
       next=util.get_next_url(),
       _external=True),
     )
+
+@mod.route('/_s/callback/yandex/oauth-authorized/')
+def yandex_authorized():
+  remote_args = {
+        'code':             flask.request.args.get('code'),
+        'client_id':        yandex.consumer_key,
+        'client_secret':    yandex.consumer_secret,
+        'grant_type': 'authorization_code'
+    }
+  remote_args.update(yandex.access_token_params)
+  if yandex.access_token_method == 'POST':
+    resp, content = yandex._client.request(yandex.expand_url(yandex.access_token_url),
+                                             yandex.access_token_method,
+                                             url_encode(remote_args))
+  elif yandex.access_token_method == 'GET':
+    url = add_query(yandex.expand_url(yandex.access_token_url), remote_args)
+    resp, content = yandex._client.request(url, yandex.access_token_method)
+  else:
+    raise OAuthException('Unsupported access_token_method: ' +
+                             yandex.access_token_method)
+  data = parse_response(resp, content)
+  if not yandex.status_okay(resp):
+    raise OAuthException('Invalid response from ' + yandex.name,
+                             type='invalid_response', data=data)
+
+  if resp is None:
+    return 'Access denied: reason=%s error=%s' % (
+      flask.request.args['error_reason'],
+      flask.request.args['error_description']
+    )
+  flask.session['oauth_token'] = (data['access_token'], '')
+  me = yandex.get('/info')
+  user_db = retrieve_user_from_yandex(me.data)
+  return login_user_db(user_db)
+
+@mod.route('/login/yandex/')
+def login_yandex():
+  params = dict(yandex.request_token_params)
+  params['client_id'] = yandex.consumer_key
+  params['response_type'] = 'code'
+  params['state'] = util.get_next_url()
+  flask.session[yandex.name + '_oauthredir'] = flask.url_for('auth.yandex_authorized')
+  url = add_query(yandex.expand_url(yandex.authorize_url), params)
+  return flask.redirect(url)
 
 
 @mod.route('/_s/callback/vk/oauth-authorized/')

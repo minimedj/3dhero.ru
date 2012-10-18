@@ -237,6 +237,47 @@ def retrieve_user_from_vk(response):
     return user_db
 
 ################################################################################
+# Yandex
+################################################################################
+yandex_oauth = flaskext.oauth.OAuth()
+
+yandex = yandex_oauth.remote_app(
+    'yandex',
+    base_url='https://login.yandex.ru/',
+    request_token_url=None,
+    access_token_url='https://oauth.yandex.ru/token',
+    authorize_url='https://oauth.yandex.ru/authorize',
+    access_token_method='POST',
+    consumer_key=model.Config.get_master_db().ya_app_id,
+    consumer_secret=model.Config.get_master_db().ya_app_secret
+)
+
+
+@yandex.tokengetter
+def get_yandex_oauth_token():
+    return flask.session.get('oauth_token')
+
+
+def retrieve_user_from_yandex(response):
+    user_db = model.User.retrieve_one_by('ya_id', response['id'])
+    if user_db:
+        return user_db
+
+    if 'display_name' in response:
+        username = response['display_name']
+    else:
+        username = response['id']
+
+    user_db = model.User(
+        ya_id=response['id'],
+        name=response['real_name'],
+        email=response['default_email'].lower(),
+        username=generate_unique_username(username),
+    )
+    user_db.put()
+    return user_db
+
+################################################################################
 # Helpers
 ################################################################################
 def login_user_db(user_db):
