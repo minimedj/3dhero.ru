@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
-from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, yandex, retrieve_user_from_yandex, mailru, retrieve_user_from_mailru, login_required, ProfileUpdateForm, current_user_db
+from auth import retrieve_user_from_google, login_user_db, odnoklassniki, retrieve_user_from_odnoklassniki, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, yandex, retrieve_user_from_yandex, mailru, retrieve_user_from_mailru, login_required, ProfileUpdateForm, current_user_db
 import flask
 from werkzeug.urls import url_encode
 import flaskext.login
@@ -30,6 +30,7 @@ def login():
   vk_login_url = flask.url_for('auth.login_vk', next=next_url)
   yandex_login_url = flask.url_for('auth.login_yandex', next=next_url)
   mailru_login_url = flask.url_for('auth.login_mailru', next=next_url)
+  odnoklassniki_login_url = flask.url_for('auth.login_odnoklassniki', next=next_url)
 
   return flask.render_template(
       'auth/login.html',
@@ -41,6 +42,7 @@ def login():
       vk_login_url=vk_login_url,
       yandex_login_url=yandex_login_url,
       mailru_login_url=mailru_login_url,
+      odnoklassniki_login_url=odnoklassniki_login_url,
       next_url=next_url,
     )
 
@@ -237,6 +239,52 @@ def vk_authorized(resp):
 @mod.route('/login/vk/')
 def login_vk():
   return vk.authorize(callback=flask.url_for('auth.vk_authorized',
+      next=util.get_next_url(),
+      _external=True),
+    )
+
+def odnoklassniki_oauth_sig(data, client_secret):
+    suffix = hashlib.md5('{0:s}{1:s}'.format(data['access_token'],
+                                     client_secret)).hexdigest()
+    check_list = sorted(['{0:s}={1:s}'.format(key, value)
+                            for key, value in data.items()
+                                if key != 'access_token'])
+    return hashlib.md5(''.join(check_list) + suffix).hexdigest()
+
+@mod.route('/_s/callback/odnoklassniki/oauth-authorized/')
+@odnoklassniki.authorized_handler
+def odnoklassniki_authorized(resp):
+  if resp is None:
+    return 'Access denied: reason=%s error=%s' % (
+      flask.request.args['error_reason'],
+      flask.request.args['error_description']
+    )
+  access_token = resp['access_token']
+  flask.session['oauth_token'] = (access_token, '')
+  try:
+      data={
+      'method':'users.getCurrentUser',
+      'application_key':odnoklassniki.consumer_public,
+      'access_token':access_token,
+      }
+      data['sig']=odnoklassniki_oauth_sig(data, client_secret=odnoklassniki.consumer_secret)
+      params = urlencode(data)
+      url = odnoklassniki.base_url + 'fb.do'
+      request = Request(url, params)
+      odnoklassniki_resp = json.loads(urlopen(request).read())
+      user_db = retrieve_user_from_odnoklassniki(odnoklassniki_resp)
+  except:
+      flask.flash(
+        u'Упс, что-то пошло не так, попробуйте зайти позже.',
+        category='danger'
+      )
+      return flask.redirect(flask.url_for('auth.login', next=util.get_next_url()))
+  return login_user_db(user_db)
+
+
+@mod.route('/login/odnoklassniki/')
+def login_odnoklassniki():
+  return odnoklassniki.authorize(callback=flask.url_for('auth.odnoklassniki_authorized',
       next=util.get_next_url(),
       _external=True),
     )
