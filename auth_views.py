@@ -305,10 +305,11 @@ def profile():
       flask.flash(u'Профиль успешно обновлен')
       return flask.redirect(flask.url_for('pages.index'))
     else:
-      if not form.telephone.data \
-         or not form.company.data\
-         or not form.address.data\
-         or not form.city.data:
+      if not form.email.data or not form.company.data:
+        if not form.email.data:
+            form.email.errors.append(u'Это поле обязательно для заполнения')
+        if not form.company.data:
+            form.company.errors.append(u'Это поле обязательно для заполнения')
         customer_fields_require = True
       else:
         msg = u'Профиль успешно обновлен, '

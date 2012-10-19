@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="page-header">
-        <h1>
-            {{ user_db.name }}
-            <small title="Username">{{ user_db.username }}</small>
-            {% include 'bit/view_in_json_btn.html' %}
-        </h1>
-    </div>
+    <h1 class="page-header">
+        {{ user_db.name }}
+        <small title="Username">{{ user_db.username }}</small>
+        {% include 'bit/view_in_json_btn.html' %}
+    </h1>
+
     <div class="row">
         <div class="span2">
             <a class="thumbnail" href="http://gravatar.com" target="_blank">
@@ -15,58 +14,57 @@
                      alt="Gravatar photo of {{ user_db.name }}">
             </a>
         </div>
-        <div class="span8">
-            <form class="form-horizontal" method="POST" action=".">
-                <fieldset>
-                    {{ form.csrf }}
 
-                    {% set form_field = form.name %}
-                    {% include 'bit/form_text_field.html' %}
+            <form class="span8 form-horizontal" method="POST" action=".">
+                {{ form.csrf }}
+                {% set form_field = form.name %}
+                {% include 'bit/form_text_field.html' %}
 
-                    {% set form_field = form.email %}
-                    {% include 'bit/form_text_field.html' %}
-
-                    {% if not current_user.user_db.is_order_box %}
-                        {% if not customer_fields_require %}
-                            <label>
-                                Для сотрудничества необходимо заполнить следующие поля:
-                            </label>
-                        {% else %}
-                            <label class="alert alert-error">
-                                Для сотрудничества необходимо заполнить следующие поля:
-                            </label>
-                        {% endif %}
+                {% if not current_user.user_db.is_order_box %}
+                    {% if not customer_fields_require %}
+                        <label>
+                            Для сотрудничества необходимо заполнить следующие поля:
+                        </label>
+                    {% else %}
+                        <label class="alert alert-error">
+                            Для сотрудничества необходимо заполнить следующие поля:
+                        </label>
                     {% endif %}
+                {% endif %}
 
-                    {% set form_field = form.company %}
-                    {% include 'bit/form_text_field.html' %}
+                {% set form_field = form.email %}
+                {% include 'bit/form_text_field.html' %}
 
-                    {% set form_field = form.telephone %}
-                    {% include 'bit/form_text_field.html' %}
+                {% set form_field = form.company %}
+                {% include 'bit/form_text_field.html' %}
 
-                    {% set form_field = form.city %}
-                    {% include 'bit/form_text_field.html' %}
+                <div class="form-actions">
+                    <button type="submit"
+                            class="btn btn-primary btn-loading"
+                            data-loading-text="Сохранение профиля...">
+                        Сохранить
+                    </button>
+                    {% if not current_user.user_db.is_order_box %}
+                    <button type="submit"
+                            name="customer_require"
+                            class="btn btn-warning btn-loading"
+                            data-loading-text="Запрос на сотрудничество..">
+                        Запрос на сотрудничество
+                    </button>
+                    {% endif %}
+                </div>
 
-                    {% set form_field = form.address %}
-                    {% include 'bit/form_textarea_field.html' %}
 
-                    <div class="form-actions">
-                        <button type="submit"
-                                class="btn btn-primary btn-loading"
-                                data-loading-text="Сохранение профиля...">
-                            Сохранить
-                        </button>
-                        {% if not current_user.user_db.is_order_box %}
-                        <button type="submit"
-                                name="customer_require"
-                                class="btn btn-warning btn-loading"
-                                data-loading-text="Запрос на сотрудничество..">
-                            Запрос на сотрудничество
-                        </button>
-                        {% endif %}
-                    </div>
-                </fieldset>
+                <label>Эти поля необязательны, но желательны для заполнения</label>
+                {% set form_field = form.telephone %}
+                {% include 'bit/form_text_field.html' %}
+
+                {% set form_field = form.city %}
+                {% include 'bit/form_text_field.html' %}
+
+                {% set form_field = form.address %}
+                {% include 'bit/form_textarea_field.html' %}
             </form>
-        </div>
+
     </div>
 {% endblock %}
