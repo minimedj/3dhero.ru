@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 from google.appengine.api import users
-from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, yandex, retrieve_user_from_yandex, login_required, ProfileUpdateForm, current_user_db
+from auth import retrieve_user_from_google, login_user_db, twitter, retrieve_user_from_twitter, facebook, retrieve_user_from_facebook, vk, retrieve_user_from_vk, yandex, retrieve_user_from_yandex, mailru, retrieve_user_from_mailru, login_required, ProfileUpdateForm, current_user_db
 import flask
 from werkzeug.urls import url_encode
 import flaskext.login
 from flaskext.oauth import add_query, parse_response, OAuthException
 import util
 from apps.order.models import PartnerRequest, REQUEST_STATUS
+import hashlib
+from urllib2 import Request, urlopen
+from urllib import urlencode
+import json
+
 
 mod = flask.Blueprint(
     'auth',
@@ -23,7 +28,8 @@ def login():
   twitter_login_url = flask.url_for('auth.login_twitter', next=next_url)
   facebook_login_url = flask.url_for('auth.login_facebook', next=next_url)
   vk_login_url = flask.url_for('auth.login_vk', next=next_url)
-  yandex_login_url = flask.url_for('auth.login_yandex', next_url=next_url)
+  yandex_login_url = flask.url_for('auth.login_yandex', next=next_url)
+  mailru_login_url = flask.url_for('auth.login_mailru', next=next_url)
 
   return flask.render_template(
       'auth/login.html',
@@ -34,6 +40,7 @@ def login():
       facebook_login_url=facebook_login_url,
       vk_login_url=vk_login_url,
       yandex_login_url=yandex_login_url,
+      mailru_login_url=mailru_login_url,
       next_url=next_url,
     )
 
@@ -115,39 +122,48 @@ def login_facebook():
       _external=True),
     )
 
+
 @mod.route('/_s/callback/yandex/oauth-authorized/')
 def yandex_authorized():
-  remote_args = {
-        'code':             flask.request.args.get('code'),
-        'client_id':        yandex.consumer_key,
-        'client_secret':    yandex.consumer_secret,
-        'grant_type': 'authorization_code'
-    }
-  remote_args.update(yandex.access_token_params)
-  if yandex.access_token_method == 'POST':
-    resp, content = yandex._client.request(yandex.expand_url(yandex.access_token_url),
-                                             yandex.access_token_method,
-                                             url_encode(remote_args))
-  elif yandex.access_token_method == 'GET':
-    url = add_query(yandex.expand_url(yandex.access_token_url), remote_args)
-    resp, content = yandex._client.request(url, yandex.access_token_method)
-  else:
-    raise OAuthException('Unsupported access_token_method: ' +
-                             yandex.access_token_method)
-  data = parse_response(resp, content)
-  if not yandex.status_okay(resp):
-    raise OAuthException('Invalid response from ' + yandex.name,
-                             type='invalid_response', data=data)
+  user_db = None
+  state = flask.request.args.get('state')
+  try:
+      remote_args = {
+            'code':             flask.request.args.get('code'),
+            'client_id':        yandex.consumer_key,
+            'client_secret':    yandex.consumer_secret,
+            'grant_type': 'authorization_code'
+        }
+      remote_args.update(yandex.access_token_params)
+      if yandex.access_token_method == 'POST':
+        resp, content = yandex._client.request(yandex.expand_url(yandex.access_token_url),
+                                                 yandex.access_token_method,
+                                                 url_encode(remote_args))
+      elif yandex.access_token_method == 'GET':
+        url = add_query(yandex.expand_url(yandex.access_token_url), remote_args)
+        resp, content = yandex._client.request(url, yandex.access_token_method)
+      else:
+        raise OAuthException('Unsupported access_token_method: ' +
+                                 yandex.access_token_method)
+      data = parse_response(resp, content)
+      if not yandex.status_okay(resp):
+        raise OAuthException('Invalid response from ' + yandex.name,
+                                 type='invalid_response', data=data)
 
-  if resp is None:
-    return 'Access denied: reason=%s error=%s' % (
-      flask.request.args['error_reason'],
-      flask.request.args['error_description']
-    )
-  flask.session['oauth_token'] = (data['access_token'], '')
-  me = yandex.get('/info')
-  user_db = retrieve_user_from_yandex(me.data)
-  return login_user_db(user_db)
+      if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+          flask.request.args['error_reason'],
+          flask.request.args['error_description']
+        )
+      flask.session['oauth_token'] = (data['access_token'], '')
+      me = yandex.get('/info')
+      user_db = retrieve_user_from_yandex(me.data)
+  except:
+    pass
+  redirect_url = login_user_db(user_db)
+  if state:
+      return flask.redirect(state)
+  return redirect_url
 
 @mod.route('/login/yandex/')
 def login_yandex():
@@ -159,6 +175,49 @@ def login_yandex():
   url = add_query(yandex.expand_url(yandex.authorize_url), params)
   return flask.redirect(url)
 
+def mailru_sig(data):
+  param_list = sorted(list(item + '=' + data[item] for item in data))
+  return hashlib.md5(''.join(param_list) + mailru.consumer_secret).hexdigest()
+
+@mod.route('/_s/callback/mailru/oauth-authorized/')
+@mailru.authorized_handler
+def mailru_authorized(resp):
+  if resp is None:
+    return 'Access denied: reason=%s error=%s' % (
+      flask.request.args['error_reason'],
+      flask.request.args['error_description']
+    )
+  access_token = resp['access_token']
+  flask.session['oauth_token'] = (access_token, '')
+  try:
+    data={
+    'method':'users.getInfo',
+    'app_id':mailru.consumer_key,
+    'session_key':access_token,
+    'secure':'1'
+    }
+    data['sig']=mailru_sig(data)
+    params = urlencode(data)
+    url = mailru.base_url + 'platform/api'
+    request = Request(url, params)
+    mailru_resp = json.loads(urlopen(request).read())
+    user_db = retrieve_user_from_mailru(mailru_resp[0])
+  except:
+    flask.flash(
+      u'Упс, что-то пошло не так, попробуйте зайти позже.',
+      category='danger'
+    )
+    return flask.redirect(flask.url_for('auth.login', next=util.get_next_url()))
+  return login_user_db(user_db)
+
+
+@mod.route('/login/mailru/')
+def login_mailru():
+    flask.session.pop('oauth_token', None)
+    return mailru.authorize(callback=flask.url_for('auth.mailru_authorized',
+    next=util.get_next_url(),
+    _external=True)
+    )
 
 @mod.route('/_s/callback/vk/oauth-authorized/')
 @vk.authorized_handler

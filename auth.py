@@ -237,6 +237,48 @@ def retrieve_user_from_vk(response):
     return user_db
 
 ################################################################################
+# Facebook
+################################################################################
+mailru_oauth = flaskext.oauth.OAuth()
+
+mailru = mailru_oauth.remote_app(
+    'mail.ru',
+    base_url='http://www.appsmail.ru/',
+    request_token_url=None,
+    access_token_url='https://connect.mail.ru/oauth/token',
+    authorize_url='https://connect.mail.ru/oauth/authorize',
+    consumer_key=model.Config.get_master_db().mailru_app_id,
+    consumer_secret=model.Config.get_master_db().mailru_app_secret,
+    access_token_params={'grant_type':'authorization_code'},
+    access_token_method='POST'
+)
+
+
+@mailru.tokengetter
+def get_mailru_oauth_token():
+    return flask.session.get('oauth_token')
+
+
+def retrieve_user_from_mailru(response):
+    user_db = model.User.retrieve_one_by('mailru_id', response['uid'])
+    if user_db:
+        return user_db
+
+    if 'first_name' or 'last_name' in response:
+        username = ('%s %s' % (response['first_name'], response['last_name'])).strip()
+    else:
+        username = response['uid']
+
+    user_db = model.User(
+        mailru_id=response['uid'],
+        name=response['nick'],
+        email=response['email'].lower(),
+        username=generate_unique_username(username),
+    )
+    user_db.put()
+    return user_db
+
+################################################################################
 # Yandex
 ################################################################################
 yandex_oauth = flaskext.oauth.OAuth()
@@ -282,16 +324,17 @@ def retrieve_user_from_yandex(response):
 ################################################################################
 def login_user_db(user_db):
     if not user_db:
+        flask.flash(u'Упс, что-то пошло не так, попробуйте зайти позже.', category='danger')
         return flask.redirect(flask.url_for('auth.login'))
 
     flask_user_db = FlaskUser(user_db)
     if flaskext.login.login_user(flask_user_db):
-        flask.flash('Welcome on %s %s!!!' % (
-            model.Config.get_master_db().brand_name, user_db.name
+        flask.flash(u'%s, добро пожаловать на сайт %s!' % (
+            user_db.name, model.Config.get_master_db().brand_name
             ), category='success')
         return flask.redirect(util.get_next_url())
     else:
-        flask.flash('Sorry, but you could not log in.', category='danger')
+        flask.flash(u'Вы не вошли на сайт.', category='danger')
         return flask.redirect(flask.url_for('auth.login'))
 
 

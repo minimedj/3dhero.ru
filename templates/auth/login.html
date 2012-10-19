@@ -5,16 +5,40 @@
     <h1>
         Вход для продолжения<br>
         <small>
-            После входа Вы будете перемещены на страницу: {{ next_url }}
+            затем Вы будете перемещены на страницу: {{ next_url }}
         </small>
     </h1>
 </div>
 
 <div class="row">
+    <div class="span12">
+        <h3>
+            Выберете социальную сеть или почтовый сервис, где у Вас есть аккаунт
+        </h3>
+    </div>
+
     <ul class="unstyled thumbnails">
         <li class="span4">
             <a class="btn" href="{{ google_login_url }}">
                 <img src="/p/img/login/google-logo-large.png">
+            </a>
+        </li>
+
+        <li class="span4">
+            <a class="btn" href="{{ yandex_login_url }}">
+                <img src="/p/img/login/ya-logo-large.png">
+            </a>
+        </li>
+
+        <li class="span4">
+            <a class="btn" href="{{ mailru_login_url }}">
+                <img src="/p/img/login/mailru-logo-large.png">
+            </a>
+        </li>
+
+        <li class="span4">
+            <a class="btn" href="{{ vk_login_url }}">
+                <img src="/p/img/login/vk-logo-large.png">
             </a>
         </li>
 
@@ -30,17 +54,6 @@
             </a>
         </li>
 
-        <li class="span4">
-            <a class="btn" href="{{ vk_login_url }}">
-                <img src="/p/img/login/vk-logo-large.png">
-            </a>
-        </li>
-
-        <li class="span4">
-            <a class="btn" href="{{ yandex_login_url }}">
-                <img src="/p/img/login/ya-logo-large.png">
-            </a>
-        </li>
     </ul>
 </div>
 {% endblock %}
