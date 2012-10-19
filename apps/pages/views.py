@@ -27,13 +27,18 @@ def index():
     posts = Post.query(Post.is_public == True).order(-Post.created).fetch(5)
     products = Product.query(Product.is_available == True).order(-Product.created).fetch(6)
     product_count = Product.query(Product.is_available == True).count()
-    series_count = Series.query(Series.is_public == True).count()
+    series = Series.query(
+                Series.is_public == True,
+                Series.is_products == True
+            ).order(Series.name)
+    series_count = series.count()
     brands_count = Brand.query(Brand.is_public == True).count()
     return flask.render_template(
         'pages/index.html',
         posts=posts,
         products=products,
         product_count=product_count,
+        series=series,
         series_count= series_count,
         brands_count=brands_count
     )
