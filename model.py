@@ -23,6 +23,8 @@ class Config(Base, modelx.ConfigX):
   ya_app_secret = ndb.StringProperty(default='')
   mailru_app_id = ndb.StringProperty(default='')
   mailru_app_secret = ndb.StringProperty(default='')
+  odnoklassniki_app_id = ndb.StringProperty(default='')
+  odnoklassniki_app_secret = ndb.StringProperty(default='')
   feedback_email = ndb.StringProperty(default='')
   flask_secret_key = ndb.StringProperty(default='%r' % os.urandom(24))
   pubnub_publish = ndb.StringProperty(default='')
@@ -65,6 +67,7 @@ class User(Base, modelx.UserX):
   vk_id = ndb.StringProperty(default='')
   ya_id = ndb.StringProperty(default='')
   mailru_id = ndb.StringProperty(default='')
+  odnoklassniki_id = ndb.StringProperty(default='')
 
   _PROPERTIES = Base._PROPERTIES.union(set([
       'name', 'username', 'avatar_url', 'company', 'telephone', 'address'

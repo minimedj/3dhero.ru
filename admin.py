@@ -43,6 +43,15 @@ class ConfigUpdateForm(wtf.Form):
     [wtf.validators.optional()]
   )
 
+  odnoklassniki_app_id = wtf.TextField(
+    'Odnoklassniki app ID',
+    [wtf.validators.optional()]
+  )
+  odnoklassniki_app_secret = wtf.TextField(
+    'Odnoklassniki secret key',
+    [wtf.validators.optional()]
+  )
+
   feedback_email = wtf.TextField('Feedback Email', [
         wtf.validators.optional(),
         wtf.validators.email("That doesn't look like an email"),
