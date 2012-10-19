@@ -47,6 +47,10 @@ class ConfigUpdateForm(wtf.Form):
     'Odnoklassniki app ID',
     [wtf.validators.optional()]
   )
+  odnoklassniki_app_public = wtf.TextField(
+      'Odnoklassniki public key',
+      [wtf.validators.optional()]
+  )
   odnoklassniki_app_secret = wtf.TextField(
     'Odnoklassniki secret key',
     [wtf.validators.optional()]

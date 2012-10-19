@@ -320,6 +320,48 @@ def retrieve_user_from_yandex(response):
     return user_db
 
 ################################################################################
+# Odnoklassniki
+################################################################################
+odnoklassniki_oauth = flaskext.oauth.OAuth()
+
+odnoklassniki = odnoklassniki_oauth.remote_app(
+    'odnoklassniki',
+    base_url='http://api.odnoklassniki.ru/',
+    request_token_url=None,
+    access_token_url='http://api.odnoklassniki.ru/oauth/token.do',
+    authorize_url='http://www.odnoklassniki.ru/oauth/authorize',
+    consumer_key=model.Config.get_master_db().odnoklassniki_app_id,
+    consumer_secret=model.Config.get_master_db().odnoklassniki_app_secret,
+    access_token_params={'grant_type':'authorization_code'},
+    access_token_method='POST'
+)
+odnoklassniki.consumer_public = model.Config.get_master_db().odnoklassniki_app_public
+
+
+@odnoklassniki.tokengetter
+def get_odnoklassniki_oauth_token():
+    return flask.session.get('oauth_token')
+
+
+def retrieve_user_from_odnoklassniki(response):
+    user_db = model.User.retrieve_one_by('odnoklassniki_id', response['uid'])
+    if user_db:
+        return user_db
+
+    if 'name' in response:
+        username = response['name']
+    else:
+        username = response['uid']
+
+    user_db = model.User(
+        odnoklassniki_id=response['uid'],
+        name=response['name'],
+        username=generate_unique_username(username),
+    )
+    user_db.put()
+    return user_db
+
+################################################################################
 # Helpers
 ################################################################################
 def login_user_db(user_db):

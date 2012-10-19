@@ -24,6 +24,7 @@ class Config(Base, modelx.ConfigX):
   mailru_app_id = ndb.StringProperty(default='')
   mailru_app_secret = ndb.StringProperty(default='')
   odnoklassniki_app_id = ndb.StringProperty(default='')
+  odnoklassniki_app_public = ndb.StringProperty(default='')
   odnoklassniki_app_secret = ndb.StringProperty(default='')
   feedback_email = ndb.StringProperty(default='')
   flask_secret_key = ndb.StringProperty(default='%r' % os.urandom(24))
