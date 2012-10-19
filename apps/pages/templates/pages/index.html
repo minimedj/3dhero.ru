@@ -42,12 +42,14 @@
                         </a>
                         </h5>
                     {% endif %}
-                    <h2>
+                    <h3 style="text-transform: uppercase">
                     {% for ser in series %}
-                        <a href="{{ url_for('pages.series', key_id=ser.key.id()) }}">
+                        <a
+                            href="{{ url_for('pages.series', key_id=ser.key.id()) }}"
+                            title='Популярные герои серии "{{ ser.name }}"'>
                             {{ ser.name }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
-                    </h2>
+                    </h3>
             </div>
         </div>
     </div>
