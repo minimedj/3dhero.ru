@@ -237,7 +237,7 @@ def retrieve_user_from_vk(response):
     return user_db
 
 ################################################################################
-# Facebook
+# Mail.ru
 ################################################################################
 mailru_oauth = flaskext.oauth.OAuth()
 
