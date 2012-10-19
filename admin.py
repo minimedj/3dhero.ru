@@ -34,6 +34,15 @@ class ConfigUpdateForm(wtf.Form):
     [wtf.validators.optional()]
   )
 
+  mailru_app_id = wtf.TextField(
+    'Mail.ru app ID',
+    [wtf.validators.optional()]
+  )
+  mailru_app_secret = wtf.TextField(
+    'Mail.ru secret key',
+    [wtf.validators.optional()]
+  )
+
   feedback_email = wtf.TextField('Feedback Email', [
         wtf.validators.optional(),
         wtf.validators.email("That doesn't look like an email"),
