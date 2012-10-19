@@ -22,31 +22,36 @@
           {% set form_field = form.analytics_id %}
           {% include 'bit/form_text_field.html' %}
 
-          <label>Авторизация через соц. сети</label>
+          <h2>Авторизация через соц. сети</h2>
+          <h3>Facebook</h3>
           {% set form_field = form.facebook_app_id %}
           {% include 'bit/form_text_field.html' %}
 
           {% set form_field = form.facebook_app_secret %}
           {% include 'bit/form_text_field.html' %}
 
+          <h3>Вконтакте</h3>
           {% set form_field = form.vk_app_id %}
           {% include 'bit/form_text_field.html' %}
 
           {% set form_field = form.vk_app_secret %}
           {% include 'bit/form_text_field.html' %}
 
+          <h3>Яндекс</h3>
           {% set form_field = form.ya_app_id %}
           {% include 'bit/form_text_field.html' %}
 
           {% set form_field = form.ya_app_secret %}
           {% include 'bit/form_text_field.html' %}
 
+          <h3>Mail.ru</h3>
           {% set form_field = form.mailru_app_id %}
           {% include 'bit/form_text_field.html' %}
 
           {% set form_field = form.mailru_app_secret %}
           {% include 'bit/form_text_field.html' %}
 
+          <h3>Одноклассники</h3>
           {% set form_field = form.odnoklassniki_app_id %}
           {% include 'bit/form_text_field.html' %}
 
@@ -56,6 +61,7 @@
           {% set form_field = form.odnoklassniki_app_secret %}
           {% include 'bit/form_text_field.html' %}
 
+          <h3>Twitter</h3>
           {% set form_field = form.twitter_consumer_key %}
           {% include 'bit/form_text_field.html' %}
 
@@ -65,6 +71,7 @@
           {% set form_field = form.pubnub_publish %}
           {% include 'bit/form_text_field.html' %}
 
+          <h2>PubHup</h2>
           {% set form_field = form.pubnub_subscribe %}
           {% include 'bit/form_text_field.html' %}
 
