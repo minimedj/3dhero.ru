@@ -108,11 +108,12 @@ def admin_required(f):
 # Google
 ################################################################################
 def retrieve_user_from_google(google_user):
-    user_db = model.User.retrieve_one_by('federated_id', google_user.user_id())
+    federated_id = google_user.user_id()
+    user_db = model.User.retrieve_one_by('federated_id', federated_id)
     if user_db:
         return user_db
     user_db = model.User(
-        federated_id=google_user.user_id(),
+        federated_id=federated_id,
         name=strip_username_from_email(google_user.nickname()),
         username=generate_unique_username(google_user.nickname()),
         email=google_user.email().lower(),
