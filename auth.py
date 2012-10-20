@@ -115,7 +115,7 @@ def retrieve_user_from_google(google_user):
     user_db = model.User(
         federated_id=federated_id,
         name=strip_username_from_email(google_user.nickname()),
-        username=generate_unique_username(google_user.nickname()),
+        username='google_%s' % federated_id,
         email=google_user.email().lower(),
         admin=users.is_current_user_admin(),
     )
