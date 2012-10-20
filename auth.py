@@ -401,25 +401,35 @@ def generate_unique_username(username):
 class ProfileUpdateForm(wtf.Form):
     name = wtf.TextField(
         u'Имя',
-        [wtf.validators.required()]
+        validators=[wtf.validators.required()],
+        description=u'Введите Ваше имя и фамилию'
     )
     email = wtf.TextField(
         u'Email',
         [
             wtf.validators.optional(),
-            wtf.validators.email(u'Это не похоже на Email')
+            wtf.validators.email(u'Это не похоже на Email, проверьте введенный текст')
         ],
         description=u'Введите Ваш Email'
     )
     company = wtf.TextField(
         u'Компания',
-        description=u'Укажите название Вашей организации'
+        validators=[wtf.validators.optional()],
+        description=u'Укажите название Вашей компании'
     )
     telephone = wtf.TextField(
         u'Телефон',
-        description=u'В случае городского телефона не забудьте указать код города')
-    city = wtf.TextField(u'Город')
+        validators=[wtf.validators.optional()],
+        description=u'Введите своий телефон, по которому наши менеджеры смогут с Вами связаться. '
+                    u'В случае городского телефона - не забудьте указать код города'
+    )
+    city = wtf.TextField(
+        u'Город',
+        validators=[wtf.validators.optional()],
+        description=u'Укажите город, в котором расположена Ваша компания'
+
+    )
     address = wtf.TextAreaField(
         u'Адрес',
-        description=u'Введите полный адрес Вашей организации'
+        description=u'Введите полный адрес Вашей компании'
     )

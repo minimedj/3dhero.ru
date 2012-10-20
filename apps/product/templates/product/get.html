@@ -8,7 +8,7 @@
         <span class="divider"> &rarr; </span>
     </li>
     <li>
-        <a class="{{ url_for('pages.catalogue') }}">Каталог</a>
+        <a href="{{ url_for('pages.catalogue') }}">Каталог</a>
         <span class="divider"> &rarr; </span>
     </li>
     <li>
@@ -23,12 +23,10 @@
 {% block container %}
     {{ super() }}
 <div class="row">
-    {% if request.referrer %}
-        <ul class="pager span2">
-            <li><a href="{{ request.referrer }}">&larr; Назад</a></li>
-        </ul>
-    {% endif %}
     <div class="span12">
+        <a class="btn" href="{{url_for('pages.series', key_id=series.key.id()) }}">
+            &larr; Перейти в каталог продукции
+        </a>
         <h2>{{ product.name }}</h2>
     </div>
     <div class="span6">

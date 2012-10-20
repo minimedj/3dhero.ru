@@ -20,25 +20,36 @@
     <div class="row">
         <div class="span12">
             <div class="hero-unit">
-            <h1>{{ config.BRAND_NAME }} - популярные герои оптом</h1>
-            <div class="pull-right">
-            {% if product_count %}
-                <a href="{{ url_for('pages.catalogue') }}">
-                    <i>Более {{ product_count }} позиций товаров</i>
-                </a><br>
-            {% endif %}
-            {% if series_count %}
-                <a href="{{ url_for('pages.catalogue') }}">
-                <i>Более {{ series_count }} категорий и серий</i>
-                </a>
-                <br>
-            {% endif %}
-            {% if brands_count %}
-                <a href="{{ url_for('pages.catalogue') }}">
-                <i>Более {{ brands_count }} брендов и производителей</i>
-                </a>
-            {% endif %}
-            </div>
+                <h1>{{ config.BRAND_NAME }} - популярные герои оптом</h1>
+                    {% if product_count %}
+                        <h5>
+                            <a href="{{ url_for('pages.catalogue') }}">
+                                <i>Более {{ product_count }} позиций товаров</i>
+                            </a>
+                        </h5>
+                    {% endif %}
+                    {% if brands_count %}
+                        <h5>
+                        <a href="{{ url_for('pages.catalogue') }}">
+                        <i>Более {{ brands_count }} брендов и производителей</i>
+                        </a>
+                        </h5>
+                    {% endif %}
+                    {% if series_count %}
+                        <h5>
+                        <a href="{{ url_for('pages.catalogue') }}">
+                        <i>Более {{ series_count }} категорий и серий</i>
+                        </a>
+                        </h5>
+                    {% endif %}
+                    <h3 style="text-transform: uppercase">
+                    {% for ser in series %}
+                        <a
+                            href="{{ url_for('pages.series', key_id=ser.key.id()) }}"
+                            title='Популярные герои серии "{{ ser.name }}"'>
+                            {{ ser.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    </h3>
             </div>
         </div>
     </div>
