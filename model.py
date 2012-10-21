@@ -50,28 +50,20 @@ class Config(Base, modelx.ConfigX):
 class User(Base, modelx.UserX):
   name = ndb.StringProperty(indexed=True, required=True)
   username = ndb.StringProperty(indexed=True, required=True)
-  email = ndb.StringProperty(default='')
 
-  telephone = ndb.StringProperty(verbose_name=u'Телефон')
-  company = ndb.StringProperty(verbose_name=u'Компания')
-  city = ndb.StringProperty(verbose_name=u'Город')
-  address = ndb.TextProperty(verbose_name=u'Адрес')
+  email = ndb.StringProperty(default='')
+  telephone = ndb.StringProperty(verbose_name=u'Телефон', default='')
+  company = ndb.StringProperty(verbose_name=u'Компания', default='')
+  city = ndb.StringProperty(verbose_name=u'Город', default='')
+  address = ndb.TextProperty(verbose_name=u'Адрес', default='')
 
   active = ndb.BooleanProperty(default=True)
   admin = ndb.BooleanProperty(default=False)
   is_customer = ndb.BooleanProperty(default=False)
   is_order_box = ndb.ComputedProperty(lambda self: True if self.admin or self.is_customer else False)
 
-  federated_id = ndb.StringProperty(default='')
-  facebook_id = ndb.StringProperty(default='')
-  twitter_id = ndb.StringProperty(default='')
-  vk_id = ndb.StringProperty(default='')
-  ya_id = ndb.StringProperty(default='')
-  mailru_id = ndb.StringProperty(default='')
-  odnoklassniki_id = ndb.StringProperty(default='')
-
   _PROPERTIES = Base._PROPERTIES.union(set([
-      'name', 'username', 'avatar_url', 'company', 'telephone', 'address'
+      'name', 'username', 'avatar_url', 'email', 'telephone', 'company', 'city', 'address'
     ]))
 
   def _pre_put_hook(self):

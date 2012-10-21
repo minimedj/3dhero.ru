@@ -108,14 +108,13 @@ def admin_required(f):
 # Google
 ################################################################################
 def retrieve_user_from_google(google_user):
-    federated_id = google_user.user_id()
-    user_db = model.User.retrieve_one_by('federated_id', federated_id)
+    id_ = 'google_%s' % google_user.user_id()
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
     user_db = model.User(
-        federated_id=federated_id,
+        username=id_,
         name=strip_username_from_email(google_user.nickname()),
-        username='google_%s' % federated_id,
         email=google_user.email().lower(),
         admin=users.is_current_user_admin(),
     )
@@ -145,13 +144,13 @@ def get_twitter_token():
 
 
 def retrieve_user_from_twitter(response):
-    user_db = model.User.retrieve_one_by('twitter_id', response['user_id'])
+    id_ = 'twitter_%s' % response['user_id']
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
     user_db = model.User(
-        twitter_id=response['user_id'],
-        name=response['screen_name'],
-        username=generate_unique_username(response['screen_name']),
+        username=id_,
+        name=response['screen_name']
     )
     user_db.put()
     return user_db
@@ -180,20 +179,15 @@ def get_facebook_oauth_token():
 
 
 def retrieve_user_from_facebook(response):
-    user_db = model.User.retrieve_one_by('facebook_id', response['id'])
+    id_ = 'facebook_%s' % response['id']
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
 
-    if 'username' in response:
-        username = response['username']
-    else:
-        username = response['id']
-
     user_db = model.User(
-        facebook_id=response['id'],
+        username=id_,
         name=response['name'],
-        email=response['email'].lower(),
-        username=generate_unique_username(username),
+        email=response['email'].lower()
     )
     user_db.put()
     return user_db
@@ -220,19 +214,14 @@ def get_vk_oauth_token():
 
 
 def retrieve_user_from_vk(response):
-    user_db = model.User.retrieve_one_by('vk_id', response['user_id'])
+    id_ = 'vk_%s' % response['user_id']
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
 
-    if 'user_name' in response:
-        username = response['user_name']
-    else:
-        username = response['user_id']
-
     user_db = model.User(
-        vk_id=response['user_id'],
-        name=username,
-        username=generate_unique_username(username),
+        username=id_,
+        name=response['user_name']
     )
     user_db.put()
     return user_db
@@ -261,20 +250,15 @@ def get_mailru_oauth_token():
 
 
 def retrieve_user_from_mailru(response):
-    user_db = model.User.retrieve_one_by('mailru_id', response['uid'])
+    id_ = 'mailru_%s' % response['uid']
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
 
-    if 'first_name' or 'last_name' in response:
-        username = ('%s %s' % (response['first_name'], response['last_name'])).strip()
-    else:
-        username = response['uid']
-
     user_db = model.User(
-        mailru_id=response['uid'],
+        username=id_,
         name=response['nick'],
         email=response['email'].lower(),
-        username=generate_unique_username(username),
     )
     user_db.put()
     return user_db
@@ -302,20 +286,15 @@ def get_yandex_oauth_token():
 
 
 def retrieve_user_from_yandex(response):
-    user_db = model.User.retrieve_one_by('ya_id', response['id'])
+    id_ = 'ya_%s' % response['id']
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
 
-    if 'display_name' in response:
-        username = response['display_name']
-    else:
-        username = response['id']
-
     user_db = model.User(
-        ya_id=response['id'],
+        username=id_,
         name=response['real_name'],
         email=response['default_email'].lower(),
-        username=generate_unique_username(username),
     )
     user_db.put()
     return user_db
@@ -345,19 +324,14 @@ def get_odnoklassniki_oauth_token():
 
 
 def retrieve_user_from_odnoklassniki(response):
-    user_db = model.User.retrieve_one_by('odnoklassniki_id', response['uid'])
+    id_ = 'odnoklassniki_%s' % response['uid']
+    user_db = model.User.retrieve_one_by('username', id_)
     if user_db:
         return user_db
 
-    if 'name' in response:
-        username = response['name']
-    else:
-        username = response['uid']
-
     user_db = model.User(
-        odnoklassniki_id=response['uid'],
-        name=response['name'],
-        username=generate_unique_username(username),
+        username=id_,
+        name=response['name']
     )
     user_db.put()
     return user_db
