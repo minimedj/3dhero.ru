@@ -3,12 +3,16 @@
 -------------------------------------------------------
 Клиент
 {% set customer = order.customer.get() %}
-Имя: {{ customer.name }}
-Компания: {{ customer.company }}
-Email: {{ customer.email }}
-Телефон: {{ customer.telephone }}
-Город: {{ customer.city }}
-Адрес: {{ customer.address }}
+{% if customer %}
+    Имя: {{ customer.name }}
+    Компания: {{ customer.company }}
+    Email: {{ customer.email }}
+    Телефон: {{ customer.telephone }}
+    Город: {{ customer.city }}
+    Адрес: {{ customer.address }}
+{% else %}
+    Пользователь не найден, возможно он был удален
+{% endif %}
 -------------------------------------------------------
 
 Для просмотра полной информации о заказе пройдите по адресу:

@@ -1,11 +1,15 @@
 <h2>Клиент</h2>
 {% set customer = order.customer.get() %}
-Имя: {{ customer.name }}<br>
-Компания: {{ customer.company }}<br>
-Email: <a href="mailto:{{ customer.email }}">{{ customer.email }}</a><br>
-Телефон: {{ customer.telephone }}<br>
-Город: {{ customer.city }}<br>
-Адрес: {{ customer.address }}
+{% if customer %}
+    Имя: {{ customer.name }}<br>
+    Компания: {{ customer.company }}<br>
+    Email: <a href="mailto:{{ customer.email }}">{{ customer.email }}</a><br>
+    Телефон: {{ customer.telephone }}<br>
+    Город: {{ customer.city }}<br>
+    Адрес: {{ customer.address }}
+{% else %}
+    Пользователь не найден, возможно он был удален
+{% endif %}
 
 
 <h2>Предзаказ №{{ order.key.id() }}</h2>

@@ -96,7 +96,7 @@ class PartnerRequest(Base):
         if customer_request and customer_request.customer:
             feedback_email = Config.get_master_db().feedback_email
             customer = customer_request.customer.get()
-            if customer.email and feedback_email:
+            if customer and customer.email and feedback_email:
                 mail.send_mail(
                     sender=feedback_email,
                     to=customer.email,

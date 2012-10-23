@@ -2,8 +2,11 @@
 
 {% block content %}
     <h1 class="page-header">
-        {{ user_db.name }}
-        <small title="Username">{{ user_db.username }}</small>
+        {% if user_db.name %}
+            {{ user_db.name }}
+        {% else %}
+            Пользователь без имени
+        {% endif %}
         {% include 'bit/view_in_json_btn.html' %}
     </h1>
 
