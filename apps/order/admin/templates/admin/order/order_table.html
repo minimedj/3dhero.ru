@@ -33,22 +33,46 @@
             {% set customer = order.customer.get() %}
             <tr>
                 <td>
-                    {{ customer.name }}
+                    {% if customer %}
+                        {{ customer.name }}
+                    {% else %}
+                        Пользователь не найден
+                    {% endif %}
                 </td>
                 <td>
-                    {{ customer.email }}
+                    {% if customer %}
+                        {{ customer.email }}
+                    {% else %}
+                        Пользователь не найден
+                    {% endif %}
                 </td>
                 <td>
-                    {{ customer.telephone }}
+                    {% if customer %}
+                        {{ customer.telephone }}
+                    {% else %}
+                        Пользователь не найден
+                    {% endif %}
                 </td>
                 <td>
-                    {{ customer.company }}
+                    {% if customer %}
+                        {{ customer.company }}
+                    {% else %}
+                        Пользователь не найден
+                    {% endif %}
                 </td>
                 <td>
-                    {{ customer.city }}
+                    {% if customer %}
+                        {{ customer.city }}
+                    {% else %}
+                        Пользователь не найден
+                    {% endif %}
                 </td>
                 <td>
-                    {{ customer.address }}
+                    {% if customer %}
+                        {{ customer.address }}
+                    {% else %}
+                        Пользователь не найден
+                    {% endif %}
                 </td>
                 <td>
                     {{ order.price }}
