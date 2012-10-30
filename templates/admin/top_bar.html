@@ -36,6 +36,22 @@
                     </ul>
                 </li>
 
+                <li class="dropdown">
+                    <a href="#"
+                       class="dropdown-toggle"
+                       data-toggle='dropdown'>
+                        Товары <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <a href="{{ url_for('admin.product.categories') }}">
+                            Категории
+                        </a>
+                        <a href="{{ url_for('admin.product.brands') }}">
+                            Бренды
+                        </a>
+                    </ul>
+                </li>
+
 
                 <li class="dropdown">
                     <a

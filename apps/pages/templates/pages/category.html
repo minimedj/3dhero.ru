@@ -22,15 +22,15 @@
         <span class="divider"> &rarr; </span>
     </li>
     <li class="active">
-        Серия «{{ series.name }}»
+        Категория «{{ category.name }}»
     </li>
 {% endblock %}
 
 {% block aside %}
-    {{ get_aside(active='series', key_id=key_id)|safe }}
+    {{ get_aside(active='category', key_id=key_id)|safe }}
 {% endblock %}
 
 {% block content %}
-    <h2>Серия <big>«{{ series.name }}»</big></h2>
+    <h2>Категория <big>«{{ category.name }}»</big></h2>
     {% include 'pages/products_ul.html' %}
 {% endblock %}

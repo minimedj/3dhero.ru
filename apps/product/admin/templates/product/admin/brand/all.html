@@ -25,6 +25,9 @@
                         Кол-во
                     </th>
                     <th>
+                        Скрытое кол-во
+                    </th>
+                    <th>
                         Операции
                     </th>
                 </tr>
@@ -42,10 +45,13 @@
                         {% endif %}
                     </td>
                     <td>
-                        ({{ brand.products|length + brand.hide_products|length }})
+                        ({{ brand.product_count }})
                     </td>
                     <td>
-                        <a href="{{ url_for('product.admin.brand_edit', key_id=brand.key.id()) }}">
+                        ({{ brand.hide_product_count }})
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.product.brand_edit', key_id=brand.key.id()) }}">
                             Редактировать
                         </a>
                     </td>
