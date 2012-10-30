@@ -1,6 +1,7 @@
 {% if sections %}
     <ul class="nav nav-tabs nav-stacked aside">
         {% for section in sections %}
+            {% if section.public_product_count %}
             <li {% if section.key.id() == key_id %}class="active"{% endif %}>
                 <a href="{{ url_for('pages.%s' % active, key_id=section.key.id()) }}">
                     {{ section.name }}
@@ -11,6 +12,7 @@
                     {% endif %}
                 </a>
             </li>
+            {% endif %}
         {% endfor %}
 
     </ul>

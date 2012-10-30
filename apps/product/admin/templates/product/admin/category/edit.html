@@ -2,7 +2,9 @@
 
 {% block content %}
     <div class="page-header">
-        <h1>Редактирование категории {{ category.name }}</h1>
+        <h1><a href="{{ url_for('admin.product.categories') }}">&larr; Назад</a>
+            Редактирование категории {{ category.name }}
+        </h1>
     </div>
     <div class="row">
         <div class="span6">

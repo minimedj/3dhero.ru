@@ -31,23 +31,28 @@
                     {% if brands_count %}
                         <h5>
                         <a href="{{ url_for('pages.catalogue') }}">
-                        <i>Более {{ brands_count }} брендов и производителей</i>
+                        <i>
+                            Более {{ brands_count }} брендов и производителей
+                            {% if countries_count %}
+                                из {{ countries_count }} стран мира
+                            {% endif %}
+                        </i>
                         </a>
                         </h5>
                     {% endif %}
-                    {% if series_count %}
+                    {% if categories_count %}
                         <h5>
                         <a href="{{ url_for('pages.catalogue') }}">
-                        <i>Более {{ series_count }} категорий и серий</i>
+                        <i>Более {{ categories_count }} категорий и серий</i>
                         </a>
                         </h5>
                     {% endif %}
                     <h3 style="text-transform: uppercase">
-                    {% for ser in series %}
+                    {% for category in categories %}
                         <a
-                            href="{{ url_for('pages.series', key_id=ser.key.id()) }}"
-                            title='Популярные герои серии "{{ ser.name }}"'>
-                            {{ ser.name }}</a>{% if not loop.last %}, {% endif %}
+                            href="{{ url_for('pages.category', key_id=category.key.id()) }}"
+                            title='Популярные герои серии "{{ category.name }}"'>
+                            {{ category.name }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                     </h3>
             </div>

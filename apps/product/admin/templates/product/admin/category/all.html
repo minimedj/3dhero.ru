@@ -5,12 +5,12 @@
         <h1>Категории</h1>
     </div>
     <div class="row">
-        <div class="span6">
+        <div class="span4">
             <h2>Новая категория</h2>
             {% include 'product/admin/category/form.html' %}
         </div>
 
-        <div class="span6">
+        <div class="span8">
             <h2>Существующие категории</h2>
             <table class="table table-bordered">
             <thead>
@@ -23,6 +23,9 @@
                     </th>
                     <th>
                         Кол-во
+                    </th>
+                    <th>
+                        Скрытое кол-во
                     </th>
                     <th>
                         Операции
@@ -42,10 +45,13 @@
                         {% endif %}
                     </td>
                     <td>
-                        ({{ category.products|length + category.hide_products|length }})
+                        ({{ category.product_count }})
                     </td>
                     <td>
-                        <a href="{{ url_for('product.admin.category_edit', key_id=category.key.id()) }}">
+                        ({{ category.hide_product_count }})
+                    </td>
+                    <td>
+                        <a href="{{ url_for('admin.product.category_edit', key_id=category.key.id()) }}">
                             Редактировать
                         </a>
                     </td>

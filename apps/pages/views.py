@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import flask
+from google.appengine.ext import ndb
 from apps.blog.models import Post
-from apps.product.models import Product, Series, Brand
+from apps.product.models import Product, Category, Brand, Country
+from apps.product.models import CategoryProduct
 from apps.utils.paginator import Paginator, EmptyPage, InvalidPage
 from apps.contact.models import Contact
 from apps.manager.models import Manager
@@ -27,19 +29,26 @@ def index():
     posts = Post.query(Post.is_public == True).order(-Post.created).fetch(5)
     products = Product.query(Product.is_available == True).order(-Product.created).fetch(6)
     product_count = Product.query(Product.is_available == True).count()
-    series = Series.query(
-                Series.is_public == True,
-                Series.is_products == True
-            ).order(Series.name)
-    series_count = series.count()
-    brands_count = Brand.query(Brand.is_public == True).count()
+    categories_obj = Category.query(Category.is_public == True).order(Category.name)
+    categories = []
+    for c in categories_obj:
+        if c.public_product_count:
+            categories.append(c)
+    categories_count = len(categories)
+    countries_count = Country.query(Country.is_public == True).count()
+    brands_objs = Brand.query(Brand.is_public == True)
+    brands_count = 0
+    for b in brands_objs:
+        if b.public_product_count:
+            brands_count += 1
     return flask.render_template(
         'pages/index.html',
         posts=posts,
         products=products,
         product_count=product_count,
-        series=series,
-        series_count= series_count,
+        categories=categories,
+        categories_count= categories_count,
+        countries_count=countries_count,
         brands_count=brands_count
     )
 
@@ -47,28 +56,30 @@ def index():
 @mod.route('/catalogue/page/<int:page>/')
 def catalogue(page):
     products = Product.query(
-        Product.is_public == True,
-        Product.images_list.is_image == True).order(-Product.rating)
+        Product.is_public == True).order(-Product.rating)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/catalogue.html',
         products=products
     )
 
-@mod.route('/s/<key_id>/', defaults={'page':1})
-@mod.route('/s/<int:key_id>/page/<int:page>/')
-def series(key_id, page):
-    series = Series.retrieve_by_id(key_id)
-    if not series:
+@mod.route('/c/<key_id>/', defaults={'page':1})
+@mod.route('/c/<int:key_id>/page/<int:page>/')
+def category(key_id, page):
+    category = Category.retrieve_by_id(key_id)
+    if not category:
         return flask.redirect(flask.url_for(
             'pages.index'
         ))
-    products_ids = series.products
-    products = [Product.get_by_id(p) for p in products_ids]
+    category_products = CategoryProduct.query(
+        CategoryProduct.section_key==category.key,
+        CategoryProduct.is_public==True
+    )
+    products = ndb.get_multi([p.product_key for p in category_products])
     products = get_paginator(products, page)
     return flask.render_template(
-        'pages/series.html',
-        series=series,
+        'pages/category.html',
+        category=category,
         products=products,
         key_id=key_id
     )

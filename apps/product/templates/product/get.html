@@ -11,10 +11,12 @@
         <a href="{{ url_for('pages.catalogue') }}">Каталог</a>
         <span class="divider"> &rarr; </span>
     </li>
+    {% if category %}
     <li>
-        <a href="{{url_for('pages.series', key_id=series.key.id()) }}">Серия «{{ series.name }}»</a>
+        <a href="{{url_for('pages.category', key_id=category.key.id()) }}">Категория «{{ category.name }}»</a>
         <span class="divider"> &rarr; </span>
     </li>
+    {% endif %}
     <li class="active">
         {{ product.name }}
     </li>
@@ -24,9 +26,15 @@
     {{ super() }}
 <div class="row">
     <div class="span12">
-        <a class="btn" href="{{url_for('pages.series', key_id=series.key.id()) }}">
-            &larr; Перейти в каталог продукции
-        </a>
+        {% if category %}
+            <a class="btn" href="{{url_for('pages.category', key_id=category.key.id()) }}">
+                &larr; Перейти в каталог продукции
+            </a>
+        {% else %}
+            <a class="btn" href="{{url_for('pages.catalogue') }}">
+                &larr; Перейти в каталог продукции
+            </a>
+        {% endif %}
         <h2>{{ product.name }}</h2>
     </div>
     <div class="span6">
@@ -74,6 +82,13 @@
                 {{ get_str_property('Артикул', product.catalogue_id)|safe }}
                 {{ get_str_property('Штрих-код', product.barcode)|safe }}
             </dl>
+
+            <dl class="dl-horizontal">
+                {{ get_str_property('Категория', product.category)|safe }}
+                {{ get_str_property('Бренд', product.brand)|safe }}
+            </dl>
+
+
             <dl class="dl-horizontal">
                 {{ get_str_property('Страна-производитель', product.country)|safe }}
                 {{ get_str_property('Материал', product.material)|safe }}
