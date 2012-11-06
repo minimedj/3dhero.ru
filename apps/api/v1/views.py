@@ -91,12 +91,17 @@ def get_product(key_id):
             if not flag:
                 return model
             product.clear_sections()
-            model_populate(model, product)
-            product.put()
-            return jsonify({
-                'success': True,
-                'msg': 'Product has been updated.'
-            })
+            if model_populate(model, product):
+                product.put()
+                return jsonify({
+                    'success': True,
+                    'msg': 'Product has been updated.'
+                })
+            else:
+                return  jsonify({
+                    'success': False,
+                    'msg': 'Product has not been updated.'
+                })
         return put_product()
     return jsonify_model_db(product)
 
