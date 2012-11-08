@@ -7,6 +7,13 @@ from apps.product.models import CategoryProduct
 from apps.utils.paginator import Paginator, EmptyPage, InvalidPage
 from apps.contact.models import Contact
 from apps.manager.models import Manager
+import util
+
+PRODUCT_VIEW_TYPES = {
+    'tile': 1,
+    'icon': 2,
+    'table': 3
+}
 
 mod = flask.Blueprint(
     "pages",
@@ -66,6 +73,16 @@ def catalogue(page):
 @mod.route('/c/<key_id>/', defaults={'page':1})
 @mod.route('/c/<int:key_id>/page/<int:page>/')
 def category(key_id, page):
+    view_type = util.param('product_view_type', int)
+    session_view_type = flask.session.get('product_view_type', None)
+    if session_view_type is None or session_view_type not in PRODUCT_VIEW_TYPES.itervalues():
+        if view_type in PRODUCT_VIEW_TYPES.itervalues():
+            flask.session['product_view_type'] = view_type
+        else:
+            flask.session['product_view_type'] = PRODUCT_VIEW_TYPES['tile']
+    else:
+        if view_type in PRODUCT_VIEW_TYPES.itervalues():
+            flask.session['product_view_type'] = view_type
     category = Category.retrieve_by_id(key_id)
     if not category:
         return flask.redirect(flask.url_for(

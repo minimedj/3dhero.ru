@@ -1,0 +1,32 @@
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Изображение</th>
+            <th>Название</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products.object_list %}
+            <tr>
+                <td style="text-align: center">
+                    <a href="{{ product.url }}">
+                        <img
+                        title="{{ product.name }}"
+                        {% if product.images_list %}
+                            src="{{ product.images_list[0].url }}=s30-c"
+                        {% else %}
+                            src="/p/img/none/30x30.jpg"
+                        {% endif %}
+                        width="30" height="30"
+                        />
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ product.url }}">
+                        {{ product.name }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

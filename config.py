@@ -49,6 +49,8 @@ SCRIPTS = {
         'lib/bootstrap/js/bootstrap-button.js',
         'lib/bootstrap/js/bootstrap-dropdown.js',
         'lib/bootstrap/js/bootstrap-tab.js',
+        'lib/bootstrap/js/bootstrap-tooltip.js',
+        'lib/bootstrap/js/bootstrap-popover.js',
     ],
     'jquery.plugins': [
         'lib/jquery.mosaic.js',

@@ -3,6 +3,11 @@
 {% block scripts %}
     <script>
         $(document).ready(function() {
+            $('.product_icon').tooltip({
+                placement: 'bottom',
+                delay: { show: 200 }
+            });
+
             $('.product_box').mosaic({
                 animation: 'fade',
                 anchor_y: 'top'});
@@ -32,5 +37,32 @@
 
 {% block content %}
     <h2>Категория <big>«{{ category.name }}»</big></h2>
-    {% include 'pages/products_ul.html' %}
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <a class="btn btn-success disabled">
+                Паказать как
+            </a>
+            <a class="btn {% if session.get('product_view_type') == 1 %} active {% endif %}"
+               href="?product_view_type=1">
+                <i class="icon-th-large"></i> Плитка
+            </a>
+            <a class="btn {% if session.get('product_view_type') == 2 %} active {% endif %}"
+               href="?product_view_type=2">
+                <i class="icon-th"></i> Иконки
+            </a>
+            <a class="btn {% if session.get('product_view_type') == 3 %} active {% endif %}"
+               href="?product_view_type=3">
+                <i class="icon-th-list"></i> Таблица
+            </a>
+        </div>
+    </div>
+    {% if session.get('product_view_type') == 1 %}
+        {% include 'pages/products_ul.html' %}
+    {% endif %}
+    {% if session.get('product_view_type') == 2 %}
+        {% include 'pages/products_icon.html' %}
+    {% endif %}
+    {% if session.get('product_view_type') == 3 %}
+        {% include 'pages/products_table.html' %}
+    {% endif %}
 {% endblock %}
