@@ -50,6 +50,7 @@ def login():
 @mod.route('/logout/')
 def logout():
   flaskext.login.logout_user()
+  flask.session.clear()
   return flask.redirect(flask.url_for('pages.index'))
 
 
