@@ -1,0 +1,16 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+    <div class="page-header">
+        <h1><a href="{{ product.url }}">&larr; Назад</a>
+            Редактирование продукта</h1>
+        <h2>
+            {{ product.name }}
+        </h2>
+    </div>
+    <div class="row">
+        <div class="span9">
+            {% include 'product/admin/edit_form.html' %}
+        </div>
+    </div>
+{% endblock %}

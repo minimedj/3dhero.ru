@@ -1,0 +1,126 @@
+{{ form.csrf }}
+
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active">
+        <a href="#main" data-toggle="tab">Основные</a>
+    </li>
+    <li>
+        <a href="#second" data-toggle="tab">Вторичные</a>
+    </li>
+    <li>
+        <a href="#property" data-toggle="tab">Свойства</a>
+    </li>
+    <li>
+        <a href="#price" data-toggle="tab">Цены</a>
+    </li>
+    <li>
+        <a href="#leftovers" data-toggle="tab">Остатки</a>
+    </li>
+    <li>
+        <a href="#box" data-toggle="tab">Упаковка</a>
+    </li>
+    <li>
+        <a href="#description" data-toggle="tab">Описание</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="main">
+        <div>
+            <ul class="thumbnails">
+            {% for image in product.images %}
+                <li class="thumbnail">
+                    <img src="{{ image }}=s100-c">
+                </li>
+            {% endfor %}
+            </ul>
+            <button type="submit"
+                    class="btn btn-info btn-loading"
+                    data-toadig-text="Подготовка изображений..."
+                    name='edit_images'
+                    >
+                Изменить изображения
+            </button>
+            <hr>
+        </div>
+        {% set form_field = form.id_1c %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.name %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.catalogue_id %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.barcode %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.is_public %}
+        {% include 'bit/form_text_field.html' %}
+    </div>
+    <div class="tab-pane" id="second">
+        {% set form_field = form.category %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.brand %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.country %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.rating %}
+        {% include 'bit/form_text_field.html' %}
+    </div>
+    <div class="tab-pane" id="property">
+        {% set form_field = form.material %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.size %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.weight %}
+        {% include 'bit/form_text_field.html' %}
+    </div>
+
+    <div class="tab-pane" id="box">
+        {% set form_field = form.box_material %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.box_size %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.box_weight %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.box_amount %}
+        {% include 'bit/form_text_field.html' %}
+    </div>
+    <div class="tab-pane" id="price">
+        {% set form_field = form.price_retail %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.price_trade %}
+        {% include 'bit/form_text_field.html' %}
+    </div>
+    <div class="tab-pane" id="leftovers">
+        {% set form_field = form.leftovers %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.leftovers_on_way %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.receipt_date %}
+        {% include 'bit/form_text_field.html' %}
+    </div>
+    <div class="tab-pane" id="description">
+        {% set form_field = form.badge %}
+        {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.equipment %}
+        {% include 'bit/form_textarea_field.html' %}
+
+        {% set form_field = form.description %}
+        {% include 'bit/form_textarea_field.html' %}
+    </div>
+</div>
+
