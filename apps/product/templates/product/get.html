@@ -46,6 +46,9 @@
         &nbsp;
     </div>
     <div class="span6">
+            {% if current_user.admin %}
+                    <a class="btn btn-large" href="{{ url_for('admin.product.edit', key_id=product.key.id()) }}">Редактировать</a>
+            {% endif %}
             <dl class="dl-horizontal">
                 {{ get_str_property('Цена розничная', product.price_retail|string + ' pублей')|safe }}
                 {% if current_user.is_order_box %}
@@ -54,22 +57,21 @@
 
                 {% if product.leftovers_on_way %}
                     {% if current_user.admin %}
-                        {{ get_str_property('Осаток', product.leftovers_on_way|string + ' шт. в пути')|safe }}
+                        {{ get_str_property('Осаток в пути', product.leftovers_on_way|string + ' шт. в пути')|safe }}
                     {% else %}
-                        {{ get_str_property('Остаток', 'В пути')|safe }}
+                        {{ get_str_property('Поступление на склад', 'В пути')|safe }}
                     {% endif %}
+                {% endif %}
+                {% if not product.leftovers %}
+                    {{ get_str_property('На складе', 'Отсуствует')|safe }}
                 {% else %}
-                    {% if not product.leftovers %}
-                        {{ get_str_property('Остаток', 'Отсуствует')|safe }}
+                    {% if current_user.admin %}
+                        {{ get_str_property('На складе', product.leftovers|string)|safe }}
                     {% else %}
-                        {% if current_user.admin %}
-                            {{ get_str_property('Остаток', product.leftovers|string)|safe }}
+                        {% if product.leftovers > 10 %}
+                            {{ get_str_property('На складе', 'Много')|safe }}
                         {% else %}
-                            {% if product.leftovers > 10 %}
-                                {{ get_str_property('Остаток', 'Много')|safe }}
-                            {% else %}
-                                {{ get_str_property('Остаток', 'Мало')|safe }}
-                            {% endif %}
+                            {{ get_str_property('На складе', 'Мало')|safe }}
                         {% endif %}
                     {% endif %}
                 {% endif %}

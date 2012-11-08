@@ -1,0 +1,19 @@
+<form class="form-inline " method="POST" action="">
+    <fieldset>
+        {% include 'product/admin/form_fields.html' %}
+
+        <div class="form-actions">
+            <button type="submit"
+                    class="btn btn-primary btn-loading"
+                    data-loading-text="Сохранение..">
+                Сохранить
+            </button>
+            <button type="submit"
+                    name="delete_product"
+                    class="btn btn-loading btn-danger"
+                    data-loading-text="Удаление..">
+                Удалить
+            </button>
+        </div>
+    </fieldset>
+</form>

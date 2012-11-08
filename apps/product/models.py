@@ -56,6 +56,10 @@ class BaseSection(Base):
         raise Exception("do_rename() not overloaded in the child class")
 
     @classmethod
+    def exist(cls, name):
+        return cls.retrieve_one_by('name_lowercase', strip_string(name).lower())
+
+    @classmethod
     def new_or_exist(cls, name):
         is_exist = cls.retrieve_one_by('name_lowercase', strip_string(name).lower())
         if is_exist:
