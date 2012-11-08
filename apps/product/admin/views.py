@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, redirect, url_for, request
-from apps.product.models import Category, Series, Brand
-from apps.product.admin.forms import CategoryForm, SeriesForm, BrandForm
+from apps.product.models import Category, Series, Brand, Product, ProductImage
+from apps.product.admin.forms import CategoryForm, SeriesForm, BrandForm, ProductForm, AddImageForm
 from auth import admin_required
+from google.appengine.api import blobstore
+from apps.utils.blobstore import get_uploads
+import os
 
 mod = Blueprint(
     'admin.product',
@@ -10,6 +13,102 @@ mod = Blueprint(
     template_folder='templates',
     url_prefix='/admin/product'
 )
+
+@mod.route('/edit/<int:key_id>/', methods=['GET', 'POST'])
+@admin_required
+def edit(key_id):
+    product = Product.retrieve_by_id(key_id)
+    if not product:
+        return redirect(url_for('admin.config_update'))
+    if request.method == 'POST' and 'delete_product' in request.form:
+        category = None
+        if product.category:
+            category = Category.exist(product.category)
+        product.key.delete()
+        if category:
+            return redirect(url_for('pages.category', key_id=category.key.id()))
+        else:
+            return redirect('pages.catalogue')
+    form = ProductForm(obj=product)
+    if form.validate_on_submit():
+        form.populate_obj(product)
+        product.put()
+        if 'edit_images' in request.form:
+            return redirect(url_for('admin.product.edit_images', key_id=key_id))
+        return redirect(url_for('product.get_product', key_id=key_id))
+    return render_template(
+        'product/admin/edit.html',
+        product=product,
+        form=form
+    )
+
+@mod.route('/edit/<int:key_id>/images/', methods=['GET', 'POST'])
+@admin_required
+def edit_images(key_id):
+    product = Product.retrieve_by_id(key_id)
+    if not product:
+        return redirect('pages.catalogue')
+    form = AddImageForm()
+    add_img_url = blobstore.create_upload_url(url_for('admin.product.add_image', key_id=key_id))
+    return render_template(
+        'product/admin/images_edit.html',
+        product=product,
+        form=form,
+        add_img_url=add_img_url
+    )
+
+@mod.route('/edit/<int:key_id>/image/add/', methods=['POST'])
+@admin_required
+def add_image(key_id):
+    product = Product.retrieve_by_id(key_id)
+    if not product:
+        return redirect('pages.catalogue')
+
+    upload_files = get_uploads(request, 'image')
+    if len(upload_files):
+        blob_info = upload_files[0]
+        if blob_info.size and ProductImage.is_image_type(blob_info.content_type):
+            img = ProductImage.create(
+                blob_info.key(),
+                size=blob_info.size,
+                filename=os.path.basename(blob_info.filename.replace('\\','/')),
+                content_type=blob_info.content_type)
+            if not len(product.images_list):
+                img.is_master = True
+            if img.get_cached_url():
+                product.images_list.append(img)
+                product.put()
+        else:
+            blob_info.delete()
+    return redirect(url_for('admin.product.edit_images', key_id=key_id))
+
+@mod.route('/edit/<int:key_id>/image/<string:img_uid>/delete/', methods=['POST'])
+@admin_required
+def delete_image(key_id, img_uid):
+    product = Product.retrieve_by_id(key_id)
+    if not product:
+        return redirect(url_for('admin.product.edit', key_id=key_id))
+    for i, img in enumerate(product.images_list):
+        if img.uid == img_uid:
+            img.delete_blob()
+            del product.images_list[i]
+            product.put()
+            break
+    return redirect(url_for('admin.product.edit_images', key_id=key_id))
+
+@mod.route('/edit/<int:key_id>/image/<string:img_uid>/default/', methods=['POST'])
+@admin_required
+def default_image(key_id, img_uid):
+    product = Product.retrieve_by_id(key_id)
+    if not product:
+        return redirect(url_for('admin.product.edit', key_id=key_id))
+    for i, img in enumerate(product.images_list):
+        if img.uid == img_uid:
+            product.images_list[0], product.images_list[i] = \
+            product.images_list[i], product.images_list[0]
+            product.put()
+            break
+    return redirect(url_for('admin.product.edit_images', key_id=key_id))
 
 @mod.route('/categories/', methods=['GET', 'POST'])
 @admin_required

@@ -48,6 +48,7 @@ SCRIPTS = {
         'lib/bootstrap/js/bootstrap-alert.js',
         'lib/bootstrap/js/bootstrap-button.js',
         'lib/bootstrap/js/bootstrap-dropdown.js',
+        'lib/bootstrap/js/bootstrap-tab.js',
     ],
     'jquery.plugins': [
         'lib/jquery.mosaic.js',
