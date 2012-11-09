@@ -1,8 +1,13 @@
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-condensed">
     <thead>
         <tr>
             <th>Изображение</th>
             <th>Название</th>
+            <th>Поступление</th>
+            <th>Наличие</th>
+            <th>РРЦ</th>
+            <th>Цена опт.</th>
+            <th>Заказ</th>
         </tr>
     </thead>
     <tbody>
@@ -13,18 +18,59 @@
                         <img
                         title="{{ product.name }}"
                         {% if product.images_list %}
-                            src="{{ product.images_list[0].url }}=s30-c"
+                            src="{{ product.images_list[0].url }}=s70-c"
                         {% else %}
                             src="/p/img/none/30x30.jpg"
                         {% endif %}
-                        width="30" height="30"
+                        width="70" height="70"
                         />
                     </a>
                 </td>
-                <td>
+                <td class="span2">
                     <a href="{{ product.url }}">
                         {{ product.name }}
                     </a>
+                </td>
+                <td>
+                    {% if product.leftovers_on_way %}
+                        {% if current_user.admin %}
+                            {{ product.leftovers_on_way }} шт. в пути<br>
+                        {% else %}
+                            Ожидается
+                        {% endif %}
+                    {% else %}
+                        Не ожидается
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not product.leftovers %}
+                        Отсуствует
+                    {% else %}
+                        {% if current_user.admin %}
+                            {{ product.leftovers }} шт.
+                        {% else %}
+                            {% if product.leftovers > 10 %}
+                                Много
+                            {% else %}
+                                Мало
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ product.price_retail }} pуб.
+                </td>
+                <td>
+                    {% if current_user.is_order_box %}
+                        {{ product.price_trade }} pуб.
+                    {% else %}
+                        <a href="{{url_for('auth.login')}}">
+                            авторизироваться
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ product.order_count }} шт.
                 </td>
             </tr>
         {% endfor %}

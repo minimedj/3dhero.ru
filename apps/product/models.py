@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import url_for
+from flask import url_for, session
 from werkzeug.wrappers import cached_property
 from google.appengine.ext import ndb, db
 from google.appengine.api import memcache
@@ -285,6 +285,12 @@ class Product(Base):
     def images(self):
         return [img.url for img in self.images_list]
 
+    @property
+    def order_count(self):
+        cart = session.get('cart', {})
+        products = cart.get('products', {})
+        order_product = products.get(self.key.id(), {})
+        return order_product.get('count', 0)
 
     def _pre_put_hook(self):
         self.category = strip_string(self.category)
