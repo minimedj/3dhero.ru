@@ -1,12 +1,12 @@
-<table class="table table-bordered table-striped table-condensed">
+<table class="table table-bordered table-striped table-condensed table-centred">
     <thead>
         <tr>
             <th>Изображение</th>
             <th>Название</th>
             <th>Поступление</th>
             <th>Наличие</th>
-            <th>РРЦ</th>
-            <th>Цена опт.</th>
+            <th class="{sorter: 'digit'}">РРЦ, руб.</th>
+            <th class="{sorter: 'digit'}">Цена опт, руб.</th>
             <th>Заказ</th>
         </tr>
     </thead>
@@ -39,7 +39,7 @@
                             Ожидается
                         {% endif %}
                     {% else %}
-                        Не ожидается
+                        -
                     {% endif %}
                 </td>
                 <td>
@@ -58,11 +58,11 @@
                     {% endif %}
                 </td>
                 <td>
-                    {{ product.price_retail }} pуб.
+                    {{ '%0.2f'|format(product.price_retail) }}
                 </td>
                 <td>
                     {% if current_user.is_order_box %}
-                        {{ product.price_trade }} pуб.
+                        {{ '%0.2f'|format(product.price_trade) }}
                     {% else %}
                         <a href="{{url_for('auth.login')}}">
                             авторизироваться

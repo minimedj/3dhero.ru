@@ -11,6 +11,26 @@
             $('.product_box').mosaic({
                 animation: 'fade',
                 anchor_y: 'top'});
+
+            $("table").tablesorter({
+                    textExtraction: function (node) {
+                        return $(node).text();
+                    }
+                }
+            );
+            $(".order_by_name").click(function() {
+                $(this).addClass('active');
+                $('.order_by_price_retail').removeClass('active');
+                $("table").trigger("sorton",[[[1,0]]]);
+                return false;
+            });
+
+            $(".order_by_price_retail").click(function() {
+                $(this).addClass('active');
+                $('.order_by_name').removeClass('active');
+                $("table").trigger("sorton",[[[4,0]]]);
+                return false;
+            });
         });
     </script>
 {% endblock %}
@@ -55,6 +75,22 @@
                 <i class="icon-th-list"></i> Таблица
             </a>
         </div>
+
+        {% if session.get('product_view_type') == 3 %}
+            <div class="btn-group pull-right">
+                <a class="btn btn-primary disabled">
+                  Сортировать по
+                </a>
+                <a class="btn order_by_name"
+                   href="#">
+                   Названию
+                </a>
+                <a class="btn order_by_price_retail"
+                   href="#">
+                   РРЦ
+                </a>
+            </div>
+        {% endif %}
     </div>
     {% if session.get('product_view_type') == 1 %}
         {% include 'pages/products_ul.html' %}

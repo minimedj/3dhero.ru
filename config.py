@@ -56,6 +56,8 @@ SCRIPTS = {
         'lib/jquery.mosaic.js',
         'lib/jquery.gmaps.js',
         'lib/jquery.form.js',
+        'lib/jquery.tablesorter.js',
+        'lib/jquery.metadata.js',
     ],
     'admin':[
         'lib/redactor.js'
