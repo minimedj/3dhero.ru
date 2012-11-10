@@ -36,7 +36,11 @@
                         {% if current_user.admin %}
                             {{ product.leftovers_on_way }} шт. в пути<br>
                         {% else %}
-                            Ожидается
+                            {% if product.leftovers_on_way > 10 %}
+                                Много
+                            {% else %}
+                                Мало
+                            {% endif %}
                         {% endif %}
                     {% else %}
                         -

@@ -25,7 +25,9 @@
             {% if current_user.admin %}
                 <span class="badge badge-warning badge_leftovers">{{ product.leftovers_on_way }} шт. в пути</span>
             {% else %}
-                <span class="badge badge-warning badge_leftovers">В пути</span>
+                <span class="badge badge-warning badge_leftovers">
+                    В пути: {% if product.leftovers_on_way > 10 %}много{% else %}мало{% endif %}
+                </span>
             {% endif %}
         {% else %}
             {% if not product.leftovers %}
