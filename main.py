@@ -71,6 +71,12 @@ from apps.user.admin.views import mod_json as json_admin_user_mod
 app.register_blueprint(admin_user_mod)
 app.register_blueprint(json_admin_user_mod)
 
+from apps.price.admin.views import mod as admin_price_mod
+app.register_blueprint(admin_price_mod)
+
+from apps.price.views import mod as price_mod
+app.register_blueprint(price_mod)
+
 @app.errorhandler(401)
 def custom_401(error):
     return flask.redirect(flask.url_for('auth.login', next=flask.request.url))

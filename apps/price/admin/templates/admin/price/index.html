@@ -1,0 +1,104 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <h1 class="page-header">
+                Прайсы и файлы
+            </h1>
+        </div>
+
+        <div class="span5">
+            <h2>Добавление нового прайса</h2>
+            <form
+                class="form-inline well"
+                method="POST"
+                enctype="multipart/form-data"
+                action="{{ upload_url }}">
+                <fieldset>
+                {{ form.csrf_token }}
+                {% set form_field = form.order_id %}
+                {% include 'bit/form_text_field.html' %}
+
+                {% set form_field = form.attach_file_ %}
+                {% include 'bit/form_text_field.html' %}
+
+                {% set form_field = form.description %}
+                {% include 'bit/form_textarea_field.html' %}
+
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit"
+                            class="btn btn-primary btn-loading"
+                            data-loading-text="Добавление..">
+                        Добавить
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="span7">
+            <h2>Существующие прайсы</h2>
+            {% if not prices.count() %}
+                Прайсов нет
+            {% else %}
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Порядок сортировки
+                            </th>
+                            <th>
+                                Название
+                            </th>
+                            <th>
+                                Тип
+                            </th>
+                            <th>
+                                Операции
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for price in prices %}
+                            <tr>
+                                <td>
+                                    {{ price.order_id }}
+                                </td>
+                                <td>
+                                    <a href="{{ price.get_file.url }}">
+                                        <i class="icon-download-alt"></i>
+                                        {{ price.get_file.filename }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="doc_ico_small">
+                                        <div class="{{ price.get_file.ext }}">
+
+                                        </div>
+                                        {{ price.get_file.ext }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <form
+                                        method="POST"
+                                        action="{{
+                                            url_for('admin.price.delete', key_id=price.key.id())
+                                        }}">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-danger btn-small"
+                                            name='delete_price'
+                                        >
+                                            Удалить
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

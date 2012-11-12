@@ -2,22 +2,18 @@
 
 from flaskext import wtf
 
-class FolderForm(wtf.Form):
-    title = wtf.TextField(
-        u'Название папки',
-        validators=[wtf.validators.required()]
-    )
-    is_public = wtf.BooleanField(
-        u'Публичная?',
-        default=False,
+class PriceFileForm(wtf.Form):
+    order_id = wtf.IntegerField(
+        u'Порядок сортировки',
+        description=u'Укажите порядок сортировки. '
+                    u'Сортируется от большего к меньшему.',
+        default=0,
         validators=[wtf.validators.optional()]
     )
-
-class FileForm(wtf.Form):
-    file = wtf.FileField(
+    attach_file_ = wtf.FileField(
         u'Файл',
         description=u'Выберите файл для загрузки',
-        validators=[wtf.validators.required()]
+        validators=[wtf.validators.optional()]
     )
     description = wtf.TextAreaField(
         u'Описание',

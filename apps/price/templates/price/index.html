@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">Главная</a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        Прайсы и файлы
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <h1 class="page-header">
+                Прайсы и файлы
+            </h1>
+        </div>
+        {% if not prices.count() %}
+            <div class="span12">
+                <h3>Файлов нет</h3>
+            </div>
+        {% else %}
+            <div class="span12">
+            <ul class="thumbnails">
+                {% for price in prices %}
+                    <li class="span4">
+                        <div class="thumbnail">
+                            <div class="doc_ico_big">
+                                <div class="{{ price.get_file.ext }}">
+                                </div>
+                                <a href="{{ price.get_file.url }}">
+                                    {{ price.get_file.filename }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
