@@ -5,26 +5,13 @@ from apps.api.v1.forms import WriteKeyForm
 from util import jsonify_model_dbs, jsonify_model_db, param
 from apps.product.models import Product, ProductImage
 from functools import wraps
-import json, logging
+import json
 from datetime import datetime
 from auth import admin_required
 from google.appengine.ext import blobstore
 from apps.utils.blobstore import get_uploads
 import os
-
-def except_wrap(func):
-    @wraps(func)
-    def wrapped(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception, e:
-            res = {'success': False,
-                   'msg': str(e),
-                   'function': func.__name__}
-            logging.error(res)
-            return jsonify(res, status=400)
-    return wrapped
-
+from apps.api.utils import except_wrap
 
 admin_mod = Blueprint(
     'api.v1.admin',

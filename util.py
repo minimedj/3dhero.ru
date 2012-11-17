@@ -27,7 +27,7 @@ def param(name, cast=None):
 
   if cast and res:
     if cast == bool:
-      return res == 'true'
+      return res.lower() == 'true'
     return cast(res)
   return res
 

@@ -28,6 +28,9 @@ from apps.api.v1.views import admin_mod as api_v1_mod_admin
 app.register_blueprint(api_v1_mod)
 app.register_blueprint(api_v1_mod_admin)
 
+from apps.api.v2.views import mod as api_v2_mod
+app.register_blueprint(api_v2_mod)
+
 from apps.feedback.views import mod as feedback_mod
 from apps.feedback.admin.views import mod as admin_feedback_mod
 app.register_blueprint(feedback_mod)
