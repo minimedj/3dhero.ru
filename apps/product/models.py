@@ -40,6 +40,8 @@ class BaseSection(Base):
     name_lowercase = ndb.StringProperty(indexed=True, default=None)
     is_public = ndb.BooleanProperty(verbose_name=u'Показывать на сайте?', default=True)
 
+    _PROPERTIES = Base._PROPERTIES.union(['name'])
+
     def _pre_put_hook(self):
         self.name = strip_string(self.name)
         lower_name = self.name.lower()
@@ -92,6 +94,18 @@ class SectionProduct(Base):
     )
 
     @cached_property
+    def product_id(self):
+        if self.product_key:
+            return self.product_key.id()
+        return None
+
+    @cached_property
+    def product_1c(self):
+        if self.product_key:
+            return self.product_key.get().id_1c
+        return None
+
+    @cached_property
     def product(self):
         if self.product_key:
             return self.product_key.get()
@@ -103,8 +117,10 @@ class SectionProduct(Base):
             return self.section_key.get()
         return None
 
+
 class CategoryProduct(SectionProduct):
     pass
+
 
 class Category(BaseSection):
     @cached_property
@@ -116,12 +132,22 @@ class Category(BaseSection):
         return self._hide_product_count(CategoryProduct)
 
     @cached_property
-    def product_count(self):
+    def products_count(self):
         return self._product_count(CategoryProduct)
+
+    @cached_property
+    def products_by_id(self):
+        return [obj.product_id for obj in CategoryProduct.query(CategoryProduct.section_key==self.key)]
+
+    @cached_property
+    def products_by_id_1c(self):
+        return [obj.product_1c for obj in CategoryProduct.query(CategoryProduct.section_key==self.key)]
 
     def do_rename(self):
         if self.key != ndb.Key('Category', None):
             rename_section(self, CategoryProduct, 'category')
+
+    _PROPERTIES = BaseSection._PROPERTIES.union(['products_count', 'products_by_id'])
 
 
 class BrandProduct(SectionProduct):
@@ -137,7 +163,7 @@ class Brand(BaseSection):
         return self._hide_product_count(BrandProduct)
 
     @cached_property
-    def product_count(self):
+    def products_count(self):
         return self._product_count(BrandProduct)
 
     def do_rename(self):
@@ -157,7 +183,7 @@ class Series(BaseSection):
         return self._hide_product_count(SeriesProduct)
 
     @cached_property
-    def product_count(self):
+    def products_count(self):
         return self._product_count(SeriesProduct)
 
     def do_rename(self):
@@ -177,7 +203,7 @@ class Country(BaseSection):
         return self._hide_product_count(CountryProduct)
 
     @cached_property
-    def product_count(self):
+    def products_count(self):
         return self._product_count(CountryProduct)
 
     def do_rename(self):
@@ -260,6 +286,7 @@ class Product(Base):
         'rating',
         'status',
         'is_public',
+        'is_available',
         'material',
         'size',
         'weight',
@@ -274,12 +301,13 @@ class Product(Base):
         'receipt_date',
         'description',
         'equipment',
-        'images'
+        'images',
+        'url'
     ])
 
     @cached_property
     def url(self):
-        return url_for('product.get_product', key_id=self.key.id())
+        return url_for('product.get_product', key_id=self.key.id(), _external=True)
 
     @property
     def images(self):

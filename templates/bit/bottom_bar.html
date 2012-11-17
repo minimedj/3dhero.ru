@@ -4,9 +4,13 @@
             <ul class="nav">
                 <li>
                     <a class="">
+                        <small>
                         &copy; 2012 - {{ config.BRAND_NAME }}
-                               (version: {{ config.CURRENT_VERSION_ID }})
+                               (version: {{ config.CURRENT_VERSION_ID }})</small>
                     </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('api.v2.index') }}">API</a>
                 </li>
             </ul>
             <ul class="nav pull-right">
