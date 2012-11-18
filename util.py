@@ -109,7 +109,7 @@ def jsonify_model_db(model_db):
   now = datetime.utcnow()
   result_object = model_db_to_object(model_db, now)
   response = flask.jsonify({
-      'status': 'success',
+      'success': True,
       'now': format_datetime_utc(now),
       'result': result_object,
     })
