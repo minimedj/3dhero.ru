@@ -39,7 +39,21 @@
     </div>
     <div class="span6">
         {% if product.images %}
-            <img src="{{ product.images[0] }}=s400">
+            <div style="height: 400px;width: 400px;">
+                <img class="img_preview" src="{{ product.images[0] }}=s400">
+            </div>
+            <br>
+            <ul class="thumbnails">
+                {% for image in product.images %}
+                    <li>
+                        <a class="thumbnail"
+                           href="#"
+                           onclick="$('.img_preview').attr('src', '{{ image }}=s400'); return false;">
+                           <img src="{{ image }}=s80">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
         {% else %}
             <img src="/p/img/none/400x400.jpg" height="400" width="400">
         {% endif %}
@@ -47,7 +61,10 @@
     </div>
     <div class="span6">
             {% if current_user.admin %}
-                    <a class="btn btn-large" href="{{ url_for('admin.product.edit', key_id=product.key.id()) }}">Редактировать</a>
+                    <a class="btn btn-large"
+                       href="{{ url_for('admin.product.edit', key_id=product.key.id()) }}">
+                        Редактировать
+                    </a>
             {% endif %}
             <dl class="dl-horizontal">
                 {{ get_str_property('Цена розничная', product.price_retail|string + ' pублей')|safe }}
