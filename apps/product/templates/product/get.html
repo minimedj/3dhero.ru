@@ -12,10 +12,12 @@
         <span class="divider"> &rarr; </span>
     </li>
     {% if category %}
-    <li>
-        <a href="{{url_for('pages.category', key_id=category.key.id()) }}">Категория «{{ category.name }}»</a>
-        <span class="divider"> &rarr; </span>
-    </li>
+        <li>
+            <a href="{{ url_for('pages.category', key_id=category.key.id()) }}">
+                Категория «{{ category.name }}»
+            </a>
+            <span class="divider"> &rarr; </span>
+        </li>
     {% endif %}
     <li class="active">
         {{ product.name }}
@@ -24,47 +26,48 @@
 
 {% block container %}
     {{ super() }}
-<div class="row">
-    <div class="span12">
-        {% if category %}
-            <a class="btn" href="{{url_for('pages.category', key_id=category.key.id()) }}">
-                &larr; Перейти в каталог продукции
-            </a>
-        {% else %}
-            <a class="btn" href="{{url_for('pages.catalogue') }}">
-                &larr; Перейти в каталог продукции
-            </a>
-        {% endif %}
-        <h2>{{ product.name }}</h2>
-    </div>
-    <div class="span6">
-        {% if product.images %}
-            <div style="height: 400px;width: 400px;">
-                <img class="img_preview" src="{{ product.images[0] }}=s400">
-            </div>
-            <br>
-            <ul class="thumbnails">
-                {% for image in product.images %}
-                    <li>
-                        <a class="thumbnail"
-                           href="#"
-                           onclick="$('.img_preview').attr('src', '{{ image }}=s400'); return false;">
-                           <img src="{{ image }}=s80">
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <img src="/p/img/none/400x400.jpg" height="400" width="400">
-        {% endif %}
-        &nbsp;
-    </div>
-    <div class="span6">
+    <div class="row">
+        <div class="span12">
+            {% if category %}
+                <a class="btn"
+                   href="{{ url_for('pages.category', key_id=category.key.id()) }}">
+                    &larr; Перейти в каталог продукции
+                </a>
+            {% else %}
+                <a class="btn" href="{{ url_for('pages.catalogue') }}">
+                    &larr; Перейти в каталог продукции
+                </a>
+            {% endif %}
+            <h2>{{ product.name }}</h2>
+        </div>
+        <div class="span6">
+            {% if product.images %}
+                <div style="height: 400px;width: 400px;">
+                    <img class="img_preview" src="{{ product.images[0] }}=s400">
+                </div>
+                <br>
+                <ul class="thumbnails">
+                    {% for image in product.images %}
+                        <li>
+                            <a class="thumbnail"
+                               href="#"
+                               onclick="$('.img_preview').attr('src', '{{ image }}=s400'); return false;">
+                                <img src="{{ image }}=s80">
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <img src="/p/img/none/400x400.jpg" height="400" width="400">
+            {% endif %}
+            &nbsp;
+        </div>
+        <div class="span6">
             {% if current_user.admin %}
-                    <a class="btn btn-large"
-                       href="{{ url_for('admin.product.edit', key_id=product.key.id()) }}">
-                        Редактировать
-                    </a>
+                <a class="btn btn-large"
+                   href="{{ url_for('admin.product.edit', key_id=product.key.id()) }}">
+                    Редактировать
+                </a>
             {% endif %}
             <dl class="dl-horizontal">
                 {{ get_str_property('Цена розничная', product.price_retail|string + ' pублей')|safe }}
@@ -125,8 +128,8 @@
             <dl>
                 {{ get_str_property('Описание', product.description)|safe }}
             </dl>
+        </div>
     </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
@@ -142,13 +145,13 @@
             order_box.delegate(".add_to_cart", "click", function () {
                 var form = $(".order_box").find(".order_form");
                 form.ajaxSubmit({
-                    success:function (data) {
+                    success: function (data) {
                         $('.order_box').html(data);
                         $.get('/order/cart_box/', function (data) {
                             $('.cart_box').html(data);
                         });
                     },
-                    error:function (data) {
+                    error: function (data) {
                         alert('Упс, что-то пошло не так, попробуйте сделать заказа чуть позже')
                     }
                 });
@@ -159,13 +162,13 @@
                 var form = $(".order_box").find(".order_form");
                 form.ajaxSubmit({
                     data: {'order_clear': 1},
-                    success:function (data) {
+                    success: function (data) {
                         $('.order_box').html(data);
                         $.get('/order/cart_box/', function (data) {
                             $('.cart_box').html(data);
                         });
                     },
-                    error:function (data) {
+                    error: function (data) {
                         alert('Упс, что-то пошло не так, попробуйте удалить предзаказ чуть позже')
                     }
                 });
