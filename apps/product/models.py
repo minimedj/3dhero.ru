@@ -275,6 +275,8 @@ class Product(Base):
 
     images_list = ndb.StructuredProperty(ProductImage, repeated=True)
 
+    to_sync = ndb.BooleanProperty(default=False)
+
     _PROPERTIES = Base._PROPERTIES.union([
         'id_1c',
         'catalogue_id',
@@ -302,7 +304,8 @@ class Product(Base):
         'description',
         'equipment',
         'images',
-        'url'
+        'url',
+        'to_sync'
     ])
 
     @cached_property
