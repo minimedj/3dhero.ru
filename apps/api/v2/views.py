@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, current_app, request, jsonify
+from flask import Blueprint, render_template, current_app, request
 from apps.product.models import Product, Category
 import json
 from util import param, jsonify_model_db
