@@ -77,7 +77,6 @@ def get_product(key_id):
             flag, model = load_data()
             if not flag:
                 return model
-            product.clear_sections()
             if model_populate(model, product):
                 product.put()
                 return jsonify({

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, current_app, request, jsonify
+from flask import Blueprint, render_template, current_app, request
 from apps.product.models import Product, Category
 import json
 from util import param, jsonify_model_db
@@ -27,6 +27,18 @@ def index():
         available_product=available_product,
         available_category=available_category
     )
+
+@mod.route('/to_sync.json')
+@except_wrap
+def get_to_sync():
+    id_1c = param('id_1c')
+    if id_1c is not None:
+        products = Product.query(Product.to_sync == True).fetch(projection=[Product.id_1c])
+        return jsonify_success([key.id_1c for key in products])
+
+    products = Product.query(Product.to_sync == True).fetch(keys_only=True)
+    return jsonify_success([key.id() for key in products])
+
 
 @mod.route('/products_count.json')
 @except_wrap

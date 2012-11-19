@@ -204,6 +204,11 @@ class ProductForm(wtf.Form):
         description=u'Введите комплектацию товара',
         validators=[wtf.validators.optional()]
     )
+    to_sync = wtf.BooleanField(
+        u'Синхронизировать?',
+        description=u'Синхронизировать с 5studio?',
+        validators=[wtf.validators.optional()]
+    )
 
 class AddImageForm(wtf.Form):
     image = wtf.FileField(
