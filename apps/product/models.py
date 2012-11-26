@@ -295,7 +295,7 @@ class Product(Base):
         'box_material',
         'box_size',
         'box_weight',
-        'box_amount,'
+        'box_amount',
         'price_retail',
         'price_trade',
         'leftovers',
