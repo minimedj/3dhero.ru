@@ -61,7 +61,7 @@
                         {% endif %}
                     </td>
                     <td>
-                       http:/{{ request.host }}{{ file.url }}
+                       {{ file.url }}
                     </td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.file.del_file', key_id=folder.key.id(), file_key=f.id()) }}">

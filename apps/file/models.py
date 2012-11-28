@@ -39,7 +39,7 @@ class File(Base):
                 if blob_info.content_type in IMAGE_TYPES:
                     cached_url = images.get_serving_url(self.blob_key)
                 else:
-                    cached_url = url_for('file.get', file_key=self.uid)
+                    cached_url = url_for('file.get', file_key=self.uid, _external=True)
                 self.url = cached_url
         return self.url
 
