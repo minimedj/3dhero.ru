@@ -18,7 +18,7 @@ def index():
         posts=posts
     )
 
-@mod.route('/blog/<int:key_id>/', endpoint='post')
+@mod.route('/<int:key_id>/', endpoint='post')
 def get_post(key_id):
     post = Post.retrieve_by_id(key_id)
     if not post:
