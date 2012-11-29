@@ -33,8 +33,9 @@ def get_paginator(products, page):
 
 @mod.route('/')
 def index():
-    posts = Post.query(Post.is_public == True).order(-Post.created).fetch(5)
-    products = Product.query(Product.is_available == True).order(-Product.created).fetch(6)
+    posts = Post.query(Post.is_public == True).order(-Post.created)
+    posts_count = posts.count()
+    posts = posts.fetch(4)
     product_count = Product.query(Product.is_available == True).count()
     categories_obj = Category.query(Category.is_public == True).order(Category.name)
     categories = []
@@ -51,7 +52,7 @@ def index():
     return flask.render_template(
         'pages/index.html',
         posts=posts,
-        products=products,
+        posts_count=posts_count,
         product_count=product_count,
         categories=categories,
         categories_count= categories_count,

@@ -1,7 +1,8 @@
 <section>
-    <h3>{{ post.title }} <small><i class="icon-calendar"></i> {{ post.created }}</small></h3>
+    <h3><small><i class="icon-calendar"></i> {{ post.created }}</small><br>{{ post.title }}</h3>
     {{ post.short_text|safe }}
     {% if post.text %}
+        <br>
         <a href="{{ url_for('blog.post', key_id=post.key.id()) }}" class="btn">Подробнее &rarr;</a>
     {% endif %}
 </section>

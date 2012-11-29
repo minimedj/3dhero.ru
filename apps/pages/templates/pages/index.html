@@ -59,24 +59,29 @@
         </div>
     </div>
     <div class="row">
-        <div class="span5">
-            <h2>Новости</h2>
-            {% if not posts %}
-                Новостей нет
-            {% else %}
-                {% for post in posts %}
+        {% if posts %}
+            <div class="span12">
+                <h2 class="page-header">
+                    Новости
+                </h2>
+            </div>
+            {% for post in posts %}
+                <div class="span6">
                     {% include 'blog/post_box.html' %}
-                {% endfor %}
+                </div>
+            {% endfor %}
 
+            {% if posts_count > 4 %}
+                <div class="span12" style="margin-top: 10px;">
+                    <a class="btn pull-right" href="{{ url_for('blog.index') }}">Читать остальные новости &rarr;</a>
+                </div>
             {% endif %}
-        </div>
-        <div class="span6 offset1">
-            <h2>Последние поступления</h2>
-            {% if not products %}
-                Свободная для заказа продукция отсуствует
-            {% else %}
-                {% include 'pages/product_ul_list.html' %}
-            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <br>
         </div>
     </div>
 {% endblock %}
