@@ -1,0 +1,19 @@
+{% if store_links.count() %}
+    <hr>
+    <a
+        href="#"
+        onclick="$(this).slideUp(function(){$('.store_links').slideDown();}); return false;">
+        Купить в розницу &darr;
+    </a>
+    <dl class="dl-horizontal store_links" style="display: none">
+        <h4>Купить в розницу</h4>
+        {% for store_link in store_links %}
+            <dt>
+                <a href="{{ store_link.link }}">{{ store_link.name }}</a>
+            </dt>
+            <dd>
+                - {{ store_link.description }}
+            </dd>
+        {% endfor %}
+    </dl>
+{% endif %}
