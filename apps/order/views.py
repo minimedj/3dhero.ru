@@ -6,6 +6,7 @@ from apps.order.forms import OrderForm
 from apps.order.models import Order, OrderProduct
 from apps.product.models import Product
 from auth import login_required
+from apps.store_link.models import StoreLink
 
 mod = Blueprint(
     'order',
@@ -32,13 +33,14 @@ def get_cart_box():
 
 @mod.route('/order_box/<int:key_id>/', methods=['GET', 'POST'])
 def get_order_box(key_id):
+    store_links = StoreLink.query()
     if current_user.id <= 0:
-        return render_template('order/login_require_box.html')
+        return render_template('order/login_require_box.html', store_links=store_links)
     if not current_user.is_order_box:
-        return render_template('order/customer_require_box.html')
+        return render_template('order/customer_require_box.html', store_links=store_links)
     product = Product.retrieve_by_id(key_id)
     if not product.is_available:
-        return render_template('order/no_available_box.html')
+        return render_template('order/no_available_box.html', store_links=store_links)
 
     cart = session.get('cart', {})
     products = cart.get('products', {})
@@ -96,7 +98,8 @@ def get_order_box(key_id):
         count=count,
         change=change,
         order_product_count=order_product_count,
-        order_product_price=order_product_price
+        order_product_price=order_product_price,
+        store_links=store_links
     )
 
 def clear_cart():

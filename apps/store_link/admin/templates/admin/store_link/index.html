@@ -1,0 +1,75 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <h1 class="page-header">
+                Ссылки на магазины
+            </h1>
+        </div>
+        <div class="span6">
+            <h2>Добавление новой ссылки</h2>
+            <form
+                    class="form-inline well"
+                    method="POST"                   >
+                <fieldset>
+                    {{ form.csrf_token }}
+                    {% set form_field = form.name %}
+                    {% include 'bit/form_text_field.html' %}
+
+                    {% set form_field = form.link %}
+                    {% include 'bit/form_text_field.html' %}
+
+                    {% set form_field = form.description %}
+                    {% include 'bit/form_textarea_field.html' %}
+                </fieldset>
+                <div class="form-actions">
+                    <button type="submit"
+                            class="btn btn-primary btn-loading"
+                            data-loading-text="Добавление..">
+                        Добавить магазин
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="span6">
+            <h2>Существующие ссылки</h2>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Операции</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for store_link in store_links %}
+                        <tr>
+                            <td>
+                                <a href={{ store_link.link }}>
+                                    {{ store_link.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <form
+                                    method="POST"
+                                    action="{{
+                                        url_for(
+                                            'admin.store_link.delete',
+                                            key_id=store_link.key.id())
+                                    }}">
+                                    <button
+                                        class="btn btn-danger btn-small"
+                                        type="submit"
+                                        name="delete">
+                                        Удалить
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
