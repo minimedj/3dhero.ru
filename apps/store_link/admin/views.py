@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from apps.store_link.admin.forms import StoreLinkForm
 from apps.store_link.models import StoreLink
+from auth import admin_required
 
 mod = Blueprint(
     'admin.store_link',
@@ -10,6 +11,8 @@ mod = Blueprint(
     url_prefix='/admin/store_link'
 )
 
+
+@admin_required
 @mod.route('/', methods=['GET', 'POST'])
 def index():
     form = StoreLinkForm()
@@ -25,6 +28,8 @@ def index():
         store_links=store_links
     )
 
+
+@admin_required
 @mod.route('/<int:key_id>/delete/', methods=['POST'], endpoint='delete')
 def del_link(key_id):
     link = StoreLink.retrieve_by_id(key_id)
