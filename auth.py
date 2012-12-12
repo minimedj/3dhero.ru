@@ -12,9 +12,9 @@ import util
 import model
 
 
-################################################################################
+###############################################################################
 # Flaskext Login
-################################################################################
+###############################################################################
 login_manager = flaskext.login.LoginManager()
 
 
@@ -93,20 +93,23 @@ def login_required(f):
     return decorated_function
 
 
+def is_admin():
+    return is_logged_in() and current_user_db().admin
+
+
 def admin_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kws):
-        if is_logged_in() and current_user_db().admin:
+        if is_admin():
             return f(*args, **kws)
         else:
             flask.abort(401)
-
     return decorated_function
 
 
-################################################################################
+###############################################################################
 # Google
-################################################################################
+###############################################################################
 def retrieve_user_from_google(google_user):
     id_ = 'google_%s' % google_user.user_id()
     user_db = model.User.retrieve_one_by('username', id_)
@@ -122,9 +125,9 @@ def retrieve_user_from_google(google_user):
     return user_db
 
 
-################################################################################
+###############################################################################
 # Twitter
-################################################################################
+###############################################################################
 twitter_oauth = flaskext.oauth.OAuth()
 
 twitter = twitter_oauth.remote_app(
@@ -156,9 +159,9 @@ def retrieve_user_from_twitter(response):
     return user_db
 
 
-################################################################################
+###############################################################################
 # Facebook
-################################################################################
+###############################################################################
 facebook_oauth = flaskext.oauth.OAuth()
 
 facebook = facebook_oauth.remote_app(
@@ -192,9 +195,9 @@ def retrieve_user_from_facebook(response):
     user_db.put()
     return user_db
 
-################################################################################
+###############################################################################
 # Vkontakte
-################################################################################
+###############################################################################
 vk_oauth = flaskext.oauth.OAuth()
 
 vk = vk_oauth.remote_app(
@@ -226,9 +229,9 @@ def retrieve_user_from_vk(response):
     user_db.put()
     return user_db
 
-################################################################################
+###############################################################################
 # Mail.ru
-################################################################################
+###############################################################################
 mailru_oauth = flaskext.oauth.OAuth()
 
 mailru = mailru_oauth.remote_app(
@@ -239,7 +242,7 @@ mailru = mailru_oauth.remote_app(
     authorize_url='https://connect.mail.ru/oauth/authorize',
     consumer_key=model.Config.get_master_db().mailru_app_id,
     consumer_secret=model.Config.get_master_db().mailru_app_secret,
-    access_token_params={'grant_type':'authorization_code'},
+    access_token_params={'grant_type': 'authorization_code'},
     access_token_method='POST'
 )
 
@@ -263,9 +266,9 @@ def retrieve_user_from_mailru(response):
     user_db.put()
     return user_db
 
-################################################################################
+###############################################################################
 # Yandex
-################################################################################
+###############################################################################
 yandex_oauth = flaskext.oauth.OAuth()
 
 yandex = yandex_oauth.remote_app(
@@ -299,9 +302,9 @@ def retrieve_user_from_yandex(response):
     user_db.put()
     return user_db
 
-################################################################################
+###############################################################################
 # Odnoklassniki
-################################################################################
+###############################################################################
 odnoklassniki_oauth = flaskext.oauth.OAuth()
 
 odnoklassniki = odnoklassniki_oauth.remote_app(
@@ -312,7 +315,7 @@ odnoklassniki = odnoklassniki_oauth.remote_app(
     authorize_url='http://www.odnoklassniki.ru/oauth/authorize',
     consumer_key=model.Config.get_master_db().odnoklassniki_app_id,
     consumer_secret=model.Config.get_master_db().odnoklassniki_app_secret,
-    access_token_params={'grant_type':'authorization_code'},
+    access_token_params={'grant_type': 'authorization_code'},
     access_token_method='POST'
 )
 odnoklassniki.consumer_public = model.Config.get_master_db().odnoklassniki_app_public
@@ -336,9 +339,10 @@ def retrieve_user_from_odnoklassniki(response):
     user_db.put()
     return user_db
 
-################################################################################
+
+###############################################################################
 # Helpers
-################################################################################
+###############################################################################
 def login_user_db(user_db):
     if not user_db:
         flask.flash(u'Упс, что-то пошло не так, попробуйте зайти позже.', category='danger')
@@ -346,9 +350,12 @@ def login_user_db(user_db):
 
     flask_user_db = FlaskUser(user_db)
     if flaskext.login.login_user(flask_user_db):
-        flask.flash(u'%s, добро пожаловать на сайт %s!' % (
-            user_db.name, model.Config.get_master_db().brand_name
-            ), category='success')
+        flask.flash(
+            u'%s, добро пожаловать на сайт %s!' % (
+                user_db.name, model.Config.get_master_db().brand_name
+            ),
+            category='success'
+        )
         return flask.redirect(util.get_next_url())
     else:
         flask.flash(u'Вы не вошли на сайт.', category='danger')

@@ -8,6 +8,7 @@ from apps.utils.paginator import Paginator, EmptyPage, InvalidPage
 from apps.contact.models import Contact
 from apps.manager.models import Manager
 import util
+from auth import is_admin
 
 PRODUCT_VIEW_TYPES = {
     'tile': 1,
@@ -23,6 +24,7 @@ mod = flask.Blueprint(
 
 PRODUCT_PER_PAGE = 18
 
+
 def get_paginator(products, page):
     paginator = Paginator(products, PRODUCT_PER_PAGE)
     try:
@@ -30,6 +32,7 @@ def get_paginator(products, page):
     except (EmptyPage, InvalidPage):
         products = paginator.page(paginator.num_pages)
     return products
+
 
 @mod.route('/')
 def index():
@@ -55,23 +58,28 @@ def index():
         posts_count=posts_count,
         product_count=product_count,
         categories=categories,
-        categories_count= categories_count,
+        categories_count=categories_count,
         countries_count=countries_count,
         brands_count=brands_count
     )
 
-@mod.route('/catalogue/', defaults={'page':1})
+
+@mod.route('/catalogue/', defaults={'page': 1})
 @mod.route('/catalogue/page/<int:page>/')
 def catalogue(page):
-    products = Product.query(
-        Product.is_public == True).order(-Product.rating)
+    if is_admin():
+        products = Product.query().order(-Product.rating)
+    else:
+        products = Product.query(
+            Product.is_public == True).order(-Product.rating)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/catalogue.html',
         products=products
     )
 
-@mod.route('/c/<key_id>/', defaults={'page':1})
+
+@mod.route('/c/<key_id>/', defaults={'page': 1})
 @mod.route('/c/<int:key_id>/page/<int:page>/')
 def category(key_id, page):
     view_type = util.param('product_view_type', int)
@@ -89,10 +97,15 @@ def category(key_id, page):
         return flask.redirect(flask.url_for(
             'pages.index'
         ))
-    category_products = CategoryProduct.query(
-        CategoryProduct.section_key==category.key,
-        CategoryProduct.is_public==True
-    )
+    if is_admin():
+        category_products = CategoryProduct.query(
+            CategoryProduct.section_key == category.key
+        )
+    else:
+        category_products = CategoryProduct.query(
+            CategoryProduct.section_key == category.key,
+            CategoryProduct.is_public == True
+        )
     products = ndb.get_multi([p.product_key for p in category_products])
     products = get_paginator(products, page)
     return flask.render_template(
@@ -105,8 +118,8 @@ def category(key_id, page):
 
 @mod.route('/contact/')
 def contacts():
-    contacts = Contact.query(Contact.is_public==True).order(-Contact.order_id)
-    managers = Manager.query(Manager.is_public==True)
+    contacts = Contact.query(Contact.is_public == True).order(-Contact.order_id)
+    managers = Manager.query(Manager.is_public == True)
     return flask.render_template(
         'pages/contact.html',
         contacts=contacts,
