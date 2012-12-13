@@ -22,11 +22,9 @@ mod = flask.Blueprint(
     template_folder='templates'
 )
 
-PRODUCT_PER_PAGE = 18
 
-
-def get_paginator(products, page):
-    paginator = Paginator(products, PRODUCT_PER_PAGE)
+def get_paginator(products, page, product_per_page = 18):
+    paginator = Paginator(products, product_per_page)
     try:
         products = paginator.page(page)
     except (EmptyPage, InvalidPage):

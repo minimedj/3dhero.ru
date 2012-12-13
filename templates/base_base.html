@@ -22,16 +22,18 @@
 
     <div class="container">
         <div class="row">
-            <div class="span8">
+            <div class="span9">
                 <ul class="breadcrumb">
                     {% block breadcrumbs %}
                     {% endblock %}
                 </ul>
             </div>
-            <div class="span4">
-                <form class="form-search pull-right" action="{{ url_for('search.index') }}" method="POST">
-                    <input type="text" class="input-medium search-query" id="query" name="query" placeholder="Введите текст">
-                    <button type="submit" class="btn">Поиск</button>
+            <div class="span3">
+                <form class="form-search pull-right" action="{{ url_for('search.index_form') }}" method="POST">
+                    <div class="input-append">
+                        <input type="text" class="input-medium search-query" id="query" name="query" placeholder="Введите текст">
+                        <button type="submit" class="btn btn-info"><i class="icon-search icon-white"></i></button>
+                    </div>
                 </form>
             </div>
             <hr>

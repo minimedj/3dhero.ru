@@ -28,6 +28,70 @@
         <h1 class="page-header">Результата поиска «{{ query }}»</h1>
     </div>
     <div class="span12">
-        {% include 'pages/product_ul_list.html' %}
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <a class="btn btn-success disabled">
+                    Паказать как
+                </a>
+                <a class="btn {% if session.get('product_view_type') == 1 %} active {% endif %}"
+                   href="?product_view_type=1">
+                    <i class="icon-th-large"></i> Плитка
+                </a>
+                <a class="btn {% if session.get('product_view_type') == 2 %} active {% endif %}"
+                   href="?product_view_type=2">
+                    <i class="icon-th"></i> Иконки
+                </a>
+                <a class="btn {% if session.get('product_view_type') == 3 %} active {% endif %}"
+                   href="?product_view_type=3">
+                    <i class="icon-th-list"></i> Таблица
+                </a>
+            </div>
+
+            {% if session.get('product_view_type') == 3 %}
+                <div class="btn-group pull-right">
+                    <a class="btn btn-primary disabled">
+                        Сортировать по
+                    </a>
+                    <a class="btn order_by_name"
+                       href="#">
+                        Названию
+                    </a>
+                    <a class="btn order_by_price_retail"
+                       href="#">
+                        РРЦ
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        {% if session.get('product_view_type') == 1 %}
+            {% include 'pages/products_ul.html' %}
+        {% endif %}
+        {% if session.get('product_view_type') == 2 %}
+            {% include 'pages/products_icon.html' %}
+        {% endif %}
+        {% if session.get('product_view_type') == 3 %}
+            {% include 'pages/products_table.html' %}
+        {% endif %}
+        <div class="pagination">
+            <ul style="float: left;">
+                {% for page in products.paginator.page_range %}
+                    {% if page %}
+                        {% if page == products.number %}
+                            <li class="active">
+                                <a href="{{ url_for('search.index', query=query, page=page) }}" class="page">{{ page }}</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('search.index', query=query, page=page) }}" class="page">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        ......
+                    {% endif %}
+                {% endfor %}
+
+
+            </ul>
+        </div>
     </div>
 {% endblock %}
