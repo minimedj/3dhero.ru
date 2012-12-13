@@ -2,5 +2,5 @@
 
 from flaskext import wtf
 
-class SearchForm():
-    query = wtf.TextArea()
+class SearchForm(wtf.Form):
+    query = wtf.TextField(validators=[wtf.validators.required()])

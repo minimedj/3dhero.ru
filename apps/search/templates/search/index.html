@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('.product_box').mosaic({
+                animation: 'fade',
+                anchor_y: 'top'});
+        });
+    </script>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">
+            Главная
+        </a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        Поиск «{{ query }}»
+    </li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1 class="page-header">Результата поиска «{{ query }}»</h1>
+    </div>
+    <div class="span12">
+        {% include 'pages/product_ul_list.html' %}
+    </div>
+{% endblock %}
