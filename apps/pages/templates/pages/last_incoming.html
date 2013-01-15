@@ -1,0 +1,84 @@
+{% extends 'base_two.html' %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('.product_box').mosaic({
+                                         animation: 'fade',
+                                         anchor_y: 'top'});
+        });
+    </script>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li>
+        <a href="{{ url_for('pages.index') }}">
+            Главная
+        </a>
+        <span class="divider"> &rarr; </span>
+    </li>
+    <li class="active">
+        Посление поступления
+    </li>
+{% endblock %}
+
+{% block aside %}
+    {{ get_aside()|safe }}
+{% endblock %}
+
+{% block content %}
+    <h2>Последние поступления</h2>
+    {% include 'pages/products_ul.html' %}
+
+    <ul class="pager">
+        {% if products.has_previous %}
+            <li class="previous">
+                <a href="{{
+                        url_for(
+                           'pages.last_incoming',
+                           page=products.previous_page_number) }}"
+                   class="prev">
+                    &larr; назад
+                </a>
+            </li>
+        {% else %}
+            <li class="disabled previous">
+                <a href="#">&larr; назад</a>
+            </li>
+        {% endif %}
+
+        {% if products.has_next %}
+            <li class="next">
+                <a href="{{ url_for('pages.last_incoming', page=products.next_page_number) }}"
+                   class="next">вперед &rarr;</a>
+            </li>
+        {% else %}
+            <li class="next disabled">
+                <a href="#"
+                   class="next">вперед &rarr;</a>
+            </li>
+        {% endif %}
+    </ul>
+    <div class="pagination">
+        <ul style="float: left;">
+            {% for page in products.paginator.page_range %}
+                {% if page %}
+                    {% if page == products.number %}
+                        <li class="active">
+                            <a href="{{ url_for('pages.last_incoming', page=page) }}" class="page">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('pages.last_incoming', page=page) }}" class="page">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    ......
+                {% endif %}
+            {% endfor %}
+
+
+        </ul>
+    </div>
+
+{% endblock %}

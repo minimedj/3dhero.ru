@@ -77,6 +77,21 @@ def catalogue(page):
     )
 
 
+@mod.route('/c/li/', defaults={'page': 1})
+@mod.route('/c/li/page/<int:page>/')
+def last_incoming(page):
+    if is_admin():
+        products = Product.query().order(-Product.created)
+    else:
+        products = Product.query(
+            Product.is_public == True).order(-Product.created)
+    products = get_paginator(products, page)
+    return flask.render_template(
+        'pages/last_incoming.html',
+        products=products
+    )
+
+
 @mod.route('/c/<key_id>/', defaults={'page': 1})
 @mod.route('/c/<int:key_id>/page/<int:page>/')
 def category(key_id, page):

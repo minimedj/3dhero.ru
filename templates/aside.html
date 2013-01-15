@@ -1,4 +1,5 @@
 {% if sections %}
+    <a class="btn" href="{{ url_for('pages.last_incoming') }}">Последние поступления</a><br><br>
     <ul class="nav nav-tabs nav-stacked aside">
         {% for section in sections %}
             {% if section.public_product_count %}
