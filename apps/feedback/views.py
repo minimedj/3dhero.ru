@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import flask
 from google.appengine.api import mail
 from model import Config
@@ -14,6 +15,12 @@ mod = flask.Blueprint(
     template_folder='templates'
 )
 
+
+def collect_emails(text):
+    email_pattern = re.compile("[-a-zA-Z0-9._]+@[-a-zA-Z0-9_]+.[a-zA-Z0-9_.]+")
+    return re.findall(email_pattern, text)
+
+
 @mod.route('/', methods=['GET', 'POST'])
 def index():
     form = FeedbackForm()
@@ -24,20 +31,22 @@ def index():
         feedback_email = Config.get_master_db().feedback_email
         managers = Manager.query()
         if feedback_email and managers:
-            subject=u'[%s] Сообщение - %s' % (
-                    Config.get_master_db().brand_name,
-                    form.subject.data,
+            subject = u'[%s] Сообщение - %s' % (
+                Config.get_master_db().brand_name,
+                form.subject.data
             )
             body = u'%s\n\n%s' % (form.feedback.data, form.email.data)
             for manager in managers:
                 if manager.email:
-                    mail.send_mail(
-                        sender=Config.get_master_db().feedback_email,
-                        to=manager.email,
-                        subject=subject,
-                        reply_to=form.email.data or Config.get_master_db().feedback_email,
-                        body=body
-                    )
+                    emails = collect_emails(manager.email)
+                    for email in emails:
+                        mail.send_mail(
+                            sender=Config.get_master_db().feedback_email,
+                            to=email,
+                            subject=subject,
+                            reply_to=form.email.data or Config.get_master_db().feedback_email,
+                            body=body
+                        )
         flask.flash(u'Спасибо за Ваш отзыв!', category='success')
         return flask.redirect(flask.url_for('pages.index'))
     if not form.errors and current_user_id() > 0:
