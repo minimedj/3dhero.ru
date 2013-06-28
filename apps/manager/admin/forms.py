@@ -2,6 +2,7 @@
 
 from flaskext import wtf
 
+
 class ManagerForm(wtf.Form):
     name = wtf.TextField(
         u'Имя',
@@ -37,4 +38,8 @@ class ManagerForm(wtf.Form):
     is_public = wtf.BooleanField(
         u'Показывать в "Контактах"?',
         description=u'Показывать мененджера на страницах сайта?'
+    )
+    is_mailable = wtf.BooleanField(
+        u'Доставлять почту?',
+        description=u'Отправлять мененджеру уведомления и рассылки?'
     )

@@ -37,7 +37,7 @@ def index():
             )
             body = u'%s\n\n%s' % (form.feedback.data, form.email.data)
             for manager in managers:
-                if manager.email:
+                if manager.email and manager.is_mailable:
                     emails = collect_emails(manager.email)
                     for email in emails:
                         mail.send_mail(
