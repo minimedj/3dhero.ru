@@ -12,7 +12,7 @@
                 <a href="{{ store_link.link }}">{{ store_link.name }}</a>
             </dt>
             <dd>
-                - {{ store_link.description }}
+                - {{ store_link.description | safe }}
             </dd>
         {% endfor %}
     </dl>
