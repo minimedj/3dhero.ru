@@ -53,7 +53,7 @@
                     <dt>URL</dt>
                     <dd>
                         <a href="{{ url_for('api.v2.products_count_json') }}">
-                            http://{{ request.host }}/{{ url_for('api.v2.products_count_json') }}
+                            http://{{ request.host }}{{ url_for('api.v2.products_count_json') }}
                         </a>
                     </dd>
                     <dt>result</dt>
@@ -67,7 +67,7 @@
                     <dt>URL</dt>
                     <dd>
                         <a href="{{ url_for('api.v2.products_count_json', available=true) }}">
-                            http://{{ request.host }}/{{ url_for('api.v2.products_count_json', available=true) }}
+                            http://{{ request.host }}{{ url_for('api.v2.products_count_json', available=true) }}
                         </a>
                     </dd>
                     <dt>result</dt>
@@ -81,7 +81,7 @@
                     <dt>URL</dt>
                     <dd>
                     <a href="{{ url_for('api.v2.products_count_json', available=false) }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.products_count_json', available=false) }}
+                        http://{{ request.host }}{{ url_for('api.v2.products_count_json', available=false) }}
                     </a>
                     </dd>
                     <dt>result</dt>
@@ -104,7 +104,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_json') }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.products_json') }}
+                        http://{{ request.host }}{{ url_for('api.v2.products_json') }}
                     </a>
                 </dd>
                 <dt>result</dt>
@@ -118,7 +118,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_json', available=true) }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.products_json', available=true) }}
+                        http://{{ request.host }}{{ url_for('api.v2.products_json', available=true) }}
                     </a>
                 </dd>
                 <dt>result</dt>
@@ -132,7 +132,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_json', available=false) }}">
-                       http://{{ request.host }}/{{ url_for('api.v2.products_json', available=false) }}
+                       http://{{ request.host }}{{ url_for('api.v2.products_json', available=false) }}
                    </a>
                 </dd>
                 <dt>result</dt>
@@ -146,7 +146,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_dates_json', from_date='2012-10-01') }}">
-                       http://{{ request.host }}/{{ url_for('api.v2.products_dates_json', from_date='2012-10-01') }}
+                       http://{{ request.host }}{{ url_for('api.v2.products_dates_json', from_date='2012-10-01') }}
                    </a>
                 </dd>
                 <dt>result</dt>
@@ -160,7 +160,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_dates_json', from_date='2012-10-01', to_date='2012-11-01') }}">
-                       http://{{ request.host }}/{{ url_for('api.v2.products_dates_json', from_date='2012-10-01', to_date='2012-11-01') }}
+                       http://{{ request.host }}{{ url_for('api.v2.products_dates_json', from_date='2012-10-01', to_date='2012-11-01') }}
                    </a>
                 </dd>
                 <dt>result</dt>
@@ -174,7 +174,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_dates_json', new=True, from_date='2012-10-01') }}">
-                       http://{{ request.host }}/{{ url_for('api.v2.products_dates_json', new=True, from_date='2012-10-01') }}
+                       http://{{ request.host }}{{ url_for('api.v2.products_dates_json', new=True, from_date='2012-10-01') }}
                    </a>
                 </dd>
                 <dt>result</dt>
@@ -188,7 +188,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.products_dates_json', new=True, from_date='2012-10-01', to_date='2012-11-01') }}">
-                       http://{{ request.host }}/{{ url_for('api.v2.products_dates_json', new=True, from_date='2012-10-01', to_date='2012-11-01') }}
+                       http://{{ request.host }}{{ url_for('api.v2.products_dates_json', new=True, from_date='2012-10-01', to_date='2012-11-01') }}
                    </a>
                 </dd>
                 <dt>result</dt>
@@ -202,7 +202,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.product_json', id=available_product.key.id()) }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.product_json', id=available_product.key.id()) }}
+                        http://{{ request.host }}{{ url_for('api.v2.product_json', id=available_product.key.id()) }}
                     </a>
                 </dd>
                 <dt>result</dt>
@@ -321,7 +321,7 @@
                 </dt>
                 <dd>
                     <a href="{{ url_for('api.v2.categories_count_json') }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.categories_count_json') }}
+                        http://{{ request.host }}{{ url_for('api.v2.categories_count_json') }}
                     </a>
                 </dd>
                 <dt>result</dt>
@@ -335,7 +335,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.categories_json') }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.categories_json') }}
+                        http://{{ request.host }}{{ url_for('api.v2.categories_json') }}
                     </a>
                 </dd>
                 <dt>result</dt>
@@ -349,7 +349,7 @@
                 <dt>URL</dt>
                 <dd>
                     <a href="{{ url_for('api.v2.category_json', id=available_category.key.id()) }}">
-                        http://{{ request.host }}/{{ url_for('api.v2.category_json', id=available_category.key.id()) }}
+                        http://{{ request.host }}{{ url_for('api.v2.category_json', id=available_category.key.id()) }}
                     </a>
                 </dd>
                 <dt>result</dt>
