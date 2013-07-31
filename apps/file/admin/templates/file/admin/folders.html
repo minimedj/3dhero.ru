@@ -1,6 +1,8 @@
 {% extends 'admin.html' %}
 
 {% block content %}
+    {% block header %}
+    {% endblock %}
     <div class="row">
         <div class="span5">
             {% block side %}
@@ -29,5 +31,11 @@
             {% block file_content %}
             {% endblock %}
         </div>
+    </div>
+    <div class="row">
+      <div class="span12">
+        {% block other %}
+        {% endblock %}
+      </div>
     </div>
 {% endblock %}
