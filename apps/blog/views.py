@@ -12,7 +12,7 @@ mod = Blueprint(
 
 @mod.route('/')
 def index():
-    posts = Post.query().order(-Post.created)
+    posts = Post.query(Post.is_public == True).order(-Post.created)
     return render_template(
         'blog/index.html',
         posts=posts
