@@ -1,5 +1,13 @@
 User-agent: *
+Allow: /
+Disallow: /admin/
 Disallow: /logout/
 Disallow: /_s/
 Disallow: /_ah/
 Disallow: /_json/
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: Yandex
+Host: http://www.3dhero.ru
