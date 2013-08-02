@@ -36,7 +36,9 @@ skip_files:
 - ^(.*/)?.*/RCS/.*
 - ^(.*/)?\..*
 - ^(.*/)?.*\.bak$
+- ^(.*/)?.*\.md
 - ^lib/.*
+- ^node_modules/.*
 - ^static/src/.*
 - ^static/lib/.*
 - ^static/dst/.*
