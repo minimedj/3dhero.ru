@@ -33,18 +33,16 @@ def get_paginator(products, page, product_per_page = 18):
     return products
 
 
-@mod.route('/')
-def index():
-    posts = Post.query(Post.is_public == True).order(-Post.created)
-    posts_count = posts.count()
-    posts = posts.fetch(4)
+def get_statistic():
     product_count = Product.query(Product.is_available == True).count()
     if product_count:
         product_count = pytils.numeral.get_plural(
             product_count,
             (u"позиции", u"позиций", u"позиций")
         )
-    categories_obj = Category.query(Category.is_public == True).order(Category.name)
+    categories_obj = Category.query(Category.is_public == True).order(
+        Category.name
+    )
     categories = []
     for c in categories_obj:
         if c.public_product_count:
@@ -73,6 +71,15 @@ def index():
              u'брендов и производителей',
              u'брендов и производителей')
         )
+    return brands_count, categories, categories_count, countries_count, product_count
+
+
+@mod.route('/')
+def index():
+    posts = Post.query(Post.is_public == True).order(-Post.created)
+    posts_count = posts.count()
+    posts = posts.fetch(4)
+    brands_count, categories, categories_count, countries_count, product_count = get_statistic()
     return flask.render_template(
         'pages/index.html',
         posts=posts,
