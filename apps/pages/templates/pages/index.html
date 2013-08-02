@@ -1,87 +1,94 @@
 {% extends 'base.html' %}
 
 {% block scripts %}
-    <script>
-        $(document).ready(function() {
-            $('.product_box').mosaic({
-                animation: 'fade',
-                anchor_y: 'top'});
-        });
-    </script>
+  <script>
+    $(document).ready(function () {
+      $('.product_box').mosaic({
+        animation: 'fade',
+        anchor_y: 'top'});
+    });
+  </script>
 {% endblock %}
 
 {% block breadcrumbs %}
-    <li class="active">
-        Главная
-    </li>
+  <li class="active">
+    Главная
+  </li>
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="span12">
-            <div class="hero-unit">
-                <h1>{{ config.BRAND_NAME }} - популярные герои кино, игр и мультфильмов оптом</h1>
-                    {% if product_count %}
-                        <h5>
-                            <a href="{{ url_for('pages.catalogue') }}">
-                                <i>Более {{ product_count }} позиций товаров</i>
-                            </a>
-                        </h5>
-                    {% endif %}
-                    {% if brands_count %}
-                        <h5>
-                        <a href="{{ url_for('pages.catalogue') }}">
-                        <i>
-                            Более {{ brands_count }} брендов и производителей
-                            {% if countries_count %}
-                                из {{ countries_count }} стран мира
-                            {% endif %}
-                        </i>
-                        </a>
-                        </h5>
-                    {% endif %}
-                    {% if categories_count %}
-                        <h5>
-                        <a href="{{ url_for('pages.catalogue') }}">
-                        <i>Более {{ categories_count }} категорий и серий</i>
-                        </a>
-                        </h5>
-                    {% endif %}
-                    <h3 style="text-transform: uppercase">
-                    {% for category in categories %}
-                        <a
-                            href="{{ url_for('pages.category', key_id=category.key.id()) }}"
-                            title='Популярные герои серии "{{ category.name }}"'>
-                            {{ category.name }}</a>{% if not loop.last %}, {% endif %}
-                    {% endfor %}
-                    </h3>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        {% if posts %}
-            <div class="span12">
-                <h2 class="page-header">
-                    Новости
-                </h2>
-            </div>
-            {% for post in posts %}
-                <div class="span6">
-                    {% include 'blog/post_box.html' %}
-                </div>
-            {% endfor %}
-
-            {% if posts_count > 4 %}
-                <div class="span12" style="margin-top: 10px;">
-                    <a class="btn pull-right" href="{{ url_for('blog.index') }}">Читать остальные новости &rarr;</a>
-                </div>
-            {% endif %}
+  <div class="row">
+    <div class="span12">
+      <h1 style="text-align: center">{{ config.BRAND_NAME }}</h1>
+      <h1 style="text-align: center; text-transform: lowercase">
+        фигурки популярных героев кино и игр оптом
+      </h1>
+      <div class="hero-unit">
+        {% if product_count %}
+          <h5>
+            <a href="{{ url_for('pages.catalogue') }}">
+              <i> Более {{ product_count }} товаров (фигурки героев, предметы и аксессуары)</i>
+            </a>
+          </h5>
         {% endif %}
+        {% if brands_count %}
+          <h5>
+            <a href="{{ url_for('pages.catalogue') }}">
+              <i>
+                Более {{ brands_count }}
+                {% if countries_count %}
+                  из {{ countries_count }} мира
+                {% endif %}
+              </i>
+            </a>
+          </h5>
+        {% endif %}
+        {% if categories_count %}
+          <h5>
+            <a href="{{ url_for('pages.catalogue') }}">
+              <i>Более {{ categories_count }} </i>
+            </a>
+          </h5>
+          <h4>Категории и серии фигурок, доступные для оптовой закупки:</h4>
+          <ul class="unstyled inline">
+            {% for category in categories %}
+              <h3 style="text-transform: uppercase; display:inline">
+                  <a
+                    href="{{ url_for('pages.category', key_id=category.key.id()) }}"
+                    title='Популярные герои серии "{{ category.name }}"'>
+                  {{ category.name }}</a>{% if not loop.last %}, {% endif %}
+              </h3>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
     </div>
-
-    <div class="row">
-        <div class="span12">
-            <br>
+  </div>
+  <div class="row">
+    {% if posts %}
+      <div class="span12">
+        <h2 class="page-header">
+          Новости
+        </h2>
+      </div>
+      {% for post in posts %}
+        <div class="span6">
+          {% include 'blog/post_box.html' %}
         </div>
+      {% endfor %}
+
+      {% if posts_count > 4 %}
+        <div class="span12" style="margin-top: 10px;">
+          <a class="btn pull-right" href="{{ url_for('blog.index') }}">Читать
+            остальные новости &rarr;</a>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <div class="span12">
+      <br>
     </div>
+  </div>
 {% endblock %}

@@ -9,6 +9,7 @@ from apps.contact.models import Contact
 from apps.manager.models import Manager
 import util
 from auth import is_admin
+import pytils
 
 PRODUCT_VIEW_TYPES = {
     'tile': 1,
@@ -38,18 +39,40 @@ def index():
     posts_count = posts.count()
     posts = posts.fetch(4)
     product_count = Product.query(Product.is_available == True).count()
+    if product_count:
+        product_count = pytils.numeral.get_plural(
+            product_count,
+            (u"позиции", u"позиций", u"позиций")
+        )
     categories_obj = Category.query(Category.is_public == True).order(Category.name)
     categories = []
     for c in categories_obj:
         if c.public_product_count:
             categories.append(c)
     categories_count = len(categories)
+    if categories_count:
+        categories_count = pytils.numeral.get_plural(
+            categories_count,
+            (u'категории', u'категорий', u'категорий')
+        )
     countries_count = Country.query(Country.is_public == True).count()
+    if countries_count:
+        countries_count = pytils.numeral.get_plural(
+            countries_count,
+            (u'страны', u'стран', u'стран')
+        )
     brands_objs = Brand.query(Brand.is_public == True)
     brands_count = 0
     for b in brands_objs:
         if b.public_product_count:
             brands_count += 1
+    if brands_count:
+        brands_count = pytils.numeral.get_plural(
+            brands_count,
+            (u'бренда и производителя',
+             u'брендов и производителей',
+             u'брендов и производителей')
+        )
     return flask.render_template(
         'pages/index.html',
         posts=posts,
