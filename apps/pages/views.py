@@ -153,6 +153,7 @@ def category(key_id, page):
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/category.html',
+        title=u'{} {}'.format(u'Категория', category.name),
         category=category,
         products=products,
         key_id=key_id
