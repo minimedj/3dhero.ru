@@ -6,10 +6,10 @@
     <title>
       {% block title %}
         {% if title %}
-          {{title}} |
+          {{title}} -
         {% endif %}
+        {{config.BRAND_NAME}} - герои оптом
       {% endblock %}
-      {{config.BRAND_NAME}} - герои оптом
     </title>
 
     {% include 'bit/style.html' %}
