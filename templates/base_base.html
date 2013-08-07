@@ -2,6 +2,17 @@
 <html class="{{html_class}}" lang="ru" data-channel-name="{{channel_name}}">
   <head>
     <meta charset="utf-8">
+    <meta name="keywords" content="
+    {% block meta_keywords%}
+      {% if meta_keywords %}
+        {{ meta_keywords }}
+      {% endif %}
+    {% endblock %}">
+    <meta name="description" content="
+    {% block meta_description%}
+      {% if meta_description %}
+      {% endif %}
+    {% endblock %}">
     <meta name='yandex-verification' content='7a8238cea51f7e7d' />
     <title>
       {% block title %}
