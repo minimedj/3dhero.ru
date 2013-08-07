@@ -32,7 +32,7 @@
                 </span>
             {% endif %}
         {% else %}
-            {% if not product.leftovers %}
+            {% if not product.leftovers or not product.is_available %}
                 <span class="badge badge-important badge_leftovers">Отсуствует</span>
             {% else %}
                 {% if current_user.admin %}
