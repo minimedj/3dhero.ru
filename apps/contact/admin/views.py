@@ -60,10 +60,8 @@ def edit(key_id):
         flash(u'Контакт удален')
         return redirect(url_for('admin.contact.index'))
     form = ContactForm(obj=contact)
-    get_geo(contact, form)
-    if contact.geo:
-        form.latitude.data = contact.geo.lat
-        form.longitude.data = contact.geo.lon
+    if request.method == 'GET':
+        get_geo(contact, form)
     if form.validate_on_submit():
         form.populate_obj(contact)
         set_geo(form, contact)
