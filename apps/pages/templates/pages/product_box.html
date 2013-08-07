@@ -5,7 +5,7 @@
             Цена: {{ product.price_retail }}<br>
             {% if current_user.is_order_box %}
                 Цена опт: {{ product.price_trade }}
-            {% endif %}
+            {% else %}
                 Цена опт: выгодная
             {% endif %}
         </span>
@@ -32,7 +32,7 @@
                 </span>
             {% endif %}
         {% else %}
-            {% if not product.leftovers or not product.is_available %}
+            {% if not product.leftovers or (not product.is_available and not current_user.admin) %}
                 <span class="badge badge-important badge_leftovers">Отсуствует</span>
             {% else %}
                 {% if current_user.admin %}

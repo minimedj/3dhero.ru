@@ -87,7 +87,7 @@
                         {{ get_str_property('Поступление на склад', 'В пути')|safe }}
                     {% endif %}
                 {% endif %}
-                {% if not product.leftovers %}
+                {% if not product.leftovers or (not product.is_available and not current_user.admin) %}
                     {{ get_str_property('На складе', 'Отсуствует')|safe }}
                 {% else %}
                     {% if current_user.admin %}
