@@ -70,9 +70,14 @@
                 </a>
             {% endif %}
             <dl class="dl-horizontal">
-                {{ get_str_property('Цена розничная', product.price_retail|string + ' pублей')|safe }}
+                {{ get_str_property('Цена розничная', product.price_retail|string + ' pуб.')|safe }}
                 {% if current_user.is_order_box %}
-                    {{ get_str_property('Цена оптовая', product.price_trade|string + ' pублей')|safe }}
+                  {{ get_str_property('Цена оптовая', product.price_trade|string + ' pуб.')|safe }}
+                {% else %}
+                  <dt>Цена оптовая:</dt>
+                  <dd>Необходимо <a href="{{ url_for('auth.login') }}">
+                    <i class="icon-user"></i>авторизироваться </a>
+                  </dd>
                 {% endif %}
 
                 {% if product.leftovers_on_way %}
