@@ -69,6 +69,7 @@
                 </div>
                 <br>
                 <ul class="thumbnails">
+                  {% if product.images|length > 1 %}
                     {% for image in product.images %}
                         <li>
                             <a class="thumbnail"
@@ -78,6 +79,7 @@
                             </a>
                         </li>
                     {% endfor %}
+                  {% endif %}
                 </ul>
             {% else %}
                 <img src="/p/img/none/400x400.jpg" height="400" width="400">
