@@ -27,7 +27,8 @@
         {% if product_count %}
           <h5>
             <a href="{{ url_for('pages.catalogue') }}">
-              <i> Более {{ product_count }} товаров (фигурки героев, предметы и аксессуары)</i>
+              <i> Более {{ product_count }} товаров в наличии
+              (фигурки героев, предметы и аксессуары)</i>
             </a>
           </h5>
         {% endif %}
@@ -72,15 +73,15 @@
         </h2>
       </div>
       {% for post in posts %}
-        <div class="span6">
+        <div class="span12">
           {% include 'blog/post_box.html' %}
         </div>
       {% endfor %}
 
       {% if posts_count > 4 %}
-        <div class="span12" style="margin-top: 10px;">
-          <a class="btn pull-right" href="{{ url_for('blog.index') }}">Читать
-            остальные новости &rarr;</a>
+        <div class="span12" style="margin-top: 10px; text-align: center">
+          <a class="btn" href="{{ url_for('blog.index') }}">
+            Читать остальные новости &rarr;</a>
         </div>
       {% endif %}
     {% endif %}
