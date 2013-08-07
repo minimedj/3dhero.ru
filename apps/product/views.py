@@ -20,19 +20,12 @@ def get_product(key_id):
     category = CategoryProduct.query(CategoryProduct.product_key == product.key).get()
     if category:
         category = category.section_key.get()
-    title_full = re.sub('[!"\'1-9]', '', product.name).split(' ')
-    if len(title_full) >= 3:
-        title = u' '.join(title_full[:3])
-        title_full = ' '.join(title_full)
-    else:
-        title_full = ' '.join(title_full)
-        title = title_full
+    title = re.sub('[!"\'\-1-9]', '', product.name)
     return render_template(
         'product/get.html',
         html_class='product',
         title=title,
-        meta_keywords=title_full,
-        meta_description=title_full,
+        meta_keywords=title,
         product=product,
         category=category,
         back_url=back_url
