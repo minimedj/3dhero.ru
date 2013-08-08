@@ -119,6 +119,7 @@ def last_incoming(page):
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/last_incoming.html',
+        title=u'Последние поступления',
         products=products
     )
 
@@ -154,7 +155,7 @@ def category(key_id, page):
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/category.html',
-        title=u'{} {}'.format(u'Категория', category.name),
+        title=u'{} "{}"'.format(u'Категория', category.name),
         category=category,
         products=products,
         key_id=key_id
