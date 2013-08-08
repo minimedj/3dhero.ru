@@ -15,5 +15,6 @@ def index():
     prices = PriceFile.query().order(-PriceFile.order_id)
     return render_template(
         'price/index.html',
+        title=u'Файлы и прайсы',
         prices=prices
     )

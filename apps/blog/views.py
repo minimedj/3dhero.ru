@@ -15,6 +15,7 @@ def index():
     posts = Post.query(Post.is_public == True).order(-Post.created)
     return render_template(
         'blog/index.html',
+        title=u'Новости',
         posts=posts
     )
 
@@ -25,5 +26,6 @@ def get_post(key_id):
         return redirect(url_for('blog.index'))
     return render_template(
         'blog/post.html',
+        title=u'{} - {}'.format(post.title, u'Новости'),
         post=post
     )

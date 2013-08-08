@@ -103,6 +103,7 @@ def catalogue(page):
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/catalogue.html',
+        title=u'Каталог товаров',
         products=products
     )
 
@@ -166,6 +167,7 @@ def contacts():
     managers = Manager.query(Manager.is_public == True)
     return flask.render_template(
         'pages/contact.html',
+        title=u'Контакты',
         contacts=contacts,
         managers=managers
     )
