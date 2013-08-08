@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 
+{% block meta_keywords %}
+  герои игр фильмов коллекционные игрушки опт оптом
+  {% for category in categories %}
+    {{ category.name }}
+  {% endfor %}
+{% endblock %}
+
+{% block meta_description %}
+  3DHero - это широкий выбор коллекционных фигурок из популярных (и не очень)
+  фильмов, аниме и игр. Мы работаем без посредников и являемся официальными
+  партнерами крупнейших производителей.
+{% endblock %}
+
 {% block scripts %}
   <script>
     $(document).ready(function () {
@@ -28,7 +41,7 @@
           <h5>
             <a href="{{ url_for('pages.catalogue') }}">
               <i> Более {{ product_count }} товаров в наличии
-              (фигурки героев, предметы и аксессуары)</i>
+              (коллекционные фигурки героев, предметы и аксессуары)</i>
             </a>
           </h5>
         {% endif %}
