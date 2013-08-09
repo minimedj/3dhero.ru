@@ -32,16 +32,16 @@
 {% block content %}
   <div class="row">
     <div class="span12">
-      <h1 style="text-align: center">{{ config.BRAND_NAME }}</h1>
-      <h1 style="text-align: center; text-transform: lowercase">
-        фигурки популярных героев кино и игр оптом
-      </h1>
+      <h1 style="text-align: center">{{ config.BRAND_NAME }} - герои оптом</h1>
+      <h2 style="text-align: center; text-transform: lowercase">
+        коллекционные фигурки героев кино, комиксов и игр оптом
+      </h2>
       <div class="hero-unit">
         {% if product_count %}
           <h5>
             <a href="{{ url_for('pages.catalogue') }}">
-              <i> Более {{ product_count }} товаров в наличии
-              (коллекционные фигурки героев кино, фильмов и комиксов,
+              <i> Более {{ product_count }} в наличии
+              (коллекционные фигурки героев кино, комиксов и игр,
                 а также предметы и аксессуары)</i>
             </a>
           </h5>
@@ -65,14 +65,16 @@
             </a>
           </h5>
           <h4>Категории и серии фигурок доступные для оптовой закупки:</h4>
-          <ul class="unstyled inline">
+          <ul class="unstyled">
             {% for category in categories %}
-              <h3 style="text-transform: uppercase; display:inline">
+              <li style="display: inline">
+              <h3 style="text-transform: uppercase; display: inline">
                   <a
                     href="{{ url_for('pages.category', key_id=category.key.id()) }}"
-                    title='Популярные герои серии "{{ category.name }}"'>
+                    title='Фигурки героев "{{ category.name }}"'>
                   {{ category.name }}</a>{% if not loop.last %}, {% endif %}
               </h3>
+              </li>
             {% endfor %}
           </ul>
         {% endif %}
