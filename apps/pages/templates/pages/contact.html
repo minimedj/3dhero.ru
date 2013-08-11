@@ -36,12 +36,14 @@
           </div>
         {% endif %}
         <div class="oh">
-          <h2 itemprop="name">{{ config.config.BRAND_NAME }}</h2>
-          <p itemprop="description">
-            3DHero - это широкий выбор коллекционных фигурок из популярных
-            фильмов, комиксов, аниме и игр оптом. Мы работаем без посредников и
-            являемся официальными партнерами крупнейших производителей.
-          </p>
+          <div style="margin-left: 30px;">
+            <h2 itemprop="name">{{ config.BRAND_NAME }}</h2>
+            <p itemprop="description" style="text-align: justify">
+              3DHero - это широкий выбор коллекционных фигурок из популярных
+              фильмов, комиксов, аниме и игр оптом. Мы работаем без посредников и
+              являемся официальными партнерами крупнейших производителей.
+            </p>
+          </div>
           <dl class="dl-horizontal" itemscope itemtype="http://schema.org/PostalAddress">
             {% if contact.zip_code %}
               <dt>Индекс</dt>
