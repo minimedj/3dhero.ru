@@ -17,8 +17,8 @@ def get_aside(active='category', key_id=None):
         key_id=key_id
     )
 
-def get_str_property(name, value):
+def get_str_property(name, value, itemprop=None):
     return render_template(
         'str_property.html',
-        name=name, value=value
+        name=name, value=value, itemprop=itemprop
     )

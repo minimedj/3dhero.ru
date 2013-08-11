@@ -48,7 +48,7 @@
 
 {% block container %}
     {{ super() }}
-    <div class="row">
+    <div class="row" itemscope itemtype="http://schema.org/Product">
         <div class="span12">
             {% if category %}
                 <a class="btn"
@@ -60,12 +60,12 @@
                     &larr; Перейти в каталог продукции
                 </a>
             {% endif %}
-            <h2>{{ product.name }}</h2>
+            <h2 itemprop="name">{{ product.name }}</h2>
         </div>
         <div class="span6">
             {% if product.images %}
                 <div style="height: 400px;width: 400px;">
-                    <img class="img_preview" src="{{ product.images[0] }}=s400">
+                    <img itemprop="image" class="img_preview" src="{{ product.images[0] }}=s400">
                 </div>
                 <br>
                 <ul class="thumbnails">
@@ -75,7 +75,7 @@
                             <a class="thumbnail"
                                href="#"
                                onclick="$('.img_preview').attr('src', '{{ image }}=s400'); return false;">
-                                <img src="{{ image }}=s80">
+                                <img itemprop="image" src="{{ image }}=s80">
                             </a>
                         </li>
                     {% endfor %}
@@ -93,8 +93,8 @@
                     Редактировать
                 </a>
             {% endif %}
-            <dl class="dl-horizontal">
-                {{ get_str_property('Цена розничная', product.price_retail|string + ' pуб.')|safe }}
+            <dl class="dl-horizontal" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                {{ get_str_property('Цена розничная', product.price_retail|string + ' pуб.', "price")|safe }}
                 {% if current_user.id <= 0 %}
                   <dt>Цена оптовая:</dt>
                   <dd>Необходимо <a href="{{ url_for('auth.login') }}">
@@ -121,15 +121,15 @@
                     {% endif %}
                 {% endif %}
                 {% if not product.leftovers or (not product.is_available and not current_user.admin) %}
-                    {{ get_str_property('На складе', 'Отсуствует')|safe }}
+                    {{ get_str_property('На складе', 'Отсуствует', itemprop='availability')|safe }}
                 {% else %}
                     {% if current_user.admin %}
                         {{ get_str_property('На складе', product.leftovers|string)|safe }}
                     {% else %}
                         {% if product.leftovers > 10 %}
-                            {{ get_str_property('На складе', 'Много')|safe }}
+                            {{ get_str_property('На складе', 'Много', itemprop='availability')|safe }}
                         {% else %}
-                            {{ get_str_property('На складе', 'Мало')|safe }}
+                            {{ get_str_property('На складе', 'Мало', itemprop='availability')|safe }}
                         {% endif %}
                     {% endif %}
                 {% endif %}
@@ -139,32 +139,34 @@
 
             <dl class="dl-horizontal">
                 {{ get_str_property('Код 1C', product.id_1c)|safe }}
-                {{ get_str_property('Артикул', product.catalogue_id)|safe }}
-                {{ get_str_property('Штрих-код', product.barcode)|safe }}
+                {{ get_str_property('Артикул', product.catalogue_id, "mpn")|safe }}
+                {{ get_str_property('Штрих-код', product.barcode, "gtin13")|safe }}
             </dl>
 
-            <dl class="dl-horizontal">
+            <dl class="dl-horizontal" itemprop="brand" itemscope itemtype="http://schema.org/Organization">
                 {{ get_str_property('Категория', product.category)|safe }}
-                {{ get_str_property('Бренд', product.brand)|safe }}
+                {{ get_str_property( 'Бренд', product.brand, 'name')|safe }}
             </dl>
-
-
             <dl class="dl-horizontal">
                 {{ get_str_property('Страна-производитель', product.country)|safe }}
                 {{ get_str_property('Материал', product.material)|safe }}
-                {{ get_str_property('Размер', product.size)|safe }}
-                {{ get_str_property('Вес', product.weight)|safe }}
             </dl>
-
+            <dl class="dl-horizontal" itemprop="height" itemscope itemtype="http://schema.org/QuantitativeValue">
+              {{ get_str_property('Размер', product.size, 'value')|safe }}
+            </dl>
+            <dl class="dl-horizontal" itemprop="weight" itemscope itemtype="http://schema.org/QuantitativeValue">
+              {{ get_str_property('Вес', product.weight, 'value')|safe }}
+            </dl>
             <dl class="dl-horizontal">
-                {{ get_str_property('Тип упаковки', product.box_material)|safe }}
-                {{ get_str_property('Размер упаковки', product.box_size)|safe }}
-                {{ get_str_property('Вес упаковки', product.box_weight)|safe }}
-                {{ get_str_property('Кол-во в упаковке', product.box_amount)|safe }}
+              {{ get_str_property('Тип упаковки', product.box_material)|safe }}
+              {{ get_str_property('Кол-во в упаковке', product.box_amount)|safe }}
             </dl>
-
+            <dl class="dl-horizontal">
+              {{ get_str_property('Размер упаковки', product.box_size)|safe }}
+              {{ get_str_property('Вес упаковки', product.box_weight)|safe }}
+            </dl>
             <dl>
-                {{ get_str_property('Описание', product.description)|safe }}
+              {{ get_str_property('Описание', product.description, "description")|safe }}
             </dl>
         </div>
     </div>

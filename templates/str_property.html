@@ -1,4 +1,8 @@
 {% if name and value %}
-<dt>{{ name }}:</dt>
-<dd>{{ value }}</dd>
+<dt>
+  {{ name }}:
+</dt>
+<dd {% if itemprop %}itemprop="{{ itemprop }}"{% endif %}>
+  {{ value }}
+</dd>
 {% endif %}
