@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 
+{% block meta_keywords %}
+  3dhero опт контакты
+{% endblock %}
+
+{% block meta_description %}
+  3DHero - это широкий выбор коллекционных фигурок из популярных
+  фильмов, комиксов, аниме и игр оптом.
+{% endblock %}
+
 {% block breadcrumbs %}
   <li>
     <a href="{{ url_for('pages.index') }}">Главная</a>
@@ -11,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
+  <div class="row" itemscope itemtype="http://schema.org/Organization">
     <div class="span12">
       <h1 class="page-header">
         Контакты
@@ -27,26 +36,32 @@
           </div>
         {% endif %}
         <div class="oh">
-          <dl class="dl-horizontal">
+          <h2 itemprop="name">{{ config.config.BRAND_NAME }}</h2>
+          <p itemprop="description">
+            3DHero - это широкий выбор коллекционных фигурок из популярных
+            фильмов, комиксов, аниме и игр оптом. Мы работаем без посредников и
+            являемся официальными партнерами крупнейших производителей.
+          </p>
+          <dl class="dl-horizontal" itemscope itemtype="http://schema.org/PostalAddress">
             {% if contact.zip_code %}
               <dt>Индекс</dt>
-              <dd>{{ contact.zip_code }}</dd>
+              <dd itemprop="postalCode">{{ contact.zip_code }}</dd>
             {% endif %}
             {% if contact.city %}
               <dt>Город</dt>
-              <dd>{{ contact.city }}</dd>
+              <dd itemprop="addressLocality">{{ contact.city }}</dd>
             {% endif %}
             {% if contact.address %}
               <dt>Адрес</dt>
-              <dd>{{ contact.address }}</dd>
+              <dd itemprop="streetAddress">{{ contact.address }}</dd>
             {% endif %}
             {% if contact.telephones %}
               <dt>Телефон</dt>
-              <dd>{{ contact.telephones }}</dd>
+              <dd itemprop="telephone">{{ contact.telephones }}</dd>
             {% endif %}
             {% if contact.faxes %}
               <dt>Факс</dt>
-              <dd>{{ contact.faxes }}</dd>
+              <dd itemprop="faxNumber">{{ contact.faxes }}</dd>
             {% endif %}
           </dl>
         </div>
@@ -81,17 +96,17 @@
           </thead>
           <tbody>
           {% for manager in managers %}
-            <tr>
-              <td>
+            <tr itemscope itemtype="http://schema.org/Person">
+              <td itemprop="name">
                 {{ manager.name }}
               </td>
-              <td>
+              <td itemprop="telephone">
                 {{ manager.mobile }}
               </td>
-              <td>
+              <td itemprop="telephone">
                 {{ manager.telephone }}
               </td>
-              <td>
+              <td itemprop="email">
                 {% if manager.email %}
                   <a href="mailto:{{ manager.email }}">
                     {{ manager.email }}
