@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import flask
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
 from apps.blog.models import Post
 from apps.product.models import Product, Category, Brand, Country
 from apps.product.models import CategoryProduct
@@ -172,5 +173,14 @@ def contacts():
         contacts=contacts,
         managers=managers
     )
+
+@mod.route('/sitemap.xml')
+def sitemap_xml():
+    products = Product.query(Product.is_public==True)
+    response = flask.make_response(
+        flask.render_template('pages/sitemap.xml', products=products)
+    )
+    response.headers['Content-Type'] = 'text/xml; charset=utf-8'
+    return response
 
 _blueprints = (mod,)

@@ -5,6 +5,7 @@ Disallow: /logout/
 Disallow: /_s/
 Disallow: /_ah/
 Disallow: /_json/
+Sitemap: http://www.3dhero.ru/sitemap.xml
 
 User-agent: AhrefsBot
 Disallow: /
