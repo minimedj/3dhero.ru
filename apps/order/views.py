@@ -143,10 +143,12 @@ def cart_view():
         clear_cart()
         return render_template(
             'order/order_success.html',
+            title=u'Предзаказ оформлен',
             order=order
         )
     return render_template(
         'order/cart.html',
+        title=u'Оформление предзаказа',
         price=price,
         products_count=products_count,
         un_products_count=un_products_count,
