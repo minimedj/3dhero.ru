@@ -2,15 +2,15 @@
 
 {% block meta_keywords %}
   герои игр фильмов комиксов коллекционные игрушки опт оптом
-  {% for category in categories %}
-    {{ category.name }}
-  {% endfor %}
+  {% for c in categories %} {{ c.name }} {% endfor %}
+  {% for b in brands %} {{ b.name }} {% endfor %}
 {% endblock %}
 
 {% block meta_description %}
   3DHero - это широкий выбор коллекционных фигурок из популярных (и не очень)
   фильмов, комиксов, аниме и игр оптом. Мы работаем без посредников и являемся
-  официальными партнерами крупнейших производителей.
+  официальными партнерами крупнейших производителей
+  {% for b in brands %}{{ b.name }}{% if not loop.last %}, {% endif %}{% endfor %}.
 {% endblock %}
 
 {% block scripts %}
@@ -51,6 +51,7 @@
             <a href="{{ url_for('pages.catalogue') }}">
               <i>
                 Более {{ brands_count }}
+                таких как {% for b in brands %}{{ b.name }}{% if not loop.last %}, {% endif %}{% endfor %}
                 {% if countries_count %}
                   из {{ countries_count }} мира
                 {% endif %}
