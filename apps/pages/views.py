@@ -176,7 +176,10 @@ def contacts():
 
 @mod.route('/sitemap.xml')
 def sitemap_xml():
-    products = Product.query(Product.is_public==True)
+    products = memcache.get('sitemap_xml')
+    if not products:
+        products = Product.query().fetch(projection=[Product.name])
+        memcache.add('sitemap_xml', products, 60*60*48)
     response = flask.make_response(
         flask.render_template('pages/sitemap.xml', products=products)
     )
