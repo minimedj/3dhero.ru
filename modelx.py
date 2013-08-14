@@ -37,7 +37,7 @@ class BaseX(object):
 
   created_utc = ndb.ComputedProperty(
       lambda self: util.format_datetime_utc(self.created) \
-          if self.modified else None
+          if self.created else None
     )
   modified_utc = ndb.ComputedProperty(
       lambda self: util.format_datetime_utc(self.modified) \
