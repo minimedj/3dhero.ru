@@ -85,15 +85,15 @@
   <div class="row">
     {% if posts %}
       <div class="span12">
-        <h2 class="page-header">
+        <h2>
           Новости
         </h2>
       </div>
+      <div class="span12">
       {% for post in posts %}
-        <div class="span12">
           {% include 'blog/post_box.html' %}
-        </div>
       {% endfor %}
+      </div>
 
       {% if posts_count > 4 %}
         <div class="span12" style="margin-top: 10px; text-align: center">
