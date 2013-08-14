@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template
 from apps.product.models import Category
+from pytils import dt
 
 def get_aside(active='category', key_id=None):
     sections=[]
@@ -17,8 +18,13 @@ def get_aside(active='category', key_id=None):
         key_id=key_id
     )
 
+
 def get_str_property(name, value, itemprop=None):
     return render_template(
         'str_property.html',
         name=name, value=value, itemprop=itemprop
     )
+
+
+def date_str(d):
+    return dt.ru_strftime(u"%d %B %Y в %H:%M", d, inflected=True)
