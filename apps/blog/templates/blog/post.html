@@ -1,31 +1,35 @@
 {% extends 'base.html' %}
 
 {% block breadcrumbs %}
-    <li>
-        <a href="{{ url_for('pages.index') }}">
-            Главная
-        </a>
-        <span class="divider"> &rarr; </span>
-    </li>
-    <li>
-        <a href="{{ url_for('blog.index') }}">Новости</a>
-        <span class="divider"> &rarr; </span>
-    </li>
-    <li class="active">
-        {{ post.title }}
-    </li>
+  <li>
+    <a href="{{ url_for('pages.index') }}">
+      Главная
+    </a>
+    <span class="divider"> &rarr; </span>
+  </li>
+  <li>
+    <a href="{{ url_for('blog.index') }}">Новости</a>
+    <span class="divider"> &rarr; </span>
+  </li>
+  <li class="active">
+    {{ post.title }}
+  </li>
 {% endblock %}
 
 
 {% block content %}
-    <h2>
+  <div class="row">
+    <div class="span12">
+      <h2>
         <span class="label">{{ date_str(post.created) }}</span>
-      <br>
-      {{ post.title }}
-    </h2>
-    {% if post.text %}
+        <br>
+        {{ post.title }}
+      </h2>
+      {% if post.text %}
         {{ post.text|safe }}
-    {% else %}
+      {% else %}
         {{ post.short_text|safe }}
-    {% endif %}
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
