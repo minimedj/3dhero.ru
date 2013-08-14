@@ -28,7 +28,7 @@ class BaseX(object):
 
   created_ago = ndb.ComputedProperty(
       lambda self: util.format_datetime_ago(self.created) \
-          if self.modified else None
+          if self.created else None
     )
   modified_ago = ndb.ComputedProperty(
       lambda self: util.format_datetime_ago(self.modified) \
