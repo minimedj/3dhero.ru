@@ -162,15 +162,10 @@ def category(key_id, page):
         return flask.redirect(flask.url_for(
             'pages.index'
         ))
-    if is_admin():
-        category_products = CategoryProduct.query(
-            CategoryProduct.section_key == category.key
-        )
-    else:
-        category_products = CategoryProduct.query(
-            CategoryProduct.section_key == category.key,
-            CategoryProduct.is_public == True
-        )
+
+    category_products = CategoryProduct.query(
+        CategoryProduct.section_key == category.key
+    ).order(-CategoryProduct.is_public)
     products = ndb.get_multi([p.product_key for p in category_products])
     products = get_paginator(products, page)
     return flask.render_template(
