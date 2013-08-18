@@ -1,0 +1,10 @@
+<dl class="dl-horizontal store_links">
+{% for store_link in store_links %}
+  <dt>
+    <a href="{{ store_link.link }}">{{ store_link.name }}</a>
+  </dt>
+  <dd>
+    - {{ store_link.description | safe }}
+  </dd>
+{% endfor %}
+</dl>

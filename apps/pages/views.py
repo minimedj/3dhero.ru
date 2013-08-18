@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import flask
-from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from apps.blog.models import Post
 from apps.product.models import Product, Category, Brand, Country
-from apps.product.models import CategoryProduct
 from apps.utils.paginator import Paginator, EmptyPage, InvalidPage
 from apps.contact.models import Contact
 from apps.manager.models import Manager
+from apps.store_link.models import StoreLink
 import util
 from auth import is_admin
 import pytils
@@ -101,6 +100,7 @@ def index():
     categories, categories_count = categories_stat()
     product_count = product_stat()
     countries_count = countries_stat()
+    store_links = StoreLink.query()
     return flask.render_template(
         'pages/index.html',
         posts=posts,
@@ -110,7 +110,8 @@ def index():
         categories_count=categories_count,
         countries_count=countries_count,
         brands_count=brands_count,
-        brands=brands
+        brands=brands,
+        store_links=store_links
     )
 
 

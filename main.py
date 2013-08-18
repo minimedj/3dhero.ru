@@ -87,6 +87,9 @@ app.register_blueprint(admin_store_link)
 from apps.search.views import mod as search_mod
 app.register_blueprint(search_mod)
 
+from apps.store_link.views import mod as store_link_mod
+app.register_blueprint(store_link_mod)
+
 @app.errorhandler(401)
 def custom_401(error):
     return flask.redirect(flask.url_for('auth.login', next=flask.request.url))

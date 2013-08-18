@@ -83,13 +83,84 @@
     </div>
   </div>
   <div class="row">
+    <div class="span12" style="padding-top: 50px;">
+      <h2>Информация для покупателей</h2>
+      <ul class="nav nav-pills">
+        <li>
+          <a href="#" data-target="#tabone" data-toggle="tab">
+            Я оптовый покупатель
+          </a>
+        </li>
+        <li>
+          <a href="#" data-target="#tabtwo" data-toggle="tab">
+            Я розничный покупатель
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-content row" style="padding-bottom: 50px;">
+      <div class="tab-pane" id="tabone">
+        <div class="span12">
+        <h3>
+          Стать нашим клиентом очень легко - это займет всего несколько минут<br>
+        </h3>
+        </div>
+        <div class="span4">
+          <div>
+            <h5 style="text-align: center">
+              <span class="label">1</span> Зарегистрируйтесь
+            </h5>
+            <span>
+            Пройдете <a href="{{ url_for('auth.login') }}">на страницу регистрации</a>
+            и войдите на сайт с помощью аккаунта в любой социальной сети или почтовом сервисе.
+            </span>
+          </div>
+        </div>
+        <div class="span4">
+          <div>
+            <h5 style="text-align: center">
+              <span class="label label-info">2</span> Запросите сотрудничество
+            </h5>
+            <span>
+              Сделайте запрос на сотрудничество в своем
+              <a href="{{ url_for('auth.profile') }}">личном кабинете</a>.
+              Наш менеджер свяжется с Вами и подтвердит партнерство.
+            </span>
+          </div>
+        </div>
+        <div class="span4">
+          <h5 style="text-align: center">
+            <span class="label label-success">3</span> Делайте заказы
+          </h5>
+          <span style="text-align: right">
+            Используйте <a href="{{ url_for('pages.catalogue') }}">наш сайт</a>
+            для оформления предзаказов.
+          </span>
+        </div>
+        <div class="span12"><hr></div>
+        <div class="span12">
+          <h4>Вам не удобен такой способ заказа товаров?</h4>
+          <a href="{{ url_for('pages.contacts') }}">Позвоните нам</a>
+          и мы сможем подобрать другой вариант взаимодействия и сотрудничества.
+          Мы уверены, что оптовые цены Вас приятно удивят.
+        </div>
+      </div>
+      <div class="tab-pane" id="tabtwo">
+        <div class="span12">
+          <h3>
+            Весь ассортимент фигурок Вы можете найти у наших партнеров
+          </h3>
+          {% include 'store_link/list.html' %}
+        </div>
+      </div>
+  </div>
+  <div class="row">
     {% if posts %}
       <div class="span12">
         <h2>
           Новости
         </h2>
-      </div>
-      <div class="span12">
       {% for post in posts %}
           {% include 'blog/post_box.html' %}
       {% endfor %}
