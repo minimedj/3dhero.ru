@@ -118,8 +118,9 @@ def catalogue(page):
     if is_admin():
         products = Product.query().order(-Product.rating)
     else:
-        products = Product.query(
-            Product.is_public == True).order(-Product.rating)
+        products = Product.query()\
+            .order(-Product.rating)\
+            .order(-Product.leftovers)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/catalogue.html',
@@ -162,11 +163,11 @@ def category(key_id, page):
         return flask.redirect(flask.url_for(
             'pages.index'
         ))
-
-    category_products = CategoryProduct.query(
-        CategoryProduct.section_key == category.key
-    ).order(-CategoryProduct.is_public)
-    products = ndb.get_multi([p.product_key for p in category_products])
+    products = Product\
+        .query(Product.category == category.name)\
+        .order(-Product.is_available)\
+        .order(-Product.leftovers_on_way)\
+        .order(-Product.leftovers)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/category.html',
