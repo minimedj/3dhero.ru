@@ -227,7 +227,8 @@ def set_section(section_cls, section_product_cls, product, section_name):
         if section_value:
             section = section_cls.new_or_exist(section_value)
             section_product = section_product_cls(section_key=section.key, product_key=product.key)
-    section_product.put()
+    if section_product:
+        section_product.put()
 
 def clear_section_product(section_product_cls, product_key):
     section_products = section_product_cls.query(section_product_cls.product_key == product_key)
