@@ -24,6 +24,8 @@ mod = flask.Blueprint(
     template_folder='templates'
 )
 
+SITEMAP_XML_TIMEOUT = 60*60*48
+
 
 def get_paginator(products, page, product_per_page = 18):
     paginator = Paginator(products, product_per_page)
@@ -194,9 +196,16 @@ def sitemap_xml():
     products = memcache.get('sitemap_xml')
     if not products:
         products = Product.query().fetch(projection=[Product.name])
-        memcache.add('sitemap_xml', products, 60*60*48)
+        memcache.add('sitemap_xml', products, SITEMAP_XML_TIMEOUT)
+    categories = memcache.get('sitemap_xml_categories')
+    if not categories:
+        categories = Category.query().fetch(projection=[Category.name])
+        memcache.add('sitemap_xml_categories', categories, SITEMAP_XML_TIMEOUT)
     response = flask.make_response(
-        flask.render_template('pages/sitemap.xml', products=products)
+        flask.render_template(
+            'pages/sitemap.xml',
+            products=products,
+            categories=categories)
     )
     response.headers['Content-Type'] = 'text/xml; charset=utf-8'
     return response
