@@ -60,12 +60,17 @@
                     &larr; Перейти в каталог продукции
                 </a>
             {% endif %}
-            <h2 itemprop="name">{{ product.name }}</h2>
+            <h1 itemprop="name">{{ product.name }}</h1>
         </div>
         <div class="span6">
             {% if product.images %}
                 <div style="height: 400px;width: 400px;">
-                    <img itemprop="image" class="img_preview" src="{{ product.images[0] }}=s400">
+                    <img
+                      itemprop="image"
+                      class="img_preview"
+                      title="{{ product.strip_name }}"
+                      alt="{{ product.strip_name }}"
+                      src="{{ product.images[0] }}=s400">
                 </div>
                 <br>
                 <ul class="thumbnails">
@@ -75,7 +80,10 @@
                             <a class="thumbnail"
                                href="#"
                                onclick="$('.img_preview').attr('src', '{{ image }}=s400'); return false;">
-                                <img itemprop="image" src="{{ image }}=s80">
+                                <img
+                                  itemprop="image"
+                                  alt="миниатюра {{ product.strip_name }}"
+                                  src="{{ image }}=s80">
                             </a>
                         </li>
                     {% endfor %}

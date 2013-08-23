@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
 from flask import Blueprint, url_for, redirect, render_template
 from apps.product.models import Product, CategoryProduct
 from util import get_next_url
@@ -20,12 +19,11 @@ def get_product(key_id):
     category = CategoryProduct.query(CategoryProduct.product_key == product.key).get()
     if category:
         category = category.section_key.get()
-    title = re.sub('[!"\'\-1-9]', '', product.name)
     return render_template(
         'product/get.html',
         html_class='product',
-        title=title,
-        meta_keywords=title,
+        title=product.strip_name,
+        meta_keywords=product.strip_name,
         product=product,
         category=category,
         back_url=back_url

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from flask import url_for, session
 from werkzeug.wrappers import cached_property
 from google.appengine.ext import ndb, db
@@ -241,6 +242,9 @@ class Product(Base):
     barcode = ndb.StringProperty(verbose_name=u'Штрих код', default='', indexed=True)
 
     name = ndb.StringProperty(verbose_name=u'Название', default='', indexed=True)
+    strip_name = ndb.ComputedProperty(
+        lambda self: re.sub('[/!,;."\'\-0-9]', '', self.name)
+    )
 
     category = ndb.StringProperty(verbose_name=u'Категория', default='', indexed=True)
     brand = ndb.StringProperty(verbose_name=u'Бренд/Производитель', indexed=True)
