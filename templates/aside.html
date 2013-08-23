@@ -4,7 +4,9 @@
         {% for section in sections %}
             {% if section.public_product_count %}
             <li {% if section.key.id() == key_id %}class="active"{% endif %}>
-                <a href="{{ url_for('pages.%s' % active, key_id=section.key.id()) }}">
+                <a 
+                  title="Переход к категории {{ section.name }}"
+                  href="{{ url_for('pages.%s' % active, key_id=section.key.id()) }}">
                     {{ section.name }}
                     {% if section.key.id() == key_id %}
                         <i class="icon-chevron-right"></i>
