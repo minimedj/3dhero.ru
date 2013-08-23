@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+
+
+{% block meta_description %}
+  3DHero - это широкий выбор коллекционных фигурок из популярных
+  фильмов, комиксов, аниме и игр оптом.
+  На этой странице Вы увидите результат поиска по запросу «{{ query }}».
+{% endblock %}
+
 {% block scripts %}
     <script>
         $(document).ready(function() {

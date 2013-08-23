@@ -43,6 +43,7 @@ def index(query, page):
     if not query:
         return render_template(
             'search/index.html',
+            title=u"Поиск по сайту",
             query=query,
             products=products
         )
@@ -65,6 +66,7 @@ def index(query, page):
     products = get_paginator(products, page, product_per_page=20)
     return render_template(
         'search/index.html',
+        title=u'Поиск по сайту',
         query=query,
         products=products
     )
