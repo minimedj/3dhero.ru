@@ -4,12 +4,13 @@
             <div class="thumbnail">
                 <a href="{{ product.url }}">
                     <img class="product_icon"
-                    title="{{ product.name }}"
+                    title="{{ product.strip_name }}"
                     {% if product.images_list %}
                         src="{{ product.images_list[0].url }}=s70-c"
                     {% else %}
                         src="/p/img/none/70x70.jpg"
                     {% endif %}
+                    alt="{{ product.strip_name }}"
                     width="70" height="70"
                     />
                 </a>

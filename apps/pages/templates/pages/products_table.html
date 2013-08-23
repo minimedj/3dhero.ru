@@ -16,12 +16,13 @@
                 <td style="text-align: center">
                     <a href="{{ product.url }}">
                         <img
-                        title="{{ product.name }}"
+                        title="{{ product.strip_name }}"
                         {% if product.images_list %}
                             src="{{ product.images_list[0].url }}=s70-c"
                         {% else %}
                             src="/p/img/none/30x30.jpg"
                         {% endif %}
+                        alt="{{ product.strip_name }}"
                         width="70" height="70"
                         />
                     </a>

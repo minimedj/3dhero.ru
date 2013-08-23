@@ -1,7 +1,7 @@
 <li class="product_box mosaic-block m-fade span3">
     <a href="{{ product.url }}" class="mosaic-overlay">
         <span class="details">
-            <h1>{{ product.name }}</h1>
+            <h2>{{ product.name }}</h2>
             Цена: {{ product.price_retail }}<br>
             {% if current_user.is_order_box %}
                 Цена опт: {{ product.price_trade }}
@@ -18,7 +18,9 @@
             {% else %}
                 src="/p/img/none/200x200.jpg"
             {% endif %}
+        title="{{ product.strip_name }}"
         width="200" height="200"
+        alt="{{ product.strip_name }}"
         style="height: 200px; width: 200px; float: left;">
         {% if product.badge %}
             <span class="badge badge-info badge_badge">{{ product.badge }}</span>
