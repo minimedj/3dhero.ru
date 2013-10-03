@@ -33,6 +33,8 @@ class Config(Base, modelx.ConfigX):
   pubnub_subscribe = ndb.StringProperty(default='')
   twitter_consumer_key = ndb.StringProperty(default='')
   twitter_consumer_secret = ndb.StringProperty(default='')
+  recaptcha_public_key = ndb.StringProperty(default='')
+  recaptcha_private_key = ndb.StringProperty(default='')
   _PROPERTIES = Base._PROPERTIES.union(set([
       'analytics_id',
       'brand_name',

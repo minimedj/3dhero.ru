@@ -59,6 +59,13 @@ class ConfigUpdateForm(wtf.Form):
         wtf.validators.email("That doesn't look like an email"),
     ])
 
+    recaptcha_public_key = wtf.TextField(
+      'reCaptcha public key', [wtf.validators.optional()]
+    )
+    recaptcha_private_key = wtf.TextField(
+      'reCaptcha private key', [wtf.validators.optional()]
+    )
+
     pubnub_publish = wtf.TextField(
         'PubNub Publish', [wtf.validators.optional()]
     )

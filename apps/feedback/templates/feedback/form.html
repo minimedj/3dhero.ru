@@ -11,6 +11,11 @@
         {% set form_field = form.email %}
         {% include 'bit/form_text_field.html' %}
 
+        {% if use_captcha %}
+          {% set form_field = form.captcha %}
+          {% include 'bit/form_captcha_field.html' %}
+        {% endif %}
+
         <div class="form-actions">
             <button type="submit"
                     class="btn btn-primary btn-loading"

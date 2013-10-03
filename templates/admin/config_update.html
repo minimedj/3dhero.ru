@@ -71,6 +71,13 @@
           {% set form_field = form.pubnub_publish %}
           {% include 'bit/form_text_field.html' %}
 
+          <h2>reCaptcha</h2>
+          {% set form_field = form.recaptcha_public_key %}
+          {% include 'bit/form_text_field.html' %}
+
+          {% set form_field = form.recaptcha_private_key %}
+          {% include 'bit/form_text_field.html' %}
+
           <h2>PubHup</h2>
           {% set form_field = form.pubnub_subscribe %}
           {% include 'bit/form_text_field.html' %}
