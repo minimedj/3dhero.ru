@@ -10,17 +10,14 @@ class RecaptchaField(Field):
 
     widget = widgets.Recaptcha()
 
-    def __init__(self, label='', validators=None, public_key=None, private_key=None, secure=False, http_proxy=None, **kwargs):
+    def __init__(self, label='', validators=None, secure=False, http_proxy=None, **kwargs):
         # Pretty useless without the Recaptcha validator but still
         # user may want to subclass it, so keep it optional
         validators = validators or [local_validators.Recaptcha()]
         super(RecaptchaField, self).__init__(label, validators, **kwargs)
 
-        if not public_key or not private_key:
-            raise ValueError, 'Both recaptcha public and private keys are required.'
-
-        self.public_key = public_key
-        self.private_key = private_key
+        self.public_key = None
+        self.private_key = None
         self.secure = secure
         self.http_proxy = http_proxy
 
@@ -35,7 +32,11 @@ class RecaptchaField(Field):
 
         if isinstance(data, dict):
             self.ip_address = data.pop('ip_address', None)
+            self.private_key = data.pop('private_key', None)
+            self.public_key = data.pop('public_key', None)
 
+            if not self.public_key or not self.private_key:
+                raise ValueError, 'Both recaptcha public and private keys are required.'
         try:
             self.process_data(data)
         except ValueError, e:
