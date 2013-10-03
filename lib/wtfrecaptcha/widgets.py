@@ -1,5 +1,12 @@
 # Template for the widget
-RECAPTCHA_HTML = u"""<script type="text/javascript"
+RECAPTCHA_HTML = u"""
+<script>
+var RecaptchaOptions = {
+   theme : 'white',
+};
+</script>
+
+<script type="text/javascript"
  src="%(protocol)s://www.google.com/recaptcha/api/challenge?k=%(public_key)s">
 </script>
 <noscript>
