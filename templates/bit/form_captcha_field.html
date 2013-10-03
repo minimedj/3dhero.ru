@@ -1,5 +1,11 @@
 {% extends 'bit/form_text_field.html' %}
 
 {% block form_field %}
-  {{form_field(class='span4')|safe}}
+  <style>
+    #recaptcha_privacy{
+      display: none!important;
+    }
+  </style>
+
+  {{form_field(class='')|safe}}
 {% endblock %}
