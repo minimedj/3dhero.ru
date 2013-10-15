@@ -136,7 +136,7 @@ class Order(Base):
         feedback_email = Config.get_master_db().feedback_email
         if customer and feedback_email:
             if self.status == ORDER_STATUS['now']:
-                managers = Manager.query()
+                managers = Manager.query(Manager.is_mailable == True)
                 for manager in managers:
                     if manager.email:
                         mail.send_mail(
@@ -147,7 +147,7 @@ class Order(Base):
                             ),
                             body=render_template(
                                 'order/emails/order.txt',
-                                order = self
+                                order=self
                             ),
                             html=render_template(
                                 'order/emails/order.html',
