@@ -7,9 +7,9 @@ import modelx
 class Base(ndb.Model, modelx.BaseX):
   created = ndb.DateTimeProperty(auto_now_add=True)
   modified = ndb.DateTimeProperty(auto_now=True)
-  _PROPERTIES = set([
-      'key', 'id', 'created', 'modified', 'created_ago', 'modified_ago',
-    ])
+  _PROPERTIES = {
+      'key', 'id', 'created', 'modified', 'created_ago', 'modified_ago'
+    }
 
 
 class Config(Base, modelx.ConfigX):
@@ -35,7 +35,7 @@ class Config(Base, modelx.ConfigX):
   twitter_consumer_secret = ndb.StringProperty(default='')
   recaptcha_public_key = ndb.StringProperty(default='')
   recaptcha_private_key = ndb.StringProperty(default='')
-  _PROPERTIES = Base._PROPERTIES.union(set([
+  _PROPERTIES = Base._PROPERTIES.union({
       'analytics_id',
       'brand_name',
       'facebook_app_id',
@@ -46,7 +46,7 @@ class Config(Base, modelx.ConfigX):
       'pubnub_subscribe',
       'twitter_consumer_key',
       'twitter_consumer_secret',
-    ]))
+    })
 
 
 class User(Base, modelx.UserX):
@@ -64,9 +64,9 @@ class User(Base, modelx.UserX):
   is_customer = ndb.BooleanProperty(default=False)
   is_order_box = ndb.ComputedProperty(lambda self: True if self.admin or self.is_customer else False)
 
-  _PROPERTIES = Base._PROPERTIES.union(set([
+  _PROPERTIES = Base._PROPERTIES.union({
       'name', 'username', 'avatar_url', 'email', 'telephone', 'company', 'city', 'address'
-    ]))
+    })
 
   def _pre_put_hook(self):
       if self.email:
