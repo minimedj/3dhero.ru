@@ -245,6 +245,11 @@ class Product(Base):
     strip_name = ndb.ComputedProperty(
         lambda self: re.sub('[/!,;."\'\-0-9]', '', self.name)
     )
+    @property
+    def clear_name(self):
+        if self.strip_name:
+            return ' '.join(word for word in self.strip_name.split() if len(word) > 2)
+        return ''
 
     category = ndb.StringProperty(verbose_name=u'Категория', default='', indexed=True)
     brand = ndb.StringProperty(verbose_name=u'Бренд/Производитель', indexed=True)
