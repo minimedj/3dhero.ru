@@ -51,12 +51,16 @@ def index(query, page):
         products_q = Product.query()
     else:
         products_q = Product.query(Product.is_available == True)
-    products_q = products_q.fetch(projection=[Product.name])
+    products_q = products_q.fetch(
+        projection=[Product.name, Product.barcode, Product.catalogue_id]
+    )
     ids = memcache.get('search_ids-%s' % query)
     if not ids:
         ids = []
         for product in products_q:
-            if query in product.name.lower():
+            if query in product.name.lower()\
+                    or query in product.barcode\
+                    or query in product.catalogue_id:
                 ids.append(product.key)
         memcache.add('search_ids-%s' % query, ids, 600)
     if ids:
