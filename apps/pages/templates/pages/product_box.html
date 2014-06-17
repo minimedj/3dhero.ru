@@ -35,7 +35,7 @@
             {% endif %}
         {% else %}
             {% if not product.leftovers or (not product.is_available and not current_user.admin) %}
-                <span class="badge badge-important badge_leftovers">Отсуствует</span>
+                <span class="badge badge-important badge_leftovers">Отсутствует</span>
             {% else %}
                 {% if current_user.admin %}
                     <span class="badge badge-success badge_leftovers">{{ product.leftovers }} шт.</span>
