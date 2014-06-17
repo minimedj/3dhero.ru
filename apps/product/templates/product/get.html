@@ -129,7 +129,7 @@
                     {% endif %}
                 {% endif %}
                 {% if not product.leftovers or (not product.is_available and not current_user.admin) %}
-                    {{ get_str_property('На складе', 'Отсуствует', itemprop='availability')|safe }}
+                    {{ get_str_property('На складе', 'Отсутствует', itemprop='availability')|safe }}
                 {% else %}
                     {% if current_user.admin %}
                         {{ get_str_property('На складе', product.leftovers|string)|safe }}
@@ -162,8 +162,8 @@
                <a
                   target="_blank"
                   class="btn btn-primary"
-                  href="http://hobbymall.ru">
-                купить в розницу на hobbymall.ru
+                  href="http://geekzona.ru">
+                купить в розницу на GeekZona
               </a>
             </div>
             <div class="multcult" style="margin-bottom: 10px;">
