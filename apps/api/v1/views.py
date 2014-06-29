@@ -207,7 +207,15 @@ def product_upload_image(key_id):
                 product.images_list.append(img)
                 product.put()
         else:
+            file_size = blob_info.size
+            content_type = blob_info.content_type
             blob_info.delete()
+            return jsonify({
+                'success': False,
+                'msg': "Unknown error. File size: %s. File type: %s" % (
+                    file_size, content_type
+                )
+            })
     else:
         return jsonify({
             'success': False,
