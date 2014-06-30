@@ -17,12 +17,9 @@ except:
 import os
 
 CURRENT_VERSION_ID = os.environ.get('CURRENT_VERSION_ID', None)
-if os.environ.get('SERVER_SOFTWARE', '').startswith('Google App Engine'):
-    DEVELOPMENT = False
-else:
-    DEVELOPMENT = True
 
-PRODUCTION = not DEVELOPMENT
+PRODUCTION = os.environ.get('SERVER_SOFTWARE', '').startswith('Google App Eng')
+DEVELOPMENT = not PRODUCTION
 DEBUG = DEVELOPMENT
 
 DEFAULT_DB_LIMIT = 64
