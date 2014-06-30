@@ -11,6 +11,7 @@ import util
 from auth import is_admin
 import pytils
 
+
 PRODUCT_VIEW_TYPES = {
     'tile': 1,
     'icon': 2,
@@ -23,7 +24,7 @@ mod = flask.Blueprint(
     template_folder='templates'
 )
 
-SITEMAP_XML_TIMEOUT = 60*60*48
+SITEMAP_XML_TIMEOUT = 60 * 60 * 48
 
 
 def get_paginator(products, page, product_per_page = 18):
@@ -161,21 +162,21 @@ def category(key_id, page):
     else:
         if view_type in PRODUCT_VIEW_TYPES.itervalues():
             flask.session['product_view_type'] = view_type
-    category = Category.retrieve_by_id(key_id)
-    if not category:
+    category_obj = Category.retrieve_by_id(key_id)
+    if not category_obj:
         return flask.redirect(flask.url_for(
             'pages.index'
         ))
     products = Product\
-        .query(Product.category == category.name)\
+        .query(Product.category == category_obj.name)\
         .order(-Product.is_available)\
         .order(-Product.leftovers_on_way)\
         .order(-Product.leftovers)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/category.html',
-        title=u'{} "{}"'.format(u'Категория', category.name),
-        category=category,
+        title=u'{} "{}"'.format(u'Категория', category_obj.name),
+        category=category_obj,
         products=products,
         key_id=key_id
     )
@@ -183,14 +184,15 @@ def category(key_id, page):
 
 @mod.route('/contact/')
 def contacts():
-    contacts = Contact.query(Contact.is_public == True).order(-Contact.order_id)
+    contacts_obj = Contact.query(Contact.is_public == True).order(-Contact.order_id)
     managers = Manager.query(Manager.is_public == True)
     return flask.render_template(
         'pages/contact.html',
         title=u'Контакты',
-        contacts=contacts,
+        contacts=contacts_obj,
         managers=managers
     )
+
 
 @mod.route('/sitemap.xml')
 def sitemap_xml():
