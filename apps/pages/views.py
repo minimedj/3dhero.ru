@@ -124,7 +124,7 @@ def catalogue(page):
     else:
         products = Product.query(Product.is_available == True)\
             .order(-Product.rating)\
-            .oder(-Product.leftovers_on_way)\
+            .order(-Product.leftovers_on_way)\
             .order(-Product.leftovers)
     products = get_paginator(products, page)
     return flask.render_template(
