@@ -2,7 +2,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for, session
 from apps.search.forms import SearchForm
 from auth import is_admin
-from apps.product.models import Product
+from apps.product.models import Product, Category
 from util import get_next_url, param
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
@@ -40,13 +40,26 @@ def index(query, page):
             session['product_view_type'] = view_type
 
     products = []
+    categories = []
+    query = query.strip().lower()
     if not query:
         return render_template(
             'search/index.html',
             title=u"Поиск по сайту",
             query=query,
+            categories=categories,
             products=products
         )
+    categories_q = Category.query().fetch(projection=[Category.name])
+    cids = memcache.get('search_cids-%s' % query)
+    if not cids:
+        cids = []
+        for category in categories_q:
+            if query in category.name.lower():
+              cids.append(category.key)
+        memcache.add('search_cids-%s' % query, cids, 600)
+    if cids:
+        categories = ndb.get_multi(cids)
     if is_admin():
         products_q = Product.query()
     else:
@@ -65,12 +78,11 @@ def index(query, page):
         memcache.add('search_ids-%s' % query, ids, 600)
     if ids:
         products = ndb.get_multi(ids)
-    else:
-        products = []
-    products = get_paginator(products, page, product_per_page=20)
+        products = get_paginator(products, page, product_per_page=20)
     return render_template(
         'search/index.html',
         title=u'Поиск по сайту',
         query=query,
+        categories=categories,
         products=products
     )

@@ -33,73 +33,103 @@
 {% block content %}
 <div class="row">
     <div class="span12">
-        <h1 class="page-header">Результата поиска «{{ query }}»</h1>
+        <h1 class="page-header">Результата поиска по запросу «{{ query }}»</h1>
     </div>
-    <div class="span12">
-        <div class="btn-toolbar">
-            <div class="btn-group">
-                <a class="btn btn-success disabled">
-                    Паказать как
-                </a>
-                <a class="btn {% if session.get('product_view_type') == 1 %} active {% endif %}"
-                   href="?product_view_type=1">
-                    <i class="icon-th-large"></i> Плитка
-                </a>
-                <a class="btn {% if session.get('product_view_type') == 2 %} active {% endif %}"
-                   href="?product_view_type=2">
-                    <i class="icon-th"></i> Иконки
-                </a>
-                <a class="btn {% if session.get('product_view_type') == 3 %} active {% endif %}"
-                   href="?product_view_type=3">
-                    <i class="icon-th-list"></i> Таблица
-                </a>
+    {% if not query %}
+        <div class="span12">
+        По пустому запросу ничего не найдено :)<br>
+        <a href="{{ url_for('pages.index') }}">Вернуться на главную страницу</a>
+        </div>
+    {% else %}
+        {% if not categories and not products %}
+            Увы, но по данному запросы мы ничего не нашли :(
+            <a href="{{ url_for('pages.index') }}">Вернуться на главную страницу</a>
+        {% endif %}
+        {% if categories %}
+            <div class="span12">
+                <h2>Найденные категории фигурок</h2>
+                <ul class="unstyled">
+                    {% for category in categories %}
+                        <li style="display: inline">
+                            <h3 style="text-transform: uppercase; display: inline">
+                                <a
+                                    href="{{ url_for('pages.category', key_id=category.key.id()) }}"
+                                    title='Фигурки героев "{{ category.name }}"'>
+                                    {{ category.name }}</a>{% if not loop.last %}, {% endif %}
+                            </h3>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
+        {% endif %}
+        {% if products %}
+            <div class="span12">
+                <h2>Найденные фигурки</h2>
+                <div class="btn-toolbar">
+                    <div class="btn-group">
+                        <a class="btn btn-success disabled">
+                            Паказать как
+                        </a>
+                        <a class="btn {% if session.get('product_view_type') == 1 %} active {% endif %}"
+                           href="?product_view_type=1">
+                            <i class="icon-th-large"></i> Плитка
+                        </a>
+                        <a class="btn {% if session.get('product_view_type') == 2 %} active {% endif %}"
+                           href="?product_view_type=2">
+                            <i class="icon-th"></i> Иконки
+                        </a>
+                        <a class="btn {% if session.get('product_view_type') == 3 %} active {% endif %}"
+                           href="?product_view_type=3">
+                            <i class="icon-th-list"></i> Таблица
+                        </a>
+                    </div>
 
-            {% if session.get('product_view_type') == 3 %}
-                <div class="btn-group pull-right">
-                    <a class="btn btn-primary disabled">
-                        Сортировать по
-                    </a>
-                    <a class="btn order_by_name"
-                       href="#">
-                        Названию
-                    </a>
-                    <a class="btn order_by_price_retail"
-                       href="#">
-                        РРЦ
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-        {% if session.get('product_view_type') == 1 %}
-            {% include 'pages/products_ul.html' %}
-        {% endif %}
-        {% if session.get('product_view_type') == 2 %}
-            {% include 'pages/products_icon.html' %}
-        {% endif %}
-        {% if session.get('product_view_type') == 3 %}
-            {% include 'pages/products_table.html' %}
-        {% endif %}
-        <div class="pagination">
-            <ul style="float: left;">
-                {% for page in products.paginator.page_range %}
-                    {% if page %}
-                        {% if page == products.number %}
-                            <li class="active">
-                                <a href="{{ url_for('search.index', query=query, page=page) }}" class="page">{{ page }}</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href="{{ url_for('search.index', query=query, page=page) }}" class="page">{{ page }}</a>
-                            </li>
-                        {% endif %}
-                    {% else %}
-                        ......
+                    {% if session.get('product_view_type') == 3 %}
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-primary disabled">
+                                Сортировать по
+                            </a>
+                            <a class="btn order_by_name"
+                               href="#">
+                                Названию
+                            </a>
+                            <a class="btn order_by_price_retail"
+                               href="#">
+                                РРЦ
+                            </a>
+                        </div>
                     {% endif %}
-                {% endfor %}
-
-
-            </ul>
-        </div>
-    </div>
+                </div>
+                {% if session.get('product_view_type') == 1 %}
+                    {% include 'pages/products_ul.html' %}
+                {% endif %}
+                {% if session.get('product_view_type') == 2 %}
+                    {% include 'pages/products_icon.html' %}
+                {% endif %}
+                {% if session.get('product_view_type') == 3 %}
+                    {% include 'pages/products_table.html' %}
+                {% endif %}
+                <div class="pagination">
+                    <ul style="float: left;">
+                        {% for page in products.paginator.page_range %}
+                            {% if page %}
+                                {% if page == products.number %}
+                                    <li class="active">
+                                        <a href="{{ url_for('search.index', query=query, page=page) }}" class="page">{{ page }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="{{ url_for('search.index', query=query, page=page) }}" class="page">{{ page }}</a>
+                                    </li>
+                                {% endif %}
+                            {% else %}
+                                ......
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
 {% endblock %}
