@@ -169,7 +169,9 @@ def category(key_id, page):
             'pages.index'
         ))
     if is_admin():
-        products = Product.query().order(-Product.rating)
+        products = Product.query(
+            Product.category == category_obj.name
+        ).order(-Product.rating)
     else:
         products = Product\
             .query(
