@@ -13,6 +13,7 @@ from apps.utils.blobstore import get_uploads
 import os
 from apps.api.utils import except_wrap
 
+
 admin_mod = Blueprint(
     'api.v1.admin',
     __name__,
@@ -30,11 +31,11 @@ def keys():
         form.populate_obj(wk)
         wk.put()
         return redirect(url_for('api.v1.admin.keys'))
-    keys = WriteKey.query()
+    keys_obj = WriteKey.query()
     return render_template(
         'api/v1/admin/keys.html',
         form=form,
-        keys=keys
+        keys=keys_obj
     )
 
 
@@ -48,8 +49,9 @@ mod = Blueprint(
 
 @mod.route('/products', methods=['GET'])
 def products():
-    products = Product.query()
-    return jsonify_model_dbs(products)
+    products_obj = Product.query()
+    return jsonify_model_dbs(products_obj)
+
 
 @mod.route('/products/<int:key_id>', methods=['GET', 'DELETE', 'PUT'])
 @except_wrap
@@ -57,9 +59,9 @@ def get_product(key_id):
     product = Product.retrieve_by_id(key_id)
     if not product:
         return jsonify({
-                'success': False,
-                'msg': 'Product with id:%s not found.' % key_id
-            })
+            'success': False,
+            'msg': 'Product with id:%s not found.' % key_id
+        })
 
     if request.method == 'DELETE':
         @check_write_permission
@@ -84,7 +86,7 @@ def get_product(key_id):
                     'msg': 'Product has been updated.'
                 })
             else:
-                return  jsonify({
+                return jsonify({
                     'success': False,
                     'msg': 'Product has not been updated.'
                 })
@@ -105,6 +107,7 @@ def check_write_permission(func):
         return func(*args, **kwargs)
     return wrapped
 
+
 def load_data():
     data = json.loads(request.data)
     if type(data) is not dict:
@@ -122,6 +125,7 @@ def load_data():
             'data': data
         }, status=500)
     return True, model
+
 
 def model_populate(model, product):
     flag = False
@@ -168,6 +172,7 @@ def product_new():
             product.put()
     return jsonify({'success': True})
 
+
 @mod.route('/products/<int:key_id>/upload_image_url', methods=['POST'])
 @check_write_permission
 @except_wrap
@@ -182,6 +187,7 @@ def product_upload_image_url(key_id):
         'upload_url': url
     })
 
+
 @mod.route('/products/<int:key_id>/upload_image', methods=['POST'])
 @except_wrap
 def product_upload_image(key_id):
@@ -195,11 +201,13 @@ def product_upload_image(key_id):
     upload_files = get_uploads(request, 'image')
     if len(upload_files):
         blob_info = upload_files[0]
-        if blob_info.size and ProductImage.is_image_type(blob_info.content_type):
+        if blob_info.size and \
+                ProductImage.is_image_type(blob_info.content_type):
             img = ProductImage.create(
                 blob_info.key(),
                 size=blob_info.size,
-                filename=os.path.basename(blob_info.filename.replace('\\','/')),
+                filename=os.path.basename(
+                    blob_info.filename.replace('\\', '/')),
                 content_type=blob_info.content_type)
             if not len(product.images_list):
                 img.is_master = True
