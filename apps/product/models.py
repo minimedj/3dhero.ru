@@ -2,12 +2,13 @@
 import re
 from flask import url_for, session
 from werkzeug.wrappers import cached_property
-from google.appengine.ext import ndb, db
+from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api.taskqueue import taskqueue
 from util import uuid
 from apps.file.models import File
 from model import Base
+
 
 def strip_string(s):
     if s:
@@ -17,6 +18,7 @@ def strip_string(s):
         if type_ == unicode:
             return u' '.join(s.split())
     return s
+
 
 def rename_section(section, section_product_cls, section_name):
     section_products = section_product_cls.query(section_product_cls.section_key == section.key)
@@ -36,6 +38,7 @@ def rename_section(section, section_product_cls, section_name):
                 mem_key=product_mem_key
             ))
 
+
 class BaseSection(Base):
     name = ndb.StringProperty(verbose_name=u'Название', indexed=True, required=True)
     name_lowercase = ndb.StringProperty(indexed=True, default=None)
@@ -50,10 +53,8 @@ class BaseSection(Base):
             self.do_rename()
         self.name_lowercase = lower_name
 
-
     def pre_delete(self, section_product_cls):
         sp = section_product_cls.query(section_product_cls.section_key == self.key)
-
 
     def do_rename(self):
         raise Exception("do_rename() not overloaded in the child class")
@@ -154,6 +155,7 @@ class Category(BaseSection):
 class BrandProduct(SectionProduct):
     pass
 
+
 class Brand(BaseSection):
     @cached_property
     def public_product_count(self):
@@ -171,8 +173,10 @@ class Brand(BaseSection):
         if self.key != ndb.Key('Brand', None):
             rename_section(self, BrandProduct, 'brand')
 
+
 class SeriesProduct(SectionProduct):
     pass
+
 
 class Series(BaseSection):
     @cached_property
@@ -191,8 +195,10 @@ class Series(BaseSection):
         if self.key != ndb.Key('Series', None):
             rename_section(self, SeriesProduct, 'series')
 
+
 class CountryProduct(SectionProduct):
     pass
+
 
 class Country(BaseSection):
     @cached_property
@@ -211,8 +217,10 @@ class Country(BaseSection):
         if self.key != ndb.Key('Country', None):
             rename_section(self, CountryProduct, 'country')
 
+
 class ProductImage(File):
     is_master = ndb.BooleanProperty(verbose_name=u'Основное изображение?', default=False)
+
 
 def set_section(section_cls, section_product_cls, product, section_name):
     section_value = getattr(product, section_name)
@@ -231,10 +239,12 @@ def set_section(section_cls, section_product_cls, product, section_name):
     if section_product:
         section_product.put()
 
+
 def clear_section_product(section_product_cls, product_key):
     section_products = section_product_cls.query(section_product_cls.product_key == product_key)
     for section_product in section_products:
         section_product.key.delete()
+
 
 class Product(Base):
     id_1c = ndb.StringProperty(verbose_name=u'Код 1С', indexed=True)
