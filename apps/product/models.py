@@ -284,7 +284,7 @@ class Product(Base):
 
     price_retail = ndb.FloatProperty(verbose_name=u'Цена (розничная)')
     price_trade = ndb.FloatProperty(verbose_name=u'Цена (оптовая)')
-    vat = ndb.IntegerProperty(verbose_name=u'НДС')
+    vat = ndb.IntegerProperty(verbose_name=u'НДС', default=0)
 
     leftovers = ndb.IntegerProperty(verbose_name=u'Остаток на складе')
     leftovers_on_way = ndb.IntegerProperty(verbose_name=u'Остаток в пути')
