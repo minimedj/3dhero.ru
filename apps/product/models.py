@@ -319,6 +319,7 @@ class Product(Base):
         'box_amount',
         'price_retail',
         'price_trade',
+        'vat',
         'leftovers',
         'leftovers_on_way',
         'receipt_date',
