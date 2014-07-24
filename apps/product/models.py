@@ -2,6 +2,7 @@
 import re
 from flask import url_for, session
 from werkzeug.wrappers import cached_property
+from werkzeug import urls as wurls
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api.taskqueue import taskqueue
@@ -255,11 +256,16 @@ class Product(Base):
     strip_name = ndb.ComputedProperty(
         lambda self: re.sub('[/!,;."\'\-0-9]', '', self.name)
     )
+
     @property
     def clear_name(self):
         if self.strip_name:
             return ' '.join(word for word in self.strip_name.split() if len(word) > 2)
         return ''
+
+    @property
+    def clear_name_cp1251(self):
+      return wurls.url_fix(self.clear_name, 'cp1251')
 
     category = ndb.StringProperty(verbose_name=u'Категория', default='', indexed=True)
     brand = ndb.StringProperty(verbose_name=u'Бренд/Производитель', indexed=True)
