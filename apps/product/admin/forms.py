@@ -194,7 +194,7 @@ class ProductForm(wtf.Form):
                     u'который будет отображать в каталоге рядом с фото товара',
         validators=[wtf.validators.optional()]
     )
-    description = wtf.TextAreaField(
+    description_md = wtf.TextAreaField(
         u'Описание',
         description=u'Введите описание товара',
         validators=[wtf.validators.optional()]

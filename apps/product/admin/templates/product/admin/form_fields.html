@@ -116,14 +116,15 @@
         {% include 'bit/form_text_field.html' %}
     </div>
     <div class="tab-pane" id="description">
+        {% set form_field = form.description_md %}
+        {% include 'bit/form_textarea_field.html' %}
+
         {% set form_field = form.badge %}
         {% include 'bit/form_text_field.html' %}
 
         {% set form_field = form.equipment %}
         {% include 'bit/form_textarea_field.html' %}
 
-        {% set form_field = form.description %}
-        {% include 'bit/form_textarea_field.html' %}
     </div>
 </div>
 

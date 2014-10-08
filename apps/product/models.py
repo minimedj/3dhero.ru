@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 import re
-from flask import url_for, session
-from werkzeug.wrappers import cached_property
-from werkzeug import urls as wurls
+
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
 from google.appengine.api.taskqueue import taskqueue
+
+from flask import url_for, session
+from werkzeug.wrappers import cached_property
+from werkzeug import urls as wurls
+import mistune
+
 from util import uuid
 from apps.file.models import File
 from model import Base
@@ -266,18 +270,20 @@ class Product(Base):
     @property
     def clear_name_cp1251(self):
       return wurls.url_fix(self.clear_name, 'cp1251')
-
-    category = ndb.StringProperty(verbose_name=u'Категория', default='', indexed=True)
-    brand = ndb.StringProperty(verbose_name=u'Бренд/Производитель', indexed=True)
-
-    country = ndb.StringProperty(verbose_name=u'Страна', default='', indexed=True)
-
+    category = ndb.StringProperty(
+        verbose_name=u'Категория', default='', indexed=True)
+    brand = ndb.StringProperty(
+        verbose_name=u'Бренд/Производитель', indexed=True)
+    country = ndb.StringProperty(
+        verbose_name=u'Страна', default='', indexed=True)
     rating = ndb.IntegerProperty(verbose_name=u'Рейтинг')
     status = ndb.IntegerProperty(verbose_name=u'Статус')
     is_public = ndb.BooleanProperty(
         verbose_name=u'Показывать на сайте?',
         default=True)
-    is_available = ndb.ComputedProperty(lambda self: True if self.is_public and (self.leftovers or self.leftovers_on_way) else False)
+    is_available = ndb.ComputedProperty(
+        lambda self: True if self.is_public and
+            (self.leftovers or self.leftovers_on_way) else False)
 
     material = ndb.StringProperty(verbose_name=u'Материал', default='', indexed=False)
     size = ndb.StringProperty(verbose_name=u'Размер', default='', indexed=False)
@@ -298,10 +304,14 @@ class Product(Base):
 
     badge = ndb.StringProperty(verbose_name=u'Бэйдж', indexed=False)
     description = ndb.TextProperty(verbose_name=u'Описание', default='')
+    description_html = ndb.TextProperty(
+        verbose_name=u'Описание в HTML', default='')
+    description_md = ndb.TextProperty(
+        verbose_name=u'Описание в Markdown', default=''
+    )
     equipment = ndb.TextProperty(verbose_name=u'Комплектация', default='')
 
     images_list = ndb.StructuredProperty(ProductImage, repeated=True)
-
     to_sync = ndb.BooleanProperty(default=False)
 
     _PROPERTIES = Base._PROPERTIES.union([
@@ -330,6 +340,8 @@ class Product(Base):
         'leftovers_on_way',
         'receipt_date',
         'description',
+        'description_html',
+        'description_md',
         'equipment',
         'images',
         'url',
@@ -358,6 +370,16 @@ class Product(Base):
         self.brand = strip_string(self.brand)
         self.country = strip_string(self.country)
         self.material = strip_string(self.material)
+
+        self.description_md = self.description_md.strip()
+        if self.description_md:
+          self.description_html = mistune.markdown(self.description_md)
+          self.description = re.sub(
+              r'(<!--.*?-->|<[^>]*>)', '', self.description_html)
+        else:
+          self.description = self.description.strip()
+          self.description_md = self.description
+          self.description_html = mistune.markdown(self.description)
 
     def _post_put_hook(self, future):
         set_section(Category, CategoryProduct, self, 'category')

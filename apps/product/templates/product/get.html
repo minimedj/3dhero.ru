@@ -62,7 +62,7 @@
             {% endif %}
             <h1 itemprop="name">{{ product.name }}</h1>
         </div>
-        <div class="span6">
+        <div class="span7">
             {% if product.images %}
                 <div style="height: 400px;width: 400px;">
                     <img
@@ -92,9 +92,17 @@
             {% else %}
                 <img src="/p/img/none/400x400.jpg" height="400" width="400">
             {% endif %}
-            &nbsp;
+            &nbsp;<br><br>
+
+          {% if product.description or product.description_html %}
+            {% if product.description_html %}
+              {{ product.description_html|safe }}
+            {% else %}
+              {{ product.description|safe }}
+            {% endif %}
+          {% endif %}
         </div>
-        <div class="span6">
+        <div class="span5">
             {% if current_user.admin %}
                 <a class="btn btn-large"
                    href="{{ url_for('admin.product.edit', key_id=product.key.id()) }}">
@@ -220,9 +228,6 @@
             <dl class="dl-horizontal">
               {{ get_str_property('Размер упаковки', product.box_size)|safe }}
               {{ get_str_property('Вес упаковки', product.box_weight)|safe }}
-            </dl>
-            <dl>
-              {{ get_str_property('Описание', product.description, "description")|safe }}
             </dl>
         </div>
     </div>

@@ -36,7 +36,8 @@ SCRIPTS_MODULES = [
     'libs',
     'site',
     'jquery.plugins',
-    'admin'
+    'admin',
+    'bootstrap-markdown',
 ]
 
 SCRIPTS = {
@@ -57,7 +58,9 @@ SCRIPTS = {
         'lib/jquery.tablesorter.js',
         'lib/jquery.metadata.js',
     ],
-    'admin':[
+    'admin': [
+        'lib/markdown/js/bootstrap-markdown.js',
+        'lib/markdown/js/markdown.js',
         'lib/redactor.js'
     ],
     'site': [
