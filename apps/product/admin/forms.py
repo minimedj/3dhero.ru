@@ -186,7 +186,6 @@ class ProductForm(wtf.Form):
     receipt_date = wtf.DateField(
         u'Дата поступления',
         description=u'Введите ожидаемую дату поступления на склад (ГГГГ-ММ-ДД)',
-        format='%Y-%m-%d',
         validators=[wtf.validators.optional()]
     )
     badge = wtf.TextField(
