@@ -3,6 +3,7 @@
 from flaskext import wtf
 from apps.product.models import Category, Series, Brand
 
+
 class CategoryForm(wtf.Form):
     name = wtf.TextField(
         u'Название',
@@ -209,6 +210,7 @@ class ProductForm(wtf.Form):
         description=u'Синхронизировать с 5studio?',
         validators=[wtf.validators.optional()]
     )
+
 
 class AddImageForm(wtf.Form):
     image = wtf.FileField(
