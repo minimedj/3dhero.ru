@@ -56,14 +56,18 @@ def brands_stat():
 
 
 def categories_stat():
-    categories_obj = Category.query(Category.is_public == True).order(
-        Category.name
-    )
-    categories = []
-    for c in categories_obj:
-        if c.public_product_count:
-            categories.append(c)
+    if is_admin():
+      categories = list(Category.query().order(Category.name))
+    else:
+      categories_obj = Category.query(Category.is_public == True).order(
+          Category.name
+      )
+      categories = []
+      for c in categories_obj:
+          if c.public_product_count:
+              categories.append(c)
     categories_count = len(categories)
+
     if categories_count:
         categories_count = pytils.numeral.get_plural(
             categories_count,
