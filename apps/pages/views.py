@@ -27,7 +27,7 @@ mod = flask.Blueprint(
 SITEMAP_XML_TIMEOUT = 60 * 60 * 48
 
 
-def get_paginator(products, page, product_per_page=18):
+def get_paginator(products, page, product_per_page=21):
     paginator = Paginator(products, product_per_page)
     try:
         products = paginator.page(page)
@@ -64,7 +64,7 @@ def categories_stat():
       )
       categories = []
       for c in categories_obj:
-          if c.public_product_count:
+          if c.products_count:
               categories.append(c)
     categories_count = len(categories)
 
@@ -123,13 +123,10 @@ def index():
 @mod.route('/catalogue/', defaults={'page': 1})
 @mod.route('/catalogue/page/<int:page>/')
 def catalogue(page):
-    if is_admin():
-        products = Product.query().order(-Product.rating)
-    else:
-        products = Product.query(Product.is_available == True)\
-            .order(-Product.rating)\
-            .order(-Product.leftovers_on_way)\
-            .order(-Product.leftovers)
+    products = Product.query() \
+        .order(-Product.rating) \
+        .order(-Product.leftovers_on_way) \
+        .order(-Product.leftovers)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/catalogue.html',
@@ -141,11 +138,7 @@ def catalogue(page):
 @mod.route('/c/li/', defaults={'page': 1})
 @mod.route('/c/li/page/<int:page>/')
 def last_incoming(page):
-    if is_admin():
-        products = Product.query().order(-Product.created)
-    else:
-        products = Product.query(
-            Product.is_available == True).order(-Product.created)
+    products = Product.query().order(-Product.created)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/last_incoming.html',
@@ -172,17 +165,10 @@ def category(key_id, page):
         return flask.redirect(flask.url_for(
             'pages.index'
         ))
-    if is_admin():
-        products = Product.query(
-            Product.category == category_obj.name
-        ).order(-Product.rating)
-    else:
-        products = Product\
-            .query(
-                Product.category == category_obj.name,
-                Product.is_available == True)\
-            .order(-Product.leftovers_on_way)\
-            .order(-Product.leftovers)
+    products = Product\
+        .query(Product.category == category_obj.name)\
+        .order(-Product.leftovers_on_way)\
+        .order(-Product.leftovers)
     products = get_paginator(products, page)
     return flask.render_template(
         'pages/category.html',
