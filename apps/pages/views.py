@@ -8,7 +8,6 @@ from apps.contact.models import Contact
 from apps.manager.models import Manager
 from apps.store_link.models import StoreLink
 import util
-from auth import is_admin
 import pytils
 
 
@@ -56,16 +55,11 @@ def brands_stat():
 
 
 def categories_stat():
-    if is_admin():
-      categories = list(Category.query().order(Category.name))
-    else:
-      categories_obj = Category.query(Category.is_public == True).order(
-          Category.name
-      )
-      categories = []
-      for c in categories_obj:
-          if c.products_count:
-              categories.append(c)
+    categories_obj = list(Category.query().order(Category.name))
+    categories = []
+    for c in categories_obj:
+        if c.products_count:
+            categories.append(c)
     categories_count = len(categories)
 
     if categories_count:
@@ -77,7 +71,7 @@ def categories_stat():
 
 
 def product_stat():
-    product_count = Product.query(Product.is_available == True).count()
+    product_count = Product.query().count()
     if product_count:
         product_count = pytils.numeral.get_plural(
             product_count,
@@ -87,7 +81,12 @@ def product_stat():
 
 
 def countries_stat():
-    countries_count = Country.query(Country.is_public == True).count()
+    countries_obj = Country.query()
+    countries = []
+    for c in countries_obj:
+      if c.products_count:
+          countries.append(c)
+    countries_count = len(countries)
     if countries_count:
         countries_count = pytils.numeral.get_plural(
             countries_count,
