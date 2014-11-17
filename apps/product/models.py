@@ -15,6 +15,13 @@ from apps.file.models import File
 from model import Base
 
 
+NAME_CLEAN_SUB = u'(/\d*\s*шт\s*in)|(/\d*\s*шт.)|(/\d*\s*шт)$'
+
+
+def clean_name(name):
+    return re.sub(NAME_CLEAN_SUB, '', name).title().strip()
+
+
 def strip_string(s):
     if s:
         type_ = type(s)
@@ -257,6 +264,7 @@ class Product(Base):
     barcode = ndb.StringProperty(verbose_name=u'Штрих код', default='', indexed=True)
 
     name = ndb.StringProperty(verbose_name=u'Название', default='', indexed=True)
+    original_name = ndb.StringProperty(verbose_name=u'Оригинальное название')
     strip_name = ndb.ComputedProperty(
         lambda self: re.sub('[/!,;."\'\-0-9]', '', self.name)
     )
@@ -270,6 +278,7 @@ class Product(Base):
     @property
     def clear_name_cp1251(self):
       return wurls.url_fix(self.clear_name, 'cp1251')
+
     category = ndb.StringProperty(
         verbose_name=u'Категория', default='', indexed=True)
     brand = ndb.StringProperty(
@@ -364,6 +373,9 @@ class Product(Base):
         return order_product.get('count', 0)
 
     def _pre_put_hook(self):
+        if not self.original_name:
+            self.original_name = self.name
+        self.name = clean_name(self.name)
         self.category = strip_string(self.category)
         self.badge = strip_string(self.badge)
         self.barcode = strip_string(self.barcode)

@@ -60,6 +60,9 @@
 
         {% set form_field = form.to_sync %}
         {% include 'bit/form_text_field.html' %}
+
+        {% set form_field = form.original_name %}
+        {% include 'bit/form_text_field.html' %}
     </div>
     <div class="tab-pane" id="second">
         {% set form_field = form.category %}

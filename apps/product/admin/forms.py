@@ -24,7 +24,8 @@ class CategoryForm(wtf.Form):
         name = self.name.data.lower()
         check_cat = Category.query(Category.name_lowercase == name).count()
         if check_cat and not is_edit:
-            self.name.errors.append(u'Название категории должно быть уникальным')
+            self.name.errors.append(
+                u'Название категории должно быть уникальным')
             return False
         return True
 
@@ -53,6 +54,7 @@ class SeriesForm(wtf.Form):
             return False
         return True
 
+
 class BrandForm(wtf.Form):
     name = wtf.TextField(
         u'Название',
@@ -77,15 +79,25 @@ class BrandForm(wtf.Form):
             return False
         return True
 
+
 class ProductForm(wtf.Form):
     id_1c = wtf.TextField(
         u'Код 1С',
-        description=u'Введите код из базы 1C. Это поле обязательно для заполнения',
+        description=u'Введите код из базы 1C. '
+                    u'Это поле обязательно для заполнения',
         validators=[wtf.validators.required()])
     name = wtf.TextField(
         u'Название',
-        description=u'Введите название продукта. Это поле обязательно для заполнения',
+        description=u'Введите название продукта. '
+                    u'Это поле обязательно для заполнения',
         validators=[wtf.validators.required()]
+    )
+    original_name = wtf.TextField(
+        u'Оригинальное название',
+        description=u'Оригинальное название, без очистки. '
+                    u'Заполняется автоматически при первом сохранениии. '
+                    u'Редактировать только при необходимости.',
+        validators=[wtf.validators.optional()]
     )
     catalogue_id = wtf.TextField(
         u'Артикул',
@@ -162,25 +174,29 @@ class ProductForm(wtf.Form):
     price_retail = wtf.FloatField(
         u'Цена розничная',
         description=u'Введите РРЦ продукта. '
-        u'Это поле должно содержать только число, например: "101.50", "50.0"',
+                    u'Это поле должно содержать только число, например: '
+                    u'"101.50", "50.0"',
         validators=[wtf.validators.optional()]
     )
     price_trade = wtf.FloatField(
         u'Цена оптовая',
         description=u'Введите оптовую цену продукта. '
-        u'Это поле должно содержать только число, например: "101.50", "50.0"',
+                    u'Это поле должно содержать только число, например: '
+                    u'"101.50", "50.0"',
         validators=[wtf.validators.optional()]
     )
     leftovers = wtf.IntegerField(
         u'Остаток',
         description=u'Введите остаток продукта на складе. '
-        u'Это поле должно содержать только целое число, например: "14", "1002"',
+                    u'Это поле должно содержать только целое число, '
+                    u'например: "14", "1002"',
         validators=[wtf.validators.optional()]
     )
     leftovers_on_way = wtf.IntegerField(
         u'В пути',
         description=u'Введите кол-во товара в пути. '
-        u'Это поле должно содержать только целое число, например: "14", "1002"',
+                    u'Это поле должно содержать только целое число, '
+                    u'например: "14", "1002"',
         validators=[wtf.validators.optional()]
     )
     receipt_date = wtf.DateField(
