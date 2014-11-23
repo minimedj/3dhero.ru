@@ -231,7 +231,8 @@ class Country(BaseSection):
 
 
 class ProductImage(File):
-    is_master = ndb.BooleanProperty(verbose_name=u'Основное изображение?', default=False)
+    is_master = ndb.BooleanProperty(
+        verbose_name=u'Основное изображение?', default=False)
 
 
 def set_section(section_cls, section_product_cls, product, section_name):
@@ -272,7 +273,8 @@ class Product(Base):
     @property
     def clear_name(self):
         if self.strip_name:
-            return ' '.join(word for word in self.strip_name.split() if len(word) > 2)
+            return ' '.join(
+                word for word in self.strip_name.split() if len(word) > 2)
         return ''
 
     @property
@@ -353,6 +355,7 @@ class Product(Base):
         'description_md',
         'equipment',
         'images',
+        'raw_images',
         'url',
         'to_sync'
     ])
@@ -364,6 +367,17 @@ class Product(Base):
     @property
     def images(self):
         return [img.url for img in self.images_list]
+
+    @property
+    def raw_images(self):
+        return [
+            url_for(
+                'file.get_b_w_name',
+                blob_key=img.blob_key,
+                name='%s.jpg' % img.uid,
+                _external=True
+            ) for img in self.images_list
+        ]
 
     @property
     def order_count(self):
@@ -407,4 +421,3 @@ class Product(Base):
         if p:
             for img in p.images_list:
                 img.delete_blob()
-

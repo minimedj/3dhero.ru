@@ -44,7 +44,12 @@ def send_blob(blob_key_or_info, content_type=None, save_as=None):
        content_type = content_type.encode('utf-8')
      headers['Content-Type'] = content_type
    else:
-     headers['Content-Type'] = ''
+     if blob_info:
+         content_type = blob_info.content_type
+         headers['Content-Type'] = content_type
+     else:
+         headers['Content-Type'] = ''
+
 
    def send_attachment(filename):
      if isinstance(filename, unicode):
