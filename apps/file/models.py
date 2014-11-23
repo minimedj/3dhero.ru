@@ -9,8 +9,11 @@ from google.appengine.api import images
 from flask import url_for
 from auth import current_user_key
 
-IMAGE_TYPES = ('image/bmp', 'image/jpeg', 'image/png',
-    'image/gif', 'image/tiff', 'image/x-icon')
+IMAGE_TYPES = (
+    'image/bmp', 'image/jpeg', 'image/png',
+    'image/gif', 'image/tiff', 'image/x-icon'
+)
+
 
 class File(Base):
     uid = ndb.StringProperty()
@@ -25,10 +28,15 @@ class File(Base):
     size = ndb.IntegerProperty(verbose_name=u'Размер файла')
     content_type = ndb.StringProperty(verbose_name=u'Тип файла')
 
-    ext = ndb.ComputedProperty(lambda self: path.splitext(self.filename)[1][1:] if self.filename is not None else '')
-    is_image = ndb.ComputedProperty(lambda self: self.content_type in IMAGE_TYPES)
+    ext = ndb.ComputedProperty(
+        lambda self: path.splitext(
+            self.filename)[1][1:] if self.filename is not None else '')
+    is_image = ndb.ComputedProperty(
+        lambda self: self.content_type in IMAGE_TYPES)
     title_filename = ndb.ComputedProperty(
-        lambda self: u'%s.%s'%(self.title, self.ext) if self.title and self.ext else self.filename if self.filename else self.uid)
+        lambda self: u'%s.%s' % (self.title, self.ext)
+        if self.title and self.ext else self.filename
+        if self.filename else self.uid)
 
     def get_cached_url(self, force=False):
         if not self.blob_key:
@@ -39,7 +47,8 @@ class File(Base):
                 if blob_info.content_type in IMAGE_TYPES:
                     cached_url = images.get_serving_url(self.blob_key)
                 else:
-                    cached_url = url_for('file.get', file_key=self.uid, _external=True)
+                    cached_url = url_for(
+                        'file.get', file_key=self.uid, _external=True)
                 self.url = cached_url
         return self.url
 
