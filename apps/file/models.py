@@ -9,6 +9,7 @@ from google.appengine.api import images
 from flask import url_for
 from auth import current_user_key
 
+
 IMAGE_TYPES = (
     'image/bmp', 'image/jpeg', 'image/png',
     'image/gif', 'image/tiff', 'image/x-icon'
