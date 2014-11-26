@@ -35,6 +35,7 @@ def get_paginator(products, page, product_per_page=21):
     return products
 
 
+@util.memcached()
 def brands_stat():
     brands_obj = Brand.query(Brand.is_public == True).order(
         Brand.name
@@ -54,6 +55,7 @@ def brands_stat():
     return brands, brands_count
 
 
+@util.memcached()
 def categories_stat():
     categories_obj = list(Category.query().order(Category.name))
     categories = []
@@ -70,6 +72,7 @@ def categories_stat():
     return categories, categories_count
 
 
+@util.memcached()
 def product_stat():
     product_count = Product.query().count()
     if product_count:
@@ -80,6 +83,7 @@ def product_stat():
     return product_count
 
 
+@util.memcached()
 def countries_stat():
     countries_obj = Country.query()
     countries = []
@@ -95,11 +99,17 @@ def countries_stat():
     return countries_count
 
 
+@util.memcached()
+def get_latest_posts():
+    posts_objs = Post.query(Post.is_public == True).order(-Post.created)
+    posts_count = posts_objs.count()
+    posts_objs = posts_objs.fetch(4)
+    return posts_objs, posts_count
+
+
 @mod.route('/')
 def index():
-    posts = Post.query(Post.is_public == True).order(-Post.created)
-    posts_count = posts.count()
-    posts = posts.fetch(4)
+    posts, posts_count = get_latest_posts()
     brands, brands_count = brands_stat()
     categories, categories_count = categories_stat()
     product_count = product_stat()

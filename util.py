@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from google.appengine.datastore.datastore_query import Cursor
 from google.appengine.ext import ndb
+from google.appengine.api import memcache
 import flask
 
 from uuid import uuid4
 from datetime import datetime, date
+import hashlib
 import urllib
 
 import config
@@ -206,3 +208,28 @@ def format_datetime_ago(timestamp):
       return 'one year ago'
     else:
       return '%d years ago' % years
+
+
+# Memcache utils
+def memcached(time=2*60*60, force=False):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            key_args = [x.__repr__() for x in args]
+            key_kwargs = [x.__repr__() for x in kwargs.values()]
+            key = [
+                func.__module__,
+                func.__class__.__name__,
+                func.__name__
+            ] + key_args + key_kwargs
+            key = hashlib.md5('_'.join(key)).hexdigest()
+            if force:
+                value = func(*args, **kwargs)
+                memcache.set(key, value, time=time)
+                return value
+            value = memcache.get(key)
+            if not value:
+                value = func(*args, **kwargs)
+                memcache.add(key, value, time=time)
+            return value
+        return wrapper
+    return decorator
