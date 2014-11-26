@@ -3,8 +3,10 @@ from flask import render_template
 
 from apps.product.models import Category
 from pytils import dt
+import util
 
 
+@util.memcached()
 def get_aside(active='category', key_id=None):
     sections=[]
     if active == 'category':
