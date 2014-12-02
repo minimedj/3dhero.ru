@@ -324,6 +324,10 @@ class Product(Base):
         verbose_name=u'Краткое описание, генерируется автоматически',
         default=''
     )
+    meta_keywords = ndb.TextProperty(
+        verbose_name=u'Список ключевых слов, генерируется автоматически',
+        default=''
+    )
     equipment = ndb.TextProperty(verbose_name=u'Комплектация', default='')
 
     images_list = ndb.StructuredProperty(ProductImage, repeated=True)
@@ -358,6 +362,7 @@ class Product(Base):
         'description_html',
         'description_md',
         'short_description',
+        'meta_keywords',
         'equipment',
         'images',
         'raw_images',
@@ -415,6 +420,7 @@ class Product(Base):
             self.short_description = u' '.join(self.description.split()[:5])
         else:
             self.short_description = ''
+        self.meta_keywords = self.clear_name.replace(' ', ', ')
 
     def _post_put_hook(self, future):
         set_section(Category, CategoryProduct, self, 'category')
