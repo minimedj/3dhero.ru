@@ -79,7 +79,7 @@ def get_product(key_id):
             flag, model = load_data()
             if not flag:
                 return model
-            if model_populate(model, product):
+            if model_populate(model, product) or param('force_save'):
                 product.put()
                 return jsonify({
                     'success': True,
