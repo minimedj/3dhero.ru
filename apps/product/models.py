@@ -320,6 +320,10 @@ class Product(Base):
     description_md = ndb.TextProperty(
         verbose_name=u'Описание в Markdown', default=''
     )
+    short_description = ndb.TextProperty(
+        verbose_name=u'Краткое описание, генерируется автоматически',
+        default=''
+    )
     equipment = ndb.TextProperty(verbose_name=u'Комплектация', default='')
 
     images_list = ndb.StructuredProperty(ProductImage, repeated=True)
@@ -353,6 +357,7 @@ class Product(Base):
         'description',
         'description_html',
         'description_md',
+        'short_description',
         'equipment',
         'images',
         'raw_images',
@@ -406,6 +411,10 @@ class Product(Base):
           self.description = self.description.strip()
           self.description_md = self.description
           self.description_html = mistune.markdown(self.description)
+        if self.description:
+            self.short_description = u' '.join(self.description.split()[:5])
+        else:
+            self.short_description = ''
 
     def _post_put_hook(self, future):
         set_section(Category, CategoryProduct, self, 'category')
