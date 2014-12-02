@@ -23,7 +23,7 @@ def get_product(key_id):
         'product/get.html',
         html_class='product',
         title=product.strip_name,
-        meta_keywords=product.strip_name,
+        meta_keywords=product.meta_keyswords or product.strip_name,
         product=product,
         category=category,
         back_url=back_url

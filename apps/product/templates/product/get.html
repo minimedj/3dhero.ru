@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 
 {% block meta_keywords %}
-  {{ meta_keywords }} {% if product.brand %} {{ product.brand }} {% endif %}
-  {{ product.barcode }}
+  {{ meta_keywords }} {% if product.brand %}, {{ product.brand }} {% endif %}
+  , {{ product.barcode }}
   купить оптом
 {% endblock %}
 
 {% block meta_description %}
   3Dhero.ru предлагает купить оптом
   '{{ product.strip_name }}'
-  из категории
-  '{{ category.name }}'
+  серии '{{ category.name }}'
   {% if product.brand %}
     от производителя {{ product.brand }}
   {% endif %}
@@ -19,7 +18,7 @@
   {% endif %}.
   На нашем сайте Вы найдете подробное описание и характеристики товара
   '{{ product.strip_name }}' с фото и штрих-кодом {{ product.barcode }}.
-  Заказать понравившийся товар оптом можно у нас на сайте или по телефону.
+  Купить понравившийся товар можно у нас на сайте или по телефону.
 {% endblock %}
 
 {% block breadcrumbs %}
