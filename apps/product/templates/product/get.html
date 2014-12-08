@@ -71,7 +71,7 @@
                                   src="{{ image }}=s80">
                             </a>
                         </li>
-                        {% if loop.index is divisibleby 5 %}
+                        {% if (loop.index is divisibleby 5) and (not loop.last) %}
                           <li style="width: 100%; height: 1px; padding: 0; margin: 0"></li>
                         {% endif %}
                     {% endfor %}
@@ -80,7 +80,7 @@
             {% else %}
                 <img src="/p/img/none/400x400.jpg" height="400" width="400">
             {% endif %}
-            &nbsp;<br><br>
+            &nbsp;<br>
 
           {% if product.description or product.description_html %}
             {% if product.description_html %}
