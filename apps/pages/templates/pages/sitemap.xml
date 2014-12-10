@@ -20,16 +20,16 @@
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
    </url>
-   {% for c in categories %}
+   {% for key in categories %}
       <url>
-          <loc>{{ url_for('pages.category', key_id=c.key.id(), _external=True) }}</loc>
+          <loc>{{ url_for('pages.category', key_id=key.id(), _external=True) }}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.7</priority>
    </url>
    {% endfor %}
-   {% for p in products %}
+   {% for key in products %}
       <url>
-          <loc>{{ url_for('product.get_product', key_id=p.key.id(), _external=True) }}</loc>
+          <loc>{{ url_for('product.get_product', key_id=key.id(), _external=True) }}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.6</priority>
    </url>
