@@ -15,7 +15,7 @@ from apps.file.models import File
 from model import Base
 
 
-NAME_CLEAN_SUB = u'(/\d*\s*шт\s*in)|(/\d*\s*шт.)|(/\d*\s*шт)$'
+NAME_CLEAN_SUB = u'(/\d*\s*шт\s*in)|(/\d*\s*шт.)|(/\d*\s*шт)|(/\d*\s*шт In)$'
 
 
 def clean_name(name):
