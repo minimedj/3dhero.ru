@@ -138,54 +138,16 @@
                     {% endif %}
                 {% endif %}
             </dl>
-            <div class="kidscom" style="margin-bottom: 10px;">
-               <a
-                  target="_blank"
-                  class="btn btn-primary"
-                  href="http://kids-s.com/search/search_do/?search_string={{product.clear_name|replace(' ', '+')}}&search_types=49&x=-1084&y=-15">
-                купить в розницу на kids-s.com
-              </a>
-            </div>
-            <div class="toysland_tiu" style="margin-bottom: 10px;">
-               <a
-                  target="_blank"
-                  class="btn btn-primary"
-                  href="http://toysland.tiu.ru/site_search?search_term={{product.clear_name|replace(' ', '+')}}">
-                купить в розницу на toysland.tiu.ru
-              </a>
-            </div>
-            <div class="1c_interes" style="margin-bottom: 10px;">
-                <a
+            {% if product.leftovers %}
+              <div class="my_3dhero" style="margin-bottom: 10px;">
+                 <a
                     target="_blank"
                     class="btn btn-primary"
-                    href="http://www.1c-interes.ru/search/index.php?q={{product.clear_name_cp1251}}&s=Search">
-                    купить в розницу в 1С Интерес
+                    href="http://my.3dhero.ru/?search_performed=Y&pshort=Y&pfull=Y&pname=Y&pkeywords=Y&q=&cid=0&subcats=N&subcats=Y&company_id=&pcode={{ product.id_1c }}&price_from=&price_to=&weight_from=&weight_to=&dispatch%5Bproducts.search%5D=">
+                    Купить в розницу на my.3dhero.ru<br> (скоро будет доступно)
                 </a>
-            </div>
-            <div class="toyzone" style="margin-bottom: 10px;">
-                <a
-                    target="_blank"
-                    class="btn btn-primary"
-                    href="http://toyszone.ru/advanced_search_result.php?search_in_description=1&keywords={{product.clear_name_cp1251|replace(' ', '+')}}">
-                    купить в розницу в ToysZone.ru
-                </a>
-            </div>
-            <div class="hobbymall" style="margin-bottom: 10px;">
-               <a
-                  target="_blank"
-                  class="btn btn-primary"
-                  href="http://geekzona.ru">
-                купить в розницу на GeekZona
-              </a>
-            </div>
-            <div class="multcult" style="margin-bottom: 10px;">
-               <a
-                  target="_blank"
-                  class="btn btn-primary"
-                  href="http://multcult.ru">
-                купить в розницу на multcult.ru
-              </a>
-            </div>
+              </div>
+            {% endif %}
             <div class="order_box">
             </div>
 
