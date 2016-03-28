@@ -171,13 +171,6 @@ class ProductForm(wtf.Form):
         description=u'Введите кол-во товара в упаковке',
         validators=[wtf.validators.optional()]
     )
-    price_retail = wtf.FloatField(
-        u'Цена розничная',
-        description=u'Введите РРЦ продукта. '
-                    u'Это поле должно содержать только число, например: '
-                    u'"101.50", "50.0"',
-        validators=[wtf.validators.optional()]
-    )
     price_trade = wtf.FloatField(
         u'Цена оптовая',
         description=u'Введите оптовую цену продукта. '

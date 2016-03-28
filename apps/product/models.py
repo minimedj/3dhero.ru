@@ -305,7 +305,9 @@ class Product(Base):
     box_weight = ndb.StringProperty(verbose_name=u'Вес упаковки', default='', indexed=False)
     box_amount = ndb.StringProperty(verbose_name=u'Количество в упаковке', default='', indexed=False)
 
-    price_retail = ndb.FloatProperty(verbose_name=u'Цена (розничная)')
+    @property
+    def price_retail(self):
+        return self.price_trade * 1.65
     price_trade = ndb.FloatProperty(verbose_name=u'Цена (оптовая)')
     vat = ndb.IntegerProperty(verbose_name=u'НДС', default=0)
 
